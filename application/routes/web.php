@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\Institution\DashboardController as InstitutionDashboardController;
 use App\Http\Controllers\Learner\DashboardController as LearnerDashboardController;
+use App\Http\Controllers\Learner\LearnController as LearnerLearnController;
 use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
 use App\Http\Middleware\ResolveTenantContext;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,9 @@ Route::middleware(['auth', ResolveTenantContext::class])->group(function () {
     Route::get('learner', LearnerDashboardController::class)
         ->middleware('workspace.role:learner,parent')
         ->name('learner.dashboard');
+    Route::get('learner/learn', [LearnerLearnController::class, 'index'])
+        ->middleware('workspace.role:learner,parent')
+        ->name('learner.learn');
     Route::get('teacher', TeacherDashboardController::class)
         ->middleware('workspace.role:teacher')
         ->name('teacher.dashboard');

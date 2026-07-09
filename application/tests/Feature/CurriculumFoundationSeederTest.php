@@ -37,8 +37,11 @@ class CurriculumFoundationSeederTest extends TestCase
 
         $catalog = app(CurriculumCatalogService::class);
         $course = $catalog->getPublishedCourse('level-1-block-creator');
+        $outline = $catalog->getPublishedCourseOutline('level-1-block-creator');
 
         $this->assertNotNull($course);
+        $this->assertNotNull($outline);
+        $this->assertSame(10, $outline['module_count']);
         $this->assertGreaterThanOrEqual(1, $catalog->getSkillPrerequisites('programming.loops.repeat-basic')->count());
     }
 }

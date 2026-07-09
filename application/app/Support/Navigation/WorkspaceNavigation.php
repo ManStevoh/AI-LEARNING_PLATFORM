@@ -29,7 +29,7 @@ class WorkspaceNavigation
             ],
             InstitutionRole::Learner, InstitutionRole::Parent => [
                 ['label' => 'Dashboard', 'href' => '/learner'],
-                ['label' => 'Learn', 'href' => '#'],
+                ['label' => 'Learn', 'href' => '/learner/learn'],
                 ['label' => 'Projects', 'href' => '#'],
                 ['label' => 'Practice', 'href' => '#'],
                 ['label' => 'AI Mentor', 'href' => '#'],

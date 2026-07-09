@@ -24,7 +24,8 @@ Current local implementation status:
 
 - Laravel application foundation published in `application/`.
 - GitHub Pages documentation portal published from repository root.
-- Phase 2 identity/tenancy foundation started locally with typed institution roles and tenant context support.
+- Phase 2 identity/tenancy foundation implemented locally with typed institution roles, tenant context, and role-aware workspaces.
+- Learning Core curriculum foundation seeded and exposed in the learner workspace UI.
 
 ## Completed Documentation
 
@@ -132,7 +133,11 @@ Developed:
 - workspace navigation shared through Inertia props,
 - Curriculum module foundation (domains, concepts, skills, courses, lessons),
 - Level 1 block coding seed catalog,
-- curriculum catalog service and seeder tests.
+- curriculum catalog service and seeder tests,
+- learner dashboard wired to published Level 1 course outline,
+- learner learning-path page (`/learner/learn`) with unit list,
+- demo learner seed user (`learner@example.com`),
+- learner curriculum dashboard feature tests.
 
 ## Partially Developed Artifacts
 
@@ -156,7 +161,7 @@ Next action:
 
 Status:
 
-- started with typed institution role primitives and request-scoped tenant context support.
+- baseline completed with typed institution roles, tenant context middleware, institution policies, and role-aware workspaces.
 
 Completed baseline:
 
@@ -165,14 +170,16 @@ Completed baseline:
 - institution membership helper methods on `User`,
 - role-scoped membership helper on `Institution`,
 - seeder role value now uses the enum,
-- tests for tenant-scoped role checks and tenant context lifecycle.
+- tests for tenant-scoped role checks and tenant context lifecycle,
+- session authentication (login, register, logout),
+- tenant context middleware and institution switching,
+- institution policy for view/update access,
+- role-aware app shell with learner, teacher, and institution dashboards.
 
 Next action:
 
-- add authentication UI/API,
-- add tenant context middleware,
-- add policies for institution-scoped resources,
-- add audit logging foundation.
+- add audit logging foundation,
+- extend learner workspace with lesson detail pages.
 
 ## Not Yet Developed
 
@@ -187,7 +194,7 @@ Application:
 Application verification:
 
 - `php artisan route:list` passes,
-- `php artisan test` passes with 29 tests and 101 assertions,
+- `php artisan test` passes with 31 tests and 131 assertions,
 - `npm run build` passes,
 - `application/.env` is ignored,
 - `application/vendor`, `application/node_modules`, and `application/public/build` are ignored.
@@ -195,7 +202,8 @@ Application verification:
 Latest local verification:
 
 - tenant context middleware, institution switching, and cross-tenant policy tests pass,
-- frontend build passes with institution select/profile pages.
+- learner dashboard and learning-path pages render published Level 1 curriculum,
+- frontend build passes with institution select/profile and learner workspace pages.
 
 Learning:
 
@@ -262,16 +270,20 @@ Published:
 - documentation foundation to GitHub,
 - GitHub Pages documentation portal,
 - Laravel application foundation,
-- Phase 2 tenancy helpers and session authentication foundation.
+- Phase 2 tenancy helpers and session authentication foundation,
+- tenant context middleware and institution policies,
+- role-aware workspace app shell,
+- Learning Core curriculum foundation,
+- learner workspace curriculum catalog UI (local, pending commit).
 
 Not published:
 
-- tenant context middleware and institution policies (next slice).
+- audit logging foundation (next slice).
 
 ## Immediate Next Build Sequence
 
 1. Add audit logging foundation.
-2. Expose published curriculum catalog to learner workspace UI.
+2. Wire learner lesson detail pages from the learning-path unit list.
 3. Configure database for PostgreSQL once local services are available.
 
 ## Ledger Update Rule

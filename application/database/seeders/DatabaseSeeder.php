@@ -36,6 +36,17 @@ class DatabaseSeeder extends Seeder
             'joined_at' => now(),
         ]);
 
+        $learner = User::factory()->create([
+            'name' => 'Demo Learner',
+            'email' => 'learner@example.com',
+        ]);
+
+        $institution->users()->attach($learner, [
+            'role' => InstitutionRole::Learner->value,
+            'status' => MembershipStatus::Active->value,
+            'joined_at' => now(),
+        ]);
+
         $this->call(CurriculumFoundationSeeder::class);
     }
 }
