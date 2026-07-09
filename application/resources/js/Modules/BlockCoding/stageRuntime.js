@@ -437,6 +437,81 @@ export class StageRuntime {
         await this.wait(250);
     }
 
+    async glideToXY(x = 0, y = 0, seconds = 1) {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const sprite = this.getActiveSprite();
+        const targetX = Number(x) || 0;
+        const targetY = Number(y) || 0;
+        const durationSeconds = Math.max(0.1, Number(seconds) || 1);
+        const startX = sprite.x;
+        const startY = sprite.y;
+        const frames = Math.max(1, Math.round(durationSeconds * 30));
+        const frameDelayMs = (durationSeconds * 1000) / frames;
+
+        for (let frame = 1; frame <= frames; frame += 1) {
+            if (this.shouldStop()) {
+                return;
+            }
+
+            const progress = frame / frames;
+            sprite.x = startX + (targetX - startX) * progress;
+            sprite.y = startY + (targetY - startY) * progress;
+            this.clampSprite(sprite);
+            this.emitChange();
+            await this.wait(frameDelayMs);
+        }
+    }
+
+    async pointInDirection(degrees = 90) {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const sprite = this.getActiveSprite();
+        sprite.direction = this.normalizeDirection(Number(degrees) || 0);
+        this.emitChange();
+        await this.wait(100);
+    }
+
+    bounceIfOnEdge() {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const sprite = this.getActiveSprite();
+        const halfWidth = this.stage.width / 2;
+        const halfHeight = this.stage.height / 2;
+        const radius = this.spriteRadius(sprite);
+        let bounced = false;
+
+        if (sprite.x + radius >= halfWidth) {
+            sprite.x = halfWidth - radius;
+            sprite.direction = this.normalizeDirection(180 - sprite.direction);
+            bounced = true;
+        } else if (sprite.x - radius <= -halfWidth) {
+            sprite.x = -halfWidth + radius;
+            sprite.direction = this.normalizeDirection(180 - sprite.direction);
+            bounced = true;
+        }
+
+        if (sprite.y + radius >= halfHeight) {
+            sprite.y = halfHeight - radius;
+            sprite.direction = this.normalizeDirection(-sprite.direction);
+            bounced = true;
+        } else if (sprite.y - radius <= -halfHeight) {
+            sprite.y = -halfHeight + radius;
+            sprite.direction = this.normalizeDirection(-sprite.direction);
+            bounced = true;
+        }
+
+        if (bounced) {
+            this.emitChange();
+        }
+    }
+
     async say(message = '', seconds = 2) {
         if (this.shouldStop()) {
             return;

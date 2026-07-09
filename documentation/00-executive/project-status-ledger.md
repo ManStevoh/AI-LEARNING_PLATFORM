@@ -377,9 +377,9 @@ Not published (blocked):
 
 ## Immediate Next Build Sequence
 
-1. Motion blocks (glide, bounce on edge) per `block-registry.md`.
-2. Teacher skill mastery view with learners needing support.
-3. Configure PostgreSQL once local services are available.
+1. Teacher skill mastery view with learners needing support.
+2. Configure PostgreSQL once local services are available.
+3. Sound asset uploads and costume editor (Phase 2 remainder).
 
 ## Ledger Update Rule
 

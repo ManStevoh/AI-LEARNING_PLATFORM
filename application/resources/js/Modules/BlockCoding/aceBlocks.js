@@ -74,6 +74,56 @@ javascriptGenerator.forBlock.ace_motion_go_to_xy = function (block, generator) {
     return `await runtime.goToXY(${x}, ${y});\n`;
 };
 
+Blockly.Blocks.ace_motion_glide = {
+    init() {
+        this.appendValueInput('SECONDS').setCheck('Number').appendField('glide');
+        this.appendValueInput('X').setCheck('Number').appendField('secs to x');
+        this.appendValueInput('Y').setCheck('Number').appendField('y');
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('ace_motion_blocks');
+        this.setTooltip('Glide smoothly to x/y over a number of seconds.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_motion_glide = function (block, generator) {
+    const seconds = generator.valueToCode(block, 'SECONDS', Order.NONE) || '1';
+    const x = generator.valueToCode(block, 'X', Order.NONE) || '0';
+    const y = generator.valueToCode(block, 'Y', Order.NONE) || '0';
+
+    return `await runtime.glideToXY(${x}, ${y}, ${seconds});\n`;
+};
+
+Blockly.Blocks.ace_motion_point_direction = {
+    init() {
+        this.appendValueInput('DIRECTION').setCheck('Number').appendField('point in direction');
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('ace_motion_blocks');
+        this.setTooltip('Point the sprite in a direction (0–360).');
+    },
+};
+
+javascriptGenerator.forBlock.ace_motion_point_direction = function (block, generator) {
+    const direction = generator.valueToCode(block, 'DIRECTION', Order.NONE) || '90';
+
+    return `await runtime.pointInDirection(${direction});\n`;
+};
+
+Blockly.Blocks.ace_motion_bounce_edge = {
+    init() {
+        this.appendDummyInput().appendField('if on edge, bounce');
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('ace_motion_blocks');
+        this.setTooltip('Bounce off the stage edge if the sprite is touching it.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_motion_bounce_edge = function () {
+    return 'runtime.bounceIfOnEdge();\n';
+};
+
 Blockly.Blocks.ace_looks_say = {
     init() {
         this.appendValueInput('MESSAGE').setCheck('String').appendField('say');

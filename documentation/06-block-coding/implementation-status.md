@@ -5,9 +5,9 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 ## Snapshot
 
 - **Last updated:** 2026-07-10
-- **Engine phase:** Phase 2–3 (looks, sound, sensing) — **partial**
-- **Published to GitHub:** `c0a067e`
-- **Custom ACE blocks:** 24 done / ~35 Level 1 documented
+- **Engine phase:** Phase 2–3 — **partial** (motion Level 1 complete)
+- **Published to GitHub:** pending this slice
+- **Custom ACE blocks:** 27 done / ~35 Level 1 documented
 - **Tests:** 85 PHPUnit
 
 ## Done
@@ -15,28 +15,20 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 | Area | Item | Evidence |
 |------|------|----------|
 | Runtime | Phase 1 events + control | complete |
-| Runtime | Phase 2 looks + sound | partial (presets only) |
-| Runtime | Phase 2–3 sensing: touching, mouse x/y, key?, timer | `stageRuntime.js`, `BlockStage.jsx` |
-| Editor | Sensing category in toolbox | `levelOneToolbox.js` |
+| Runtime | Phase 2 motion (all documented L1 blocks) | `stageRuntime.js`, `aceBlocks.js` |
+| Runtime | Phase 2 looks + sound | partial |
+| Runtime | Phase 2–3 sensing | complete for L1 scope |
 
-### Blocks done (24)
+### Motion blocks (all done)
 
-All Phase 1 blocks, looks/sound blocks, plus **touching**, **mouse x/y**, **key pressed?**, **timer**.
-
-## In Progress / Partial
-
-| Area | Item | Remaining |
-|------|------|-----------|
-| Sensing | Touching another sprite | Multi-sprite collision |
-| Sound | Uploaded assets | Storage adapter |
-| Looks | Costume/backdrop libraries | Asset pipeline |
+move, turn, go to x/y, **glide**, **point in direction**, **if on edge bounce**.
 
 ## Pending (Next Slices)
 
 | Priority | Item | Phase | Ref |
 |----------|------|-------|-----|
-| P1 | Motion: glide, bounce on edge | 2 | registry |
-| P2 | Teacher skill mastery view | app | ledger |
+| P1 | Teacher skill mastery view | app | ledger |
+| P2 | Sound asset uploads | 2 | data model v1.3 |
 | P3 | Stage rendering ADR | 2 | parity strategy |
 
 ## Verification (Latest)
@@ -48,9 +40,8 @@ npm run build      → pass
 
 Manual smoke:
 
-- **if touching edge** inside forever + move loop
-- **mouse x** / **mouse y** in say block while moving mouse over stage
-- **key space pressed?** with if during run
+- **glide 1 secs to x 100 y 0** — smooth animation
+- **forever** move + **if on edge bounce** — paddle/ball style
 
 ## Related
 

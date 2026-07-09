@@ -48,6 +48,21 @@ export function getLevelOneToolbox(preset = 'level_1_default') {
                             Y: { shadow: { type: 'math_number', fields: { NUM: 0 } } },
                         },
                     },
+                    {
+                        kind: 'block',
+                        type: 'ace_motion_glide',
+                        inputs: {
+                            SECONDS: { shadow: { type: 'math_number', fields: { NUM: 1 } } },
+                            X: { shadow: { type: 'math_number', fields: { NUM: 0 } } },
+                            Y: { shadow: { type: 'math_number', fields: { NUM: 0 } } },
+                        },
+                    },
+                    {
+                        kind: 'block',
+                        type: 'ace_motion_point_direction',
+                        inputs: { DIRECTION: { shadow: { type: 'math_number', fields: { NUM: 90 } } } },
+                    },
+                    { kind: 'block', type: 'ace_motion_bounce_edge' },
                 ],
             },
             {

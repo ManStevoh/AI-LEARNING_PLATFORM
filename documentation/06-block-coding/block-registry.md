@@ -21,9 +21,9 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 | `ace_motion_move_steps` | move steps | move steps | yes | yes | 0 | done |
 | `ace_motion_turn_degrees` | turn degrees | turn degrees | yes | yes | 0 | done |
 | `ace_motion_go_to_xy` | go to x/y | go to x y | yes | yes | 0 | done |
-| `ace_motion_glide` | glide | glide | planned | planned | 2 | planned |
-| `ace_motion_point_direction` | point in direction | point in direction | planned | planned | 2 | planned |
-| `ace_motion_bounce_edge` | bounce on edge | if on edge bounce | planned | planned | 2 | planned |
+| `ace_motion_glide` | glide | glide | yes | yes | 2 | done |
+| `ace_motion_point_direction` | point in direction | point in direction | yes | yes | 2 | done |
+| `ace_motion_bounce_edge` | if on edge bounce | if on edge bounce | yes | yes | 2 | done |
 
 ## Looks
 
