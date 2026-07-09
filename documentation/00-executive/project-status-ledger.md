@@ -122,7 +122,12 @@ Developed:
 - expanded institution role tests,
 - session authentication (login, register, logout),
 - protected dashboard route,
-- auth feature tests.
+- auth feature tests,
+- membership status on institution_user pivot,
+- tenant context middleware and session switching,
+- institution policy for view/update access,
+- institution select and profile pages,
+- cross-tenant access tests.
 
 ## Partially Developed Artifacts
 
@@ -179,7 +184,7 @@ Application:
 Application verification:
 
 - `php artisan route:list` passes,
-- `php artisan test` passes with 14 tests and 49 assertions,
+- `php artisan test` passes with 22 tests and 65 assertions,
 - `npm run build` passes,
 - `application/.env` is ignored,
 - `application/vendor`, `application/node_modules`, and `application/public/build` are ignored.
@@ -262,12 +267,10 @@ Not published:
 
 ## Immediate Next Build Sequence
 
-1. Finish identity/tenancy primitives.
-2. Add tenant context middleware.
-3. Add institution-scoped policies.
-4. Add audit logging foundation.
-5. Configure database for PostgreSQL once local services are available.
-6. Continue Learning Core baseline after tenant isolation is protected.
+1. Add audit logging foundation.
+2. Configure database for PostgreSQL once local services are available.
+3. Continue Learning Core baseline after tenant isolation is protected.
+4. Add role-aware app shell dashboards.
 
 ## Ledger Update Rule
 

@@ -1,6 +1,6 @@
 import { Link, useForm } from '@inertiajs/react';
 
-export default function Dashboard({ auth }) {
+export default function Dashboard({ auth, tenant }) {
     const { post, processing } = useForm({});
 
     const logout = (event) => {
@@ -16,6 +16,13 @@ export default function Dashboard({ auth }) {
                         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600">ACE Platform</p>
                         <h1 className="mt-2 text-3xl font-bold tracking-tight">Dashboard</h1>
                         <p className="mt-2 text-slate-600">Signed in as {auth.user?.name}</p>
+                        {tenant?.institution ? (
+                            <p className="mt-1 text-sm text-slate-500">
+                                Active institution: {tenant.institution.name} ({tenant.role})
+                            </p>
+                        ) : (
+                            <p className="mt-1 text-sm text-amber-700">No active institution selected yet.</p>
+                        )}
                     </div>
                     <form onSubmit={logout}>
                         <button
@@ -30,10 +37,25 @@ export default function Dashboard({ auth }) {
 
                 <section className="mt-8 grid gap-4 md:grid-cols-2">
                     <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                        <h2 className="text-lg font-semibold">Identity foundation</h2>
+                        <h2 className="text-lg font-semibold">Institution context</h2>
                         <p className="mt-2 text-sm text-slate-600">
-                            Session authentication is active. Institution context and role-aware dashboards come next.
+                            Tenant middleware now resolves your active institution from session membership.
                         </p>
+                        {tenant?.institution ? (
+                            <Link
+                                className="mt-4 inline-block text-sm font-medium text-blue-600 hover:text-blue-700"
+                                href={`/institutions/${tenant.institution.id}`}
+                            >
+                                View institution profile
+                            </Link>
+                        ) : (
+                            <Link
+                                className="mt-4 inline-block text-sm font-medium text-blue-600 hover:text-blue-700"
+                                href="/institution/select"
+                            >
+                                Select institution
+                            </Link>
+                        )}
                     </article>
                     <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
                         <h2 className="text-lg font-semibold">Back to docs</h2>

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Enums\InstitutionRole;
+use App\Enums\MembershipStatus;
 use App\Models\Institution;
 use App\Models\User;
 use App\Support\Tenancy\TenantContext;
@@ -20,6 +21,7 @@ class InstitutionMembershipTest extends TestCase
 
         $institution->users()->attach($user, [
             'role' => InstitutionRole::Teacher->value,
+            'status' => MembershipStatus::Active->value,
             'joined_at' => now(),
         ]);
 
@@ -35,6 +37,7 @@ class InstitutionMembershipTest extends TestCase
 
         $institution->users()->attach($user, [
             'role' => InstitutionRole::Teacher->value,
+            'status' => MembershipStatus::Active->value,
             'joined_at' => now(),
         ]);
 

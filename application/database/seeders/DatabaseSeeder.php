@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\InstitutionRole;
+use App\Enums\MembershipStatus;
 use App\Models\Institution;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -31,6 +32,7 @@ class DatabaseSeeder extends Seeder
 
         $institution->users()->attach($admin, [
             'role' => InstitutionRole::InstitutionAdmin->value,
+            'status' => MembershipStatus::Active->value,
             'joined_at' => now(),
         ]);
     }
