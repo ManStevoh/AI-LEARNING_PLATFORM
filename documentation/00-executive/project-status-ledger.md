@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `e85f0c8 Add AI Gateway fake provider shell with mentor endpoint and usage logging.`
+- `f40d74c Add Level 1 starter Blockly projects and wire lesson AI mentor UI.`
 
 Current local implementation status:
 
@@ -186,7 +186,7 @@ Completed baseline:
 
 Next action:
 
-- add starter Blockly projects per Level 1 lesson.
+- configure PostgreSQL once local services are available.
 
 ## Not Yet Developed
 
@@ -200,7 +200,7 @@ Application:
 Application verification:
 
 - `php artisan route:list` passes,
-- `php artisan test` passes with 48 tests and 235 assertions,
+- `php artisan test` passes with 52 tests and 300 assertions,
 - `npm run build` passes,
 - `application/.env` is ignored,
 - `application/vendor`, `application/node_modules`, and `application/public/build` are ignored.
@@ -211,7 +211,8 @@ Latest local verification:
 - learner dashboard and learning-path pages render published Level 1 curriculum,
 - auth login/logout and institution switch actions are audit logged,
 - block project save/load with tenant-scoped persistence and auto-save on lesson pages,
-- AI Gateway fake provider mentor endpoint with usage logging tests.
+- AI Gateway fake provider mentor endpoint with usage logging tests,
+- starter Blockly projects and lesson mentor UI integration.
 
 Learning:
 
@@ -289,17 +290,19 @@ Published:
 - stage runtime and green-flag execution,
 - block project save/load persistence,
 - PHPUnit-required backend rule,
-- AI Gateway fake provider shell.
+- AI Gateway fake provider shell,
+- Level 1 starter Blockly projects,
+- learner lesson AI mentor UI.
 
 Not published:
 
-- starter Blockly projects per lesson (next slice).
+- PostgreSQL local setup (next slice).
 
 ## Immediate Next Build Sequence
 
-1. Add starter Blockly projects per Level 1 lesson.
-2. Configure database for PostgreSQL once local services are available.
-3. Wire learner lesson UI to AI mentor endpoint.
+1. Configure database for PostgreSQL once local services are available.
+2. Add prompt registry and context builder for mentor responses.
+3. Add teacher review view for learner block projects.
 
 ## Ledger Update Rule
 
