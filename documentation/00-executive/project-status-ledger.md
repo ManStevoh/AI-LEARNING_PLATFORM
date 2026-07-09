@@ -29,7 +29,7 @@ Current local implementation status:
 - **Block coding Phase 1 complete + Phase 2 looks partial** published in `828be6b`.
 - **Teacher skill mastery view** published in `65ddc0b`.
 - **Sound asset uploads** published in `4c1ca17`.
-- **Costume uploads** implemented locally (not yet published).
+- **Costume uploads** published in `7b0acd0`.
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
@@ -164,7 +164,7 @@ Developed:
 - teacher class overview with institution-scoped learner progress summaries and live dashboard metrics,
 - teacher skill mastery view with skill evidence, prerequisite gaps, and inactive-learner support flags,
 - tenant-scoped block project sound uploads with envelope v1.3 refs,
-- tenant-scoped block project costume uploads with envelope v1.4 sprite costume refs (local).
+- tenant-scoped block project costume uploads with envelope v1.4 sprite costume refs.
 
 ### Block Coding (Published)
 
@@ -377,20 +377,20 @@ Published:
 - teacher class overview with learner progress summaries,
 - teacher skill mastery view with support gap detection,
 - block project sound uploads with Sounds tab and envelope v1.3,
+- block project costume uploads with Costumes tab and envelope v1.4,
 - Scratch block coding studio and ACE Stage Engine Phases 1–2,
 - block coding docs (registry, parity strategy, status procedure).
 
 Not published (local only):
 
-- PostgreSQL local setup (Docker unavailable),
-- block project costume uploads (`BlockProjectCostumeService`, Costumes tab, envelope v1.4).
+- PostgreSQL local setup (Docker unavailable).
 
 Not published (blocked):
 
 ## Immediate Next Build Sequence
 
-1. Commit and publish costume upload slice.
-2. Stage rendering ADR (PixiJS/Phaser evaluation).
+1. Stage rendering ADR (PixiJS/Phaser evaluation).
+2. Backdrop asset uploads.
 3. Configure PostgreSQL once local services are available.
 
 ## Ledger Update Rule
