@@ -7,7 +7,6 @@ import {
     workspaceToJavaScript,
 } from './blocklySetup';
 import { saveLessonProject } from './projectPersistence.js';
-import { saveLessonProject } from './projectPersistence.js';
 
 function saveStatusLabel(status) {
     switch (status) {
@@ -15,6 +14,8 @@ function saveStatusLabel(status) {
             return 'Saving…';
         case 'saved':
             return 'Saved';
+        case 'starter':
+            return 'Starter loaded';
         case 'error':
             return 'Save failed';
         default:
@@ -27,6 +28,7 @@ export default function BlockWorkspace({
     lessonSlug,
     onReady,
     savedProject,
+    starterProject,
     onSaveStatusChange,
 }) {
     const containerRef = useRef(null);
@@ -35,7 +37,9 @@ export default function BlockWorkspace({
     const hasLoadedProjectRef = useRef(false);
     const allowAutoSaveRef = useRef(false);
     const [generatedCode, setGeneratedCode] = useState('// Drag blocks into the workspace to generate code.');
-    const [saveStatus, setSaveStatus] = useState(savedProject ? 'saved' : 'idle');
+    const [saveStatus, setSaveStatus] = useState(
+        savedProject ? 'saved' : starterProject ? 'starter' : 'idle',
+    );
 
     const updateSaveStatus = (status) => {
         setSaveStatus(status);
@@ -52,8 +56,13 @@ export default function BlockWorkspace({
         const workspace = createBlockWorkspace(container, preset);
         workspaceRef.current = workspace;
 
-        if (savedProject?.workspace && !hasLoadedProjectRef.current) {
-            loadWorkspaceState(workspace, savedProject.workspace);
+        if (!hasLoadedProjectRef.current) {
+            if (savedProject?.workspace) {
+                loadWorkspaceState(workspace, savedProject.workspace);
+            } else if (starterProject?.workspace) {
+                loadWorkspaceState(workspace, starterProject.workspace);
+            }
+
             hasLoadedProjectRef.current = true;
         }
 
@@ -115,7 +124,7 @@ export default function BlockWorkspace({
             hasLoadedProjectRef.current = false;
             allowAutoSaveRef.current = false;
         };
-    }, [preset, lessonSlug, onReady, savedProject, onSaveStatusChange]);
+    }, [preset, lessonSlug, onReady, savedProject, starterProject, onSaveStatusChange]);
 
     return (
         <div className="space-y-4">
@@ -123,7 +132,11 @@ export default function BlockWorkspace({
                 <div className="flex items-center justify-between border-b border-[var(--color-border-subtle)] px-4 py-3">
                     <div>
                         <p className="text-sm font-semibold text-[var(--color-text-primary)]">Block workspace</p>
-                        <p className="text-xs text-[var(--color-text-muted)]">Level 1 toolbox · auto-saves your project</p>
+                        <p className="text-xs text-[var(--color-text-muted)]">
+                            {starterProject && !savedProject
+                                ? `Starter: ${starterProject.title}`
+                                : 'Level 1 toolbox · auto-saves your project'}
+                        </p>
                     </div>
                     <span
                         className={`rounded-full px-3 py-1 text-xs font-medium ${
@@ -131,7 +144,9 @@ export default function BlockWorkspace({
                                 ? 'bg-rose-100 text-rose-700'
                                 : saveStatus === 'saved'
                                   ? 'bg-emerald-100 text-emerald-700'
-                                  : 'bg-slate-100 text-slate-700'
+                                  : saveStatus === 'starter'
+                                    ? 'bg-indigo-100 text-indigo-700'
+                                    : 'bg-slate-100 text-slate-700'
                         }`}
                     >
                         {saveStatusLabel(saveStatus)}

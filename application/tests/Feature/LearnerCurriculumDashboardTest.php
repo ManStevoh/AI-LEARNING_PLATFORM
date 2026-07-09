@@ -84,6 +84,13 @@ class LearnerCurriculumDashboardTest extends TestCase
                 )
                 ->etc()
             )
+            ->has('starterProject', fn (Assert $starter) => $starter
+                ->where('lesson_slug', 'unit-01-meet-the-coding-studio')
+                ->where('schema_version', '1.0')
+                ->has('workspace.blocks.blocks', 1)
+                ->etc()
+            )
+            ->where('savedProject', null)
         );
     }
 

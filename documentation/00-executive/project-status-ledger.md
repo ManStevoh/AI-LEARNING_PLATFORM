@@ -143,7 +143,9 @@ Developed:
 - Blockly workspace shell with Level 1 toolbox, stage preview placeholder, and generated JavaScript panel,
 - stage runtime with green-flag execution, sprite motion/looks blocks, and run/stop controls,
 - tenant-scoped block project persistence with auto-save and reload on lesson pages,
-- AI Gateway shell with fake provider, usage logging, and learner mentor endpoint.
+- AI Gateway shell with fake provider, usage logging, and learner mentor endpoint,
+- Level 1 starter Blockly projects for all ten lessons with lesson-page load fallback,
+- learner lesson AI mentor panel wired to the gateway endpoint.
 
 ## Partially Developed Artifacts
 

@@ -1,9 +1,10 @@
 import { Head, Link } from '@inertiajs/react';
 import BlockLessonWorkspace from '../../Modules/BlockCoding/BlockLessonWorkspace';
+import MentorPanel from '../../Modules/BlockCoding/MentorPanel';
 import PageHeader from '../../Components/shell/PageHeader';
 import AppShell from '../../Layouts/AppShell';
 
-export default function Lesson({ lesson, workspace, savedProject }) {
+export default function Lesson({ lesson, workspace, savedProject, starterProject }) {
     return (
         <AppShell title={lesson.title}>
             <Head title={lesson.title} />
@@ -20,7 +21,13 @@ export default function Lesson({ lesson, workspace, savedProject }) {
                     </p>
                 </section>
 
-                <BlockLessonWorkspace savedProject={savedProject} workspaceConfig={workspace} />
+                <BlockLessonWorkspace
+                    savedProject={savedProject}
+                    starterProject={starterProject}
+                    workspaceConfig={workspace}
+                />
+
+                <MentorPanel lessonSlug={lesson.slug} lessonTitle={lesson.title} />
 
                 {lesson.skills.length > 0 ? (
                     <section className="rounded-2xl border border-[var(--color-border-subtle)] bg-white p-5 shadow-sm">

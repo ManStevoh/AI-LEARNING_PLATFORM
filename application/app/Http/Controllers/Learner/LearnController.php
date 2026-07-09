@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Learner;
 
 use App\Http\Controllers\Controller;
 use App\Modules\BlockCoding\Services\BlockProjectPersistenceService;
+use App\Modules\BlockCoding\Services\BlockStarterProjectService;
 use App\Modules\BlockCoding\Services\BlockWorkspaceShellService;
 use App\Modules\Curriculum\Services\CurriculumCatalogService;
 use App\Support\Tenancy\TenantContext;
@@ -17,6 +18,7 @@ class LearnController extends Controller
         private CurriculumCatalogService $catalog,
         private BlockWorkspaceShellService $workspaceShell,
         private BlockProjectPersistenceService $projectPersistence,
+        private BlockStarterProjectService $starterProjects,
         private TenantContext $tenantContext,
     ) {}
 
@@ -53,6 +55,9 @@ class LearnController extends Controller
             'lesson' => $lesson,
             'workspace' => $this->workspaceShell->configForLesson($lesson),
             'savedProject' => $savedProject,
+            'starterProject' => $savedProject === null
+                ? $this->starterProjects->forLesson($lessonSlug)
+                : null,
         ]);
     }
 }

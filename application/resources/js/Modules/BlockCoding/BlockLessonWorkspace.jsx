@@ -4,7 +4,7 @@ import BlockWorkspace from './BlockWorkspace';
 import { runWorkspaceProgram } from './blocklySetup';
 import { StageRuntime } from './stageRuntime';
 
-export default function BlockLessonWorkspace({ workspaceConfig, savedProject }) {
+export default function BlockLessonWorkspace({ workspaceConfig, savedProject, starterProject }) {
     const runtimeRef = useRef(null);
     const workspaceRef = useRef(null);
     const [snapshot, setSnapshot] = useState(null);
@@ -62,6 +62,7 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject }) 
                 onReady={handleWorkspaceReady}
                 preset={workspaceConfig.preset}
                 savedProject={savedProject}
+                starterProject={starterProject}
             />
         </div>
     );
