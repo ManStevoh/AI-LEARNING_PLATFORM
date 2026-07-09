@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `7151fe8 Update status ledger after learner lesson detail slice.` (pending Blockly push)
+- `4f8c725 Add Blockly workspace shell for Level 1 learner lessons.`
 
 Current local implementation status:
 
