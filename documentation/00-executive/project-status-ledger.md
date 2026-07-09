@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `adaadda` — Complete ledger publish markers for backdrop uploads.
+- `ae12511` — Add Scratch-style stage reporter monitors with envelope v1.6.
 
 Current local implementation status:
 
@@ -34,7 +34,7 @@ Current local implementation status:
 - **Scratch Motion/Looks/Sound/Events/Control palette parity** published in `f7c2d3c`.
 - **Scratch Control clones + Sensing/Operators/Lists/My Blocks parity** published in `a79c32b`.
 - **Backdrop asset uploads (envelope v1.5)** published in `e39ec5d`.
-- **Stage reporter monitors (envelope v1.6)** implemented locally (ready to publish).
+- **Stage reporter monitors (envelope v1.6)** published in `ae12511`.
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
@@ -272,7 +272,7 @@ Application:
 Application verification:
 
 - `php artisan route:list` passes,
-- `php artisan test` passes with 108 tests and 593 assertions,
+- `php artisan test` passes with 109 tests and 611 assertions,
 - `npm run build` passes,
 - `application/.env` is ignored,
 - `application/vendor`, `application/node_modules`, and `application/public/build` are ignored.
@@ -297,6 +297,7 @@ Latest local verification:
 - block project envelope v1.1 save/load with sprite state (PHPUnit),
 - Scratch Phase 3 clones/sensing/operators/lists/My Blocks (StageRuntime smoke 25/25; published `a79c32b`).
 - block project backdrop upload/list/stream/delete with envelope v1.5 (PHPUnit 6; smoke 27/27; published `e39ec5d`).
+- stage reporter monitors with envelope v1.6 (PHPUnit persistence; smoke 31/31; local pending publish).
 
 Learning:
 
@@ -396,13 +397,14 @@ Published:
 
 Not published (local only):
 
+- stage reporter monitors with toolbox checkboxes and overlay (envelope v1.6),
 - PostgreSQL local setup (Docker unavailable).
 
 Not published (blocked):
 
 ## Immediate Next Build Sequence
 
-1. Stage monitor checkboxes for reporter blocks.
+1. Publish stage reporter monitors (envelope v1.6).
 2. Configure PostgreSQL once local services are available.
 
 ## Ledger Update Rule

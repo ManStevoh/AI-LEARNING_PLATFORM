@@ -6,7 +6,7 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 
 - **Last updated:** 2026-07-10
 - **Engine phase:** Phase 3 — palette parity + assets + stage monitors (envelope v1.6)
-- **Published to GitHub:** pending (local slice ready)
+- **Published to GitHub:** `ae12511`
 - **Custom ACE blocks:** ~78 done (plus Blockly control/math/text/variables/lists/procedures)
 - **Tests:** 109 PHPUnit + StageRuntime smoke 31/31
 
