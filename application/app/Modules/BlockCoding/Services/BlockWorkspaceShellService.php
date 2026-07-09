@@ -14,9 +14,26 @@ class BlockWorkspaceShellService
             'preset' => 'level_1_default',
             'lesson_slug' => $lesson['slug'],
             'stage' => [
-                'title' => 'Preview stage',
-                'status' => 'placeholder',
-                'message' => 'Sprite stage and green-flag runtime will mount here in the next slice.',
+                'title' => 'Stage',
+                'status' => 'active',
+                'width' => 480,
+                'height' => 360,
+                'background' => '#dbeafe',
+                'sprites' => [
+                    [
+                        'id' => 'sprite-1',
+                        'name' => 'Sprite',
+                        'x' => 0,
+                        'y' => 0,
+                        'direction' => 90,
+                        'emoji' => '🐱',
+                        'visible' => true,
+                    ],
+                ],
+            ],
+            'runtime' => [
+                'max_run_ms' => 10000,
+                'max_loop_iterations' => 10000,
             ],
         ];
     }

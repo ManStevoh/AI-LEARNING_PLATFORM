@@ -18,6 +18,9 @@ class BlockWorkspaceShellServiceTest extends TestCase
 
         $this->assertSame('level_1_default', $config['preset']);
         $this->assertSame('unit-01-meet-the-coding-studio', $config['lesson_slug']);
-        $this->assertSame('placeholder', $config['stage']['status']);
+        $this->assertSame('active', $config['stage']['status']);
+        $this->assertSame(480, $config['stage']['width']);
+        $this->assertSame('sprite-1', $config['stage']['sprites'][0]['id']);
+        $this->assertSame(10000, $config['runtime']['max_run_ms']);
     }
 }

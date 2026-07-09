@@ -6,6 +6,52 @@ export function getLevelOneToolbox(preset = 'level_1_default') {
         contents: [
             {
                 kind: 'category',
+                name: 'Events',
+                categorystyle: 'event_category',
+                contents: [{ kind: 'block', type: 'ace_event_green_flag' }],
+            },
+            {
+                kind: 'category',
+                name: 'Motion',
+                categorystyle: 'math_category',
+                contents: [
+                    {
+                        kind: 'block',
+                        type: 'ace_motion_move_steps',
+                        inputs: { STEPS: { shadow: { type: 'math_number', fields: { NUM: 10 } } } },
+                    },
+                    {
+                        kind: 'block',
+                        type: 'ace_motion_turn_degrees',
+                        inputs: { DEGREES: { shadow: { type: 'math_number', fields: { NUM: 15 } } } },
+                    },
+                    {
+                        kind: 'block',
+                        type: 'ace_motion_go_to_xy',
+                        inputs: {
+                            X: { shadow: { type: 'math_number', fields: { NUM: 0 } } },
+                            Y: { shadow: { type: 'math_number', fields: { NUM: 0 } } },
+                        },
+                    },
+                ],
+            },
+            {
+                kind: 'category',
+                name: 'Looks',
+                categorystyle: 'text_category',
+                contents: [
+                    {
+                        kind: 'block',
+                        type: 'ace_looks_say',
+                        inputs: {
+                            MESSAGE: { shadow: { type: 'text', fields: { TEXT: 'Hello!' } } },
+                            SECONDS: { shadow: { type: 'math_number', fields: { NUM: 2 } } },
+                        },
+                    },
+                ],
+            },
+            {
+                kind: 'category',
                 name: 'Control',
                 categorystyle: 'loop_category',
                 contents: [

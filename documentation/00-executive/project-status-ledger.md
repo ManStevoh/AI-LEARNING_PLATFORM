@@ -140,7 +140,8 @@ Developed:
 - learner curriculum dashboard feature tests,
 - audit logging foundation (`audit_logs` table, `AuditLogger`, auth and tenant switch events),
 - learner lesson detail page (`/learner/learn/{slug}`) with skills and unit context,
-- Blockly workspace shell with Level 1 toolbox, stage preview placeholder, and generated JavaScript panel.
+- Blockly workspace shell with Level 1 toolbox, stage preview placeholder, and generated JavaScript panel,
+- stage runtime with green-flag execution, sprite motion/looks blocks, and run/stop controls.
 
 ## Partially Developed Artifacts
 
@@ -279,7 +280,7 @@ Published:
 - learner workspace curriculum catalog UI,
 - audit logging foundation,
 - learner lesson detail pages,
-- Blockly workspace shell (local, pending commit).
+- Blockly workspace shell.
 
 Not published:
 

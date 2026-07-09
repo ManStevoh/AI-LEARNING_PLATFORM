@@ -1,6 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
-import BlockStagePreview from '../../Modules/BlockCoding/BlockStagePreview';
-import BlockWorkspace from '../../Modules/BlockCoding/BlockWorkspace';
+import BlockLessonWorkspace from '../../Modules/BlockCoding/BlockLessonWorkspace';
 import PageHeader from '../../Components/shell/PageHeader';
 import AppShell from '../../Layouts/AppShell';
 
@@ -21,10 +20,7 @@ export default function Lesson({ lesson, workspace }) {
                     </p>
                 </section>
 
-                <div className="grid gap-6 xl:grid-cols-[minmax(240px,320px)_minmax(0,1fr)]">
-                    <BlockStagePreview stage={workspace.stage} />
-                    <BlockWorkspace lessonSlug={workspace.lesson_slug} preset={workspace.preset} />
-                </div>
+                <BlockLessonWorkspace workspaceConfig={workspace} />
 
                 {lesson.skills.length > 0 ? (
                     <section className="rounded-2xl border border-[var(--color-border-subtle)] bg-white p-5 shadow-sm">

@@ -5,7 +5,7 @@ import {
     workspaceToJavaScript,
 } from './blocklySetup';
 
-export default function BlockWorkspace({ preset, lessonSlug }) {
+export default function BlockWorkspace({ preset, lessonSlug, onReady }) {
     const containerRef = useRef(null);
     const workspaceRef = useRef(null);
     const [generatedCode, setGeneratedCode] = useState('// Drag blocks into the workspace to generate code.');
@@ -19,6 +19,7 @@ export default function BlockWorkspace({ preset, lessonSlug }) {
 
         const workspace = createBlockWorkspace(container, preset);
         workspaceRef.current = workspace;
+        onReady?.(workspace);
 
         const updateCode = () => {
             const code = workspaceToJavaScript(workspace).trim();
@@ -41,7 +42,7 @@ export default function BlockWorkspace({ preset, lessonSlug }) {
             workspace.dispose();
             workspaceRef.current = null;
         };
-    }, [preset, lessonSlug]);
+    }, [preset, lessonSlug, onReady]);
 
     return (
         <div className="space-y-4">

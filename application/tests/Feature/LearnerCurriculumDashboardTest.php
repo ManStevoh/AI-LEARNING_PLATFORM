@@ -77,7 +77,11 @@ class LearnerCurriculumDashboardTest extends TestCase
             ->has('workspace', fn (Assert $workspace) => $workspace
                 ->where('preset', 'level_1_default')
                 ->where('lesson_slug', 'unit-01-meet-the-coding-studio')
-                ->where('stage.status', 'placeholder')
+                ->where('stage.status', 'active')
+                ->has('runtime', fn (Assert $runtime) => $runtime
+                    ->where('max_run_ms', 10000)
+                    ->etc()
+                )
                 ->etc()
             )
         );
