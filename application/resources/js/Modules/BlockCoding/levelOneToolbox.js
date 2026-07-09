@@ -88,6 +88,20 @@ export function getLevelOneToolbox(preset = 'level_1_default') {
             },
             {
                 kind: 'category',
+                name: 'Sound',
+                categorystyle: 'sound_category',
+                contents: [
+                    { kind: 'block', type: 'ace_sound_play' },
+                    { kind: 'block', type: 'ace_sound_stop_all' },
+                    {
+                        kind: 'block',
+                        type: 'ace_sound_set_volume',
+                        inputs: { VOLUME: { shadow: { type: 'math_number', fields: { NUM: 100 } } } },
+                    },
+                ],
+            },
+            {
+                kind: 'category',
                 name: 'Control',
                 categorystyle: 'control_category',
                 contents: [

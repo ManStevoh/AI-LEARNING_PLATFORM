@@ -1,3 +1,5 @@
+import { SoundEngine } from './soundEngine.js';
+
 const DEFAULT_STAGE = {
     width: 480,
     height: 360,
@@ -40,6 +42,7 @@ export class StageRuntime {
         this.state = 'idle';
         this.error = null;
         this.boundKeyDown = null;
+        this.soundEngine = new SoundEngine();
         this.stage = structuredClone(this.initialStage);
         this.sprites = structuredClone(this.initialSprites);
     }
@@ -125,6 +128,7 @@ export class StageRuntime {
         this.error = null;
         this.stage = structuredClone(this.initialStage);
         this.sprites = structuredClone(this.initialSprites);
+        this.soundEngine.stopAll();
         this.finishEventLoop();
         this.setState('idle');
     }
@@ -210,6 +214,7 @@ export class StageRuntime {
 
     stopAll() {
         this.stopRequested = true;
+        this.soundEngine.stopAll();
         this.finishEventLoop();
 
         if (this.state === 'running') {
@@ -487,6 +492,22 @@ export class StageRuntime {
 
         this.stage.background = String(color);
         this.emitChange();
+    }
+
+    async playSound(name = 'pop') {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        await this.soundEngine.playPreset(name);
+    }
+
+    stopAllSounds() {
+        this.soundEngine.stopAll();
+    }
+
+    setSoundVolume(percent = 100) {
+        this.soundEngine.setVolume(percent);
     }
 
     applyPersistedSprites(sprites, activeSpriteId = null) {

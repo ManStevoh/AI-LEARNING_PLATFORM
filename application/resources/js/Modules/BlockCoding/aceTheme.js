@@ -31,11 +31,17 @@ export const aceTheme = Theme.defineTheme('ace', {
             colourSecondary: '#EC9D00',
             colourTertiary: '#CF8B17',
         },
+        ace_sound_blocks: {
+            colourPrimary: '#CF63CF',
+            colourSecondary: '#C94FC9',
+            colourTertiary: '#BD42BD',
+        },
     },
     categoryStyles: {
         event_category: { colour: '#FFBF00' },
         motion_category: { colour: '#4C97FF' },
         looks_category: { colour: '#9966FF' },
+        sound_category: { colour: '#CF63CF' },
         control_category: { colour: '#FFAB19' },
         sensing_category: { colour: '#5CB1D6' },
         operators_category: { colour: '#59C059' },

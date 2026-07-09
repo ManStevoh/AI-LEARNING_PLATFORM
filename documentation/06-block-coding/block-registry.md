@@ -51,7 +51,15 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 |--------|-------|--------------------|-------|--------|
 | Blockly `VARIABLE` category | set / change / get | variables | 1 | partial |
 
-## Sound, Sensing, Procedures, ACE-only
+## Sound
+
+| Block ID | Label | Scratch equivalent | Generator | Runtime | Phase | Status |
+|----------|-------|--------------------|-----------|---------|-------|--------|
+| `ace_sound_play` | play sound | play sound | yes | yes | 2 | done |
+| `ace_sound_stop_all` | stop all sounds | stop all sounds | yes | yes | 2 | done |
+| `ace_sound_set_volume` | set volume to | change volume by / set volume | yes | yes | 2 | partial |
+
+## Sensing, Procedures, ACE-only
 
 See [block-taxonomy-and-custom-blocks.md](./block-taxonomy-and-custom-blocks.md) and [scratch-parity-and-custom-engine-strategy.md](./scratch-parity-and-custom-engine-strategy.md). Rows to be added as phases are scheduled.
 

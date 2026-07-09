@@ -5,9 +5,9 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 ## Snapshot
 
 - **Last updated:** 2026-07-10
-- **Engine phase:** Phase 2 (looks) — **partial**
-- **Published to GitHub:** `828be6b`
-- **Custom ACE blocks:** 16 done / ~35 Level 1 documented
+- **Engine phase:** Phase 2 (looks + sound) — **partial**
+- **Published to GitHub:** `49e7f9e` (sound slice pending commit)
+- **Custom ACE blocks:** 19 done / ~35 Level 1 documented
 - **Tests:** 85 PHPUnit
 
 ## Done
@@ -15,53 +15,46 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 | Area | Item | Evidence |
 |------|------|----------|
 | Editor | Blockly 13 + Zelos + Scratch-style theme | `aceTheme.js`, `blocklySetup.js` |
-| Editor | Level 1 toolbox (all core categories) | `levelOneToolbox.js` |
-| UI | Scratch studio shell + collapsible nav | `BlockLessonWorkspace.jsx`, `ShellLayoutContext.jsx` |
+| Editor | Sound category in toolbox | `levelOneToolbox.js` |
 | Runtime | Phase 1 events + control (complete) | `stageRuntime.js`, `aceBlocks.js` |
-| Runtime | Phase 2 looks: think, show, hide, set size | `stageRuntime.js`, `BlockStage.jsx` |
-| Runtime | Phase 2 looks: switch costume (emoji list), backdrop (color presets) | partial — no asset upload yet |
-| Persistence | Project envelope v1.1 + sprite size/costumes | `projectEnvelope.js` |
-| Backend | Tenant-scoped save/load + teacher review | `BlockProject*` services, tests |
-| Docs | Strategy, registry, data model, status procedure | `06-block-coding/*.md` |
+| Runtime | Phase 2 looks (think, show, hide, size, costume/backdrop presets) | partial |
+| Runtime | Phase 2 sound: play, stop all, set volume | `soundEngine.js`, `stageRuntime.js` |
+| Persistence | Project envelope v1.1 | `projectEnvelope.js` |
+| Backend | Tenant-scoped save/load + teacher review | `BlockProject*` services |
 
 ### Blocks done
 
-Green flag, key pressed, sprite clicked, broadcast, receive, move, turn, go to xy, say, **think**, **show**, **hide**, **set size**, wait, stop.  
-Partial: **switch costume** (numbered emoji costumes), **switch backdrop** (color presets).
+Events, motion, looks (incl. partial costume/backdrop), control, **play sound**, **stop all sounds**, **set volume**.  
+Sound uses Web Audio presets (pop, click, success, drum) — no uploaded assets yet.
 
 ## In Progress / Partial
 
 | Area | Item | Remaining |
 |------|------|-----------|
-| Looks | Switch costume | Costume editor UI; image assets via storage adapter |
-| Looks | Switch backdrop | Named backdrop library; not only color presets |
-| Runtime | Variables | Per-sprite scope not implemented |
-| Sound | All blocks | Phase 2 remainder |
+| Sound | Uploaded sound assets | Tenant storage adapter + envelope v1.3 |
+| Looks | Costume/backdrop | Asset libraries beyond emoji/color presets |
 | Sensing | All blocks | Phase 2–3 |
 
 ## Pending (Next Slices)
 
 | Priority | Item | Phase | Ref |
 |----------|------|-------|-----|
-| P1 | Sound blocks + Web Audio | 2 | registry (TBD rows) |
-| P2 | Sensing blocks + collision | 2–3 | stage-runtime spec |
-| P2 | Stage rendering ADR (PixiJS vs Phaser) | 2 | parity strategy |
-| P3 | Motion: glide, point direction, bounce | 2 | registry |
+| P1 | Sensing blocks (touching, key, mouse) | 2–3 | registry |
+| P2 | Motion: glide, bounce, point direction | 2 | registry |
+| P3 | Teacher skill mastery view | app | ledger |
 
 ## Verification (Latest)
 
 ```text
 php artisan test   → 85 passed
-npm run build      → pass (run after this slice)
+npm run build      → pass
 ```
 
 Manual smoke:
 
-- **think** shows italic thought bubble
-- **hide** / **show** toggle sprite visibility
-- **set size to** scales sprite on stage
-- **switch backdrop** changes stage color
-- **switch costume to 1** uses emoji from sprite costumes list
+- **play sound pop** after green flag (browser may require user gesture — green flag counts)
+- **set volume to** 50 then play sounds
+- **stop all sounds** during a script
 
 ## Related
 

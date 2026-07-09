@@ -1,5 +1,6 @@
 import * as Blockly from 'blockly/core';
 import { javascriptGenerator, Order } from 'blockly/javascript';
+import { SOUND_PRESET_OPTIONS } from './soundEngine.js';
 
 Blockly.Blocks.ace_event_green_flag = {
     init() {
@@ -195,6 +196,55 @@ javascriptGenerator.forBlock.ace_looks_set_backdrop = function (block) {
     const color = block.getFieldValue('COLOR');
 
     return `runtime.setBackdrop(${JSON.stringify(color)});\n`;
+};
+
+Blockly.Blocks.ace_sound_play = {
+    init() {
+        this.appendDummyInput()
+            .appendField('play sound')
+            .appendField(new Blockly.FieldDropdown(SOUND_PRESET_OPTIONS), 'SOUND');
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('ace_sound_blocks');
+        this.setTooltip('Play a built-in sound effect.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_sound_play = function (block) {
+    const sound = block.getFieldValue('SOUND');
+
+    return `await runtime.playSound(${JSON.stringify(sound)});\n`;
+};
+
+Blockly.Blocks.ace_sound_stop_all = {
+    init() {
+        this.appendDummyInput().appendField('stop all sounds');
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('ace_sound_blocks');
+        this.setTooltip('Stop every sound that is playing.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_sound_stop_all = function () {
+    return 'runtime.stopAllSounds();\n';
+};
+
+Blockly.Blocks.ace_sound_set_volume = {
+    init() {
+        this.appendValueInput('VOLUME').setCheck('Number').appendField('set volume to');
+        this.appendDummyInput().appendField('%');
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('ace_sound_blocks');
+        this.setTooltip('Set volume for sounds (0–100).');
+    },
+};
+
+javascriptGenerator.forBlock.ace_sound_set_volume = function (block, generator) {
+    const volume = generator.valueToCode(block, 'VOLUME', Order.NONE) || '100';
+
+    return `runtime.setSoundVolume(${volume});\n`;
 };
 
 Blockly.Blocks.ace_event_sprite_clicked = {

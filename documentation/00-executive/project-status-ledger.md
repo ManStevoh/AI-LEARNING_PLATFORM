@@ -160,7 +160,7 @@ Developed:
 - institution-admin AI prompt management UI with draft save, publish, and audit logging,
 - teacher class overview with institution-scoped learner progress summaries and live dashboard metrics.
 
-### Block Coding (Local — Not Yet Published)
+### Block Coding (Published)
 
 Status: Phase 1 complete; Phase 2 looks partial. See `documentation/06-block-coding/implementation-status.md`.
 
@@ -365,25 +365,21 @@ Published:
 - teacher feedback notes on reviewed block projects,
 - database-backed AI prompt registry with version publishing workflow,
 - institution-admin AI prompt management UI,
-- teacher class overview with learner progress summaries.
+- teacher class overview with learner progress summaries,
+- Scratch block coding studio and ACE Stage Engine Phases 1–2,
+- block coding docs (registry, parity strategy, status procedure).
 
 Not published (local only):
 
-- block coding Scratch studio UI and layout fixes,
-- ACE Stage Engine Phase 1 (events, control, envelope v1.1),
-- block coding strategy/registry/data-model docs,
-- status tracking procedure.
+- PostgreSQL local setup (Docker unavailable).
 
 Not published (blocked):
 
-- PostgreSQL local setup (Docker unavailable).
-
 ## Immediate Next Build Sequence
 
-1. Commit and push block-coding Phase 1 slice + status docs.
-2. Begin Block Coding Phase 2 (looks/sound) per `block-registry.md`.
+1. Sensing blocks (Phase 2–3) per `block-registry.md`.
+2. Teacher skill mastery view with learners needing support.
 3. Configure PostgreSQL once local services are available.
-4. Add teacher skill mastery view with learners needing support.
 
 ## Ledger Update Rule
 
