@@ -35,5 +35,7 @@ class DatabaseSeeder extends Seeder
             'status' => MembershipStatus::Active->value,
             'joined_at' => now(),
         ]);
+
+        $this->call(CurriculumFoundationSeeder::class);
     }
 }

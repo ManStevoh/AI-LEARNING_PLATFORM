@@ -129,7 +129,10 @@ Developed:
 - institution select and profile pages,
 - cross-tenant access tests,
 - role-aware app shell with learner, teacher, and institution dashboards,
-- workspace navigation shared through Inertia props.
+- workspace navigation shared through Inertia props,
+- Curriculum module foundation (domains, concepts, skills, courses, lessons),
+- Level 1 block coding seed catalog,
+- curriculum catalog service and seeder tests.
 
 ## Partially Developed Artifacts
 
@@ -184,7 +187,7 @@ Application:
 Application verification:
 
 - `php artisan route:list` passes,
-- `php artisan test` passes with 27 tests and 90 assertions,
+- `php artisan test` passes with 29 tests and 101 assertions,
 - `npm run build` passes,
 - `application/.env` is ignored,
 - `application/vendor`, `application/node_modules`, and `application/public/build` are ignored.
@@ -268,7 +271,7 @@ Not published:
 ## Immediate Next Build Sequence
 
 1. Add audit logging foundation.
-2. Start Learning Core schema and Level 1 seed data.
+2. Expose published curriculum catalog to learner workspace UI.
 3. Configure database for PostgreSQL once local services are available.
 
 ## Ledger Update Rule
