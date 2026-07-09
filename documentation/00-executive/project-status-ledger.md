@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `5d9eeab Add teacher review views for institution-scoped learner block projects.`
+- `26cfcbd Add teacher feedback notes on reviewed block projects.`
 
 Current local implementation status:
 
@@ -147,7 +147,8 @@ Developed:
 - Level 1 starter Blockly projects for all ten lessons with lesson-page load fallback,
 - learner lesson AI mentor panel wired to the gateway endpoint,
 - AI prompt registry, renderer, and mentor context builder for lesson-aware responses,
-- teacher block project review list and detail views with tenant-scoped access.
+- teacher block project review list and detail views with tenant-scoped access,
+- teacher feedback notes on reviewed block projects with upsert, audit logging, and tenant isolation.
 
 ## Partially Developed Artifacts
 
@@ -202,7 +203,7 @@ Application:
 Application verification:
 
 - `php artisan route:list` passes,
-- `php artisan test` passes with 63 tests and 352 assertions,
+- `php artisan test` passes with 67 tests and 373 assertions,
 - `npm run build` passes,
 - `application/.env` is ignored,
 - `application/vendor`, `application/node_modules`, and `application/public/build` are ignored.
@@ -216,7 +217,8 @@ Latest local verification:
 - AI Gateway fake provider mentor endpoint with usage logging tests,
 - starter Blockly projects and lesson mentor UI integration,
 - prompt registry and mentor context builder with PHPUnit coverage,
-- teacher block project review routes and UI.
+- teacher block project review routes and UI,
+- teacher block project feedback save with audit logging and tenant isolation tests.
 
 Learning:
 
@@ -298,7 +300,8 @@ Published:
 - Level 1 starter Blockly projects,
 - learner lesson AI mentor UI,
 - AI prompt registry and mentor context builder,
-- teacher block project review views (local, pending commit).
+- teacher block project review views,
+- teacher feedback notes on reviewed block projects.
 
 Not published:
 
@@ -308,7 +311,6 @@ Not published:
 
 1. Configure database for PostgreSQL once local services are available.
 2. Persist prompt registry to database tables with version publishing workflow.
-3. Add teacher feedback notes on reviewed block projects.
 
 ## Ledger Update Rule
 
