@@ -58,6 +58,8 @@ The latest documentation pass added:
 
 The newest completion pass added:
 
+- Last-Mile Execution Roadmap,
+- Project Status Ledger,
 - ACE Platform Engineering Constitution,
 - persistent Cursor engineering rule,
 - learner experience specification,
@@ -88,7 +90,7 @@ These cannot be completed by documentation alone:
 
 - commit and push the repository,
 - create the actual Figma design system and prototypes,
-- scaffold the Laravel/React/Inertia application,
+- publish the Laravel/React/Inertia application foundation after review,
 - write database migrations, factories, seeders, and tests,
 - implement modules and APIs,
 - expand and validate `api/openapi.yaml` from real endpoint decisions,
@@ -142,32 +144,49 @@ Needed:
 
 Type: Implementation.
 
-Status: Pending.
+Status: Started.
 
 Needed:
 
-- actual Laravel migrations,
-- factories,
-- seeders,
+- additional Laravel migrations,
+- additional factories,
+- additional seeders,
 - ERD refinement,
 - indexes,
 - tenant constraints.
+
+Completed baseline:
+
+- institutions migration,
+- institution membership migration,
+- Institution model,
+- Institution factory,
+- demo institution seed data,
+- institution membership test.
 
 ### P3: Laravel Project Scaffold
 
 Type: Implementation.
 
-Status: Pending.
+Status: Started. Baseline scaffold created locally.
 
 Needed:
 
-- Laravel app,
-- React/Inertia,
+- publish reviewed application foundation,
 - PostgreSQL,
 - Redis,
-- Tailwind,
-- module structure,
 - auth foundation.
+
+Completed baseline:
+
+- Laravel 13 app scaffold,
+- React/Inertia setup,
+- Tailwind/Vite build,
+- first React landing page,
+- module skeleton,
+- safe `.env.example`,
+- passing backend tests,
+- passing frontend build.
 
 ### P4: Level 1 Content Authoring
 

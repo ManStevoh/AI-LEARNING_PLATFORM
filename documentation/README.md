@@ -12,6 +12,7 @@ Initial documents:
 
 - `00-executive/product-vision.md`
 - `00-executive/engineering-constitution.md`
+- `00-executive/project-status-ledger.md`
 - `00-executive/missing-pieces-gap-analysis.md`
 - `00-executive/assumptions-open-questions-and-validation-plan.md`
 - `00-executive/pending-work-register.md`
@@ -239,6 +240,7 @@ Initial documents:
 - `13-roadmap/release-gate-checklists.md`
 - `13-roadmap/production-readiness-checklist.md`
 - `13-roadmap/phase-1-sprint-plan.md`
+- `13-roadmap/last-mile-execution-roadmap.md`
 
 ### Engineering
 
