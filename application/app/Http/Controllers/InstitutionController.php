@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SetActiveInstitutionRequest;
 use App\Models\Institution;
 use App\Models\User;
+use App\Support\Audit\AuditAction;
+use App\Support\Audit\AuditLogger;
 use App\Support\Tenancy\TenantContext;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,6 +17,7 @@ class InstitutionController extends Controller
 {
     public function __construct(
         private TenantContext $tenantContext,
+        private AuditLogger $auditLogger,
     ) {}
 
     public function select(Request $request): Response|RedirectResponse
@@ -64,6 +67,14 @@ class InstitutionController extends Controller
         }
 
         $request->session()->put($this->tenantContext->sessionKey(), $institutionId);
+
+        $this->auditLogger->record(
+            AuditAction::TENANT_INSTITUTION_SWITCHED,
+            $user,
+            Institution::query()->find($institutionId),
+            ['institution_id' => $institutionId],
+            $request,
+        );
 
         return redirect()->route('dashboard');
     }

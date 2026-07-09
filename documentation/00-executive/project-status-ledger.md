@@ -137,7 +137,8 @@ Developed:
 - learner dashboard wired to published Level 1 course outline,
 - learner learning-path page (`/learner/learn`) with unit list,
 - demo learner seed user (`learner@example.com`),
-- learner curriculum dashboard feature tests.
+- learner curriculum dashboard feature tests,
+- audit logging foundation (`audit_logs` table, `AuditLogger`, auth and tenant switch events).
 
 ## Partially Developed Artifacts
 
