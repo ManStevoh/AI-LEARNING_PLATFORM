@@ -4,6 +4,9 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InstitutionController;
+use App\Http\Controllers\Institution\DashboardController as InstitutionDashboardController;
+use App\Http\Controllers\Learner\DashboardController as LearnerDashboardController;
+use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
 use App\Http\Middleware\ResolveTenantContext;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -22,6 +25,16 @@ Route::middleware('guest')->group(function () {
 Route::middleware(['auth', ResolveTenantContext::class])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
+    Route::get('learner', LearnerDashboardController::class)
+        ->middleware('workspace.role:learner,parent')
+        ->name('learner.dashboard');
+    Route::get('teacher', TeacherDashboardController::class)
+        ->middleware('workspace.role:teacher')
+        ->name('teacher.dashboard');
+    Route::get('institution/workspace', InstitutionDashboardController::class)
+        ->middleware('workspace.role:institution_admin')
+        ->name('institution.dashboard');
 
     Route::get('institution/select', [InstitutionController::class, 'select'])->name('institution.select');
     Route::post('institution/switch', [InstitutionController::class, 'switchInstitution'])->name('institution.switch');

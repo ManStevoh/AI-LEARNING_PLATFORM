@@ -27,7 +27,7 @@ class TenantContextMiddlewareTest extends TestCase
 
         $response = $this->actingAs($user)->get('/dashboard');
 
-        $response->assertOk();
+        $response->assertRedirect('/teacher');
         $this->assertTrue(app(TenantContext::class)->hasCurrent());
         $this->assertSame($institution->id, session('active_institution_id'));
     }

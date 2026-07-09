@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Support\Navigation\WorkspaceNavigation;
 use App\Support\Tenancy\TenantContext;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -21,6 +22,7 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $tenantContext = app(TenantContext::class);
+        $role = $tenantContext->role();
 
         return [
             ...parent::share($request),
@@ -33,7 +35,11 @@ class HandleInertiaRequests extends Middleware
             ],
             'tenant' => [
                 'institution' => $tenantContext->current()?->only(['id', 'name', 'slug']),
-                'role' => $tenantContext->role()?->value,
+                'role' => $role?->value,
+            ],
+            'navigation' => [
+                'primary' => WorkspaceNavigation::primary($role),
+                'home' => WorkspaceNavigation::homeRoute($role),
             ],
         ];
     }

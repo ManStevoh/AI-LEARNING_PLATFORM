@@ -127,7 +127,9 @@ Developed:
 - tenant context middleware and session switching,
 - institution policy for view/update access,
 - institution select and profile pages,
-- cross-tenant access tests.
+- cross-tenant access tests,
+- role-aware app shell with learner, teacher, and institution dashboards,
+- workspace navigation shared through Inertia props.
 
 ## Partially Developed Artifacts
 
@@ -182,15 +184,15 @@ Application:
 Application verification:
 
 - `php artisan route:list` passes,
-- `php artisan test` passes with 22 tests and 65 assertions,
+- `php artisan test` passes with 27 tests and 90 assertions,
 - `npm run build` passes,
 - `application/.env` is ignored,
 - `application/vendor`, `application/node_modules`, and `application/public/build` are ignored.
 
 Latest local verification:
 
-- linter check reports no errors for the new tenancy files,
-- expanded test run is in progress/backgrounded in the local terminal after adding Phase 2 tenancy helpers.
+- tenant context middleware, institution switching, and cross-tenant policy tests pass,
+- frontend build passes with institution select/profile pages.
 
 Learning:
 
@@ -266,9 +268,8 @@ Not published:
 ## Immediate Next Build Sequence
 
 1. Add audit logging foundation.
-2. Configure database for PostgreSQL once local services are available.
-3. Continue Learning Core baseline after tenant isolation is protected.
-4. Add role-aware app shell dashboards.
+2. Start Learning Core schema and Level 1 seed data.
+3. Configure database for PostgreSQL once local services are available.
 
 ## Ledger Update Rule
 

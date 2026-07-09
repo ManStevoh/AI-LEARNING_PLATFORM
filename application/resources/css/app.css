@@ -10,6 +10,15 @@
 
 :root {
     color-scheme: light dark;
+    --color-background-default: #ffffff;
+    --color-background-subtle: #f8fafc;
+    --color-surface-default: #ffffff;
+    --color-surface-raised: #f8fafc;
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #475569;
+    --color-text-muted: #64748b;
+    --color-border-subtle: #e2e8f0;
+    --color-action-primary: #2563eb;
 }
 
 html {
