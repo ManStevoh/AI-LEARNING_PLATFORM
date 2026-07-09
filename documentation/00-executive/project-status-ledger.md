@@ -171,11 +171,11 @@ Developed:
 - tenant-scoped block project costume uploads with envelope v1.4 sprite costume refs,
 - ADR 0010: PixiJS for ACE stage rendering (Phaser rejected; DOM Level 1 default).
 - Scratch Control clones + Sensing/Operators/Lists/My Blocks palette parity.
-- tenant-scoped block project backdrop uploads with envelope v1.5 stage refs (local; pending publish).
+- tenant-scoped block project backdrop uploads with envelope v1.5 stage refs.
 
-### Block Coding (Published + local backdrop uploads)
+### Block Coding (Published)
 
-Status: Phase 1–3 Scratch palette parity published; backdrop uploads local. See `documentation/06-block-coding/implementation-status.md`.
+Status: Phase 1–3 Scratch palette parity + backdrop uploads published. See `documentation/06-block-coding/implementation-status.md`.
 
 Developed:
 
@@ -183,13 +183,12 @@ Developed:
 - Blockly Zelos theme and Scratch palette order,
 - ACE Stage Engine Phases 1–3,
 - Operators/Lists/My Blocks,
-- project envelope through v1.5 (local),
+- project envelope through v1.5,
 - block registry and scratch parity strategy docs,
 - StageRuntime smoke 27/27; PHPUnit 108.
 
 Next action:
 
-- publish backdrop asset uploads,
 - stage monitor checkboxes for reporter blocks.
 
 ## Partially Developed Artifacts
@@ -293,7 +292,7 @@ Latest local verification:
 - block project costume upload/list/stream/delete routes with tenant and ownership tests,
 - block project envelope v1.1 save/load with sprite state (PHPUnit),
 - Scratch Phase 3 clones/sensing/operators/lists/My Blocks (StageRuntime smoke 25/25; published `a79c32b`).
-- block project backdrop upload/list/stream/delete with envelope v1.5 (PHPUnit 6; smoke 27/27; local pending publish).
+- block project backdrop upload/list/stream/delete with envelope v1.5 (PHPUnit 6; smoke 27/27; published `e39ec5d`).
 
 Learning:
 
@@ -387,21 +386,20 @@ Published:
 - ADR 0010 PixiJS stage rendering decision,
 - Scratch Motion/Looks/Sound/Events/Control palette parity,
 - Scratch Control clones + Sensing/Operators/Lists/My Blocks palette parity,
+- block project backdrop uploads with Backdrops tab and envelope v1.5,
 - Scratch block coding studio and ACE Stage Engine Phases 1–3,
 - block coding docs (registry, parity strategy, status procedure).
 
 Not published (local only):
 
-- block project backdrop uploads with Backdrops tab and envelope v1.5,
 - PostgreSQL local setup (Docker unavailable).
 
 Not published (blocked):
 
 ## Immediate Next Build Sequence
 
-1. Publish backdrop asset uploads (envelope v1.5).
-2. Stage monitor checkboxes for reporter blocks.
-3. Configure PostgreSQL once local services are available.
+1. Stage monitor checkboxes for reporter blocks.
+2. Configure PostgreSQL once local services are available.
 
 ## Ledger Update Rule
 
