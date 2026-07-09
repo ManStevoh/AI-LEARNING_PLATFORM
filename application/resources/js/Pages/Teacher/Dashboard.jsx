@@ -34,6 +34,17 @@ export default function Dashboard({ metrics }) {
                     </a>
                 </div>
             </DashboardSection>
+
+            <DashboardSection title="Skill mastery">
+                <div className="rounded-2xl border border-[var(--color-border-subtle)] bg-white p-5">
+                    <p className="text-sm text-[var(--color-text-secondary)]">
+                        See skill evidence from block projects and learners who need prerequisite or activity support.
+                    </p>
+                    <a className="mt-4 inline-block text-sm font-medium text-blue-600 hover:text-blue-700" href="/teacher/skills">
+                        View skill mastery and support gaps
+                    </a>
+                </div>
+            </DashboardSection>
         </AppShell>
     );
 }

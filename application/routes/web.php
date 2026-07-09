@@ -12,6 +12,7 @@ use App\Http\Controllers\Learner\LearnController as LearnerLearnController;
 use App\Http\Controllers\Learner\MentorController as LearnerMentorController;
 use App\Http\Controllers\Teacher\ClassOverviewController;
 use App\Http\Controllers\Teacher\BlockProjectReviewController;
+use App\Http\Controllers\Teacher\SkillMasteryController;
 use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
 use App\Http\Middleware\ResolveTenantContext;
 use Illuminate\Support\Facades\Route;
@@ -53,6 +54,9 @@ Route::middleware(['auth', ResolveTenantContext::class])->group(function () {
     Route::get('teacher/classes', [ClassOverviewController::class, 'index'])
         ->middleware('workspace.role:teacher')
         ->name('teacher.classes.index');
+    Route::get('teacher/skills', [SkillMasteryController::class, 'index'])
+        ->middleware('workspace.role:teacher')
+        ->name('teacher.skills.index');
     Route::get('teacher/block-projects', [BlockProjectReviewController::class, 'index'])
         ->middleware('workspace.role:teacher')
         ->name('teacher.block-projects.index');

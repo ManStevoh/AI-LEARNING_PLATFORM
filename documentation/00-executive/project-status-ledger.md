@@ -27,6 +27,7 @@ Current local implementation status:
 - Phase 2 identity/tenancy foundation implemented locally with typed institution roles, tenant context, and role-aware workspaces.
 - Learning Core curriculum foundation seeded and exposed in the learner workspace UI.
 - **Block coding Phase 1 complete + Phase 2 looks partial** published in `828be6b`.
+- **Teacher skill mastery view** implemented locally (not yet published).
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
@@ -158,7 +159,8 @@ Developed:
 - teacher feedback notes on reviewed block projects with upsert, audit logging, and tenant isolation,
 - database-backed AI prompt registry with version publishing workflow and config fallback,
 - institution-admin AI prompt management UI with draft save, publish, and audit logging,
-- teacher class overview with institution-scoped learner progress summaries and live dashboard metrics.
+- teacher class overview with institution-scoped learner progress summaries and live dashboard metrics,
+- teacher skill mastery view with skill evidence, prerequisite gaps, and inactive-learner support flags (local).
 
 ### Block Coding (Published)
 
@@ -258,7 +260,7 @@ Application:
 Application verification:
 
 - `php artisan route:list` passes,
-- `php artisan test` passes with 85 tests and 503 assertions,
+- `php artisan test` passes with 90 tests and 528 assertions,
 - `npm run build` passes,
 - `application/.env` is ignored,
 - `application/vendor`, `application/node_modules`, and `application/public/build` are ignored.
@@ -277,6 +279,7 @@ Latest local verification:
 - AI prompt registry database persistence, publish workflow, and seeder tests,
 - institution-admin prompt management routes, UI, and authorization tests,
 - teacher class overview routes, progress service, and tenant-scoped learner summary tests,
+- teacher skill mastery routes, service, prerequisite/stale support flags, and tenant isolation tests,
 - block project envelope v1.1 save/load with sprite state (PHPUnit),
 - block coding Phase 1 runtime and UI (local manual smoke; not yet published).
 
@@ -371,13 +374,14 @@ Published:
 
 Not published (local only):
 
-- PostgreSQL local setup (Docker unavailable).
+- PostgreSQL local setup (Docker unavailable),
+- teacher skill mastery view (`TeacherSkillMasteryService`, `/teacher/skills`, 5 PHPUnit tests).
 
 Not published (blocked):
 
 ## Immediate Next Build Sequence
 
-1. Teacher skill mastery view with learners needing support.
+1. Commit and publish teacher skill mastery slice.
 2. Configure PostgreSQL once local services are available.
 3. Sound asset uploads and costume editor (Phase 2 remainder).
 
