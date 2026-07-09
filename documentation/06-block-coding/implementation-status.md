@@ -6,7 +6,7 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 
 - **Last updated:** 2026-07-10
 - **Engine phase:** Phase 2 — Scratch Motion/Looks/Sound/Events/Control parity (visible palette)
-- **Published to GitHub:** pending Scratch parity publish
+- **Published to GitHub:** `f7c2d3c`
 - **Custom ACE blocks:** ~63 done (plus Blockly control/math/text/variables)
 - **Tests:** 102 PHPUnit + StageRuntime smoke 20/20
 

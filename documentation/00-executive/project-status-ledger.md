@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `98a8a3e` — Accept ADR 0010: PixiJS for ACE stage rendering, reject Phaser.
+- `f7c2d3c` — Add Scratch Motion/Looks/Sound/Events/Control palette parity blocks.
 
 Current local implementation status:
 
