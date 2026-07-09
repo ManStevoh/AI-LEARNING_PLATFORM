@@ -28,7 +28,8 @@ Current local implementation status:
 - Learning Core curriculum foundation seeded and exposed in the learner workspace UI.
 - **Block coding Phase 1 complete + Phase 2 looks partial** published in `828be6b`.
 - **Teacher skill mastery view** published in `65ddc0b`.
-- **Sound asset uploads** implemented locally (not yet published).
+- **Sound asset uploads** published in `4c1ca17`.
+- **Costume uploads** implemented locally (not yet published).
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
@@ -162,7 +163,8 @@ Developed:
 - institution-admin AI prompt management UI with draft save, publish, and audit logging,
 - teacher class overview with institution-scoped learner progress summaries and live dashboard metrics,
 - teacher skill mastery view with skill evidence, prerequisite gaps, and inactive-learner support flags,
-- tenant-scoped block project sound uploads with envelope v1.3 refs (local).
+- tenant-scoped block project sound uploads with envelope v1.3 refs,
+- tenant-scoped block project costume uploads with envelope v1.4 sprite costume refs (local).
 
 ### Block Coding (Published)
 
@@ -262,7 +264,7 @@ Application:
 Application verification:
 
 - `php artisan route:list` passes,
-- `php artisan test` passes with 96 tests and 551 assertions,
+- `php artisan test` passes with 102 tests and 572 assertions,
 - `npm run build` passes,
 - `application/.env` is ignored,
 - `application/vendor`, `application/node_modules`, and `application/public/build` are ignored.
@@ -373,20 +375,20 @@ Published:
 - institution-admin AI prompt management UI,
 - teacher class overview with learner progress summaries,
 - teacher skill mastery view with support gap detection,
+- block project sound uploads with Sounds tab and envelope v1.3,
 - Scratch block coding studio and ACE Stage Engine Phases 1–2,
 - block coding docs (registry, parity strategy, status procedure).
 
 Not published (local only):
 
-- PostgreSQL local setup (Docker unavailable),
-- block project sound uploads (`BlockProjectSoundService`, Sounds tab, envelope v1.3).
+- PostgreSQL local setup (Docker unavailable).
 
 Not published (blocked):
 
 ## Immediate Next Build Sequence
 
-1. Commit and publish sound asset upload slice.
-2. Costume editor / uploads (Phase 2 remainder).
+1. Costume editor / uploads (Phase 2 remainder).
+2. Stage rendering ADR (PixiJS/Phaser evaluation).
 3. Configure PostgreSQL once local services are available.
 
 ## Ledger Update Rule

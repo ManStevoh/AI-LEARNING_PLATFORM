@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { costumeImageUrl } from './costumeAssets.js';
 
 function spritePositionStyle(sprite, stage) {
     const halfWidth = stage.width / 2;
@@ -11,10 +12,32 @@ function spritePositionStyle(sprite, stage) {
     };
 }
 
-function SpriteVisual({ sprite, stage, activeSpriteId, interactive, onSpriteClick }) {
+function CostumeFace({ sprite, lessonSlug, className, scale }) {
+    if (sprite.costumeAssetUuid && lessonSlug) {
+        return (
+            <img
+                alt={sprite.name}
+                className={`${className} object-contain`}
+                src={costumeImageUrl(lessonSlug, sprite.costumeAssetUuid)}
+                style={{ transform: `scale(${scale})` }}
+            />
+        );
+    }
+
+    return (
+        <div className={className} style={{ transform: `scale(${scale})` }}>
+            {sprite.emoji}
+        </div>
+    );
+}
+
+function SpriteVisual({ sprite, stage, activeSpriteId, interactive, onSpriteClick, lessonSlug }) {
     const isActive = sprite.id === activeSpriteId;
     const canClick = interactive && onSpriteClick;
     const scale = (sprite.size ?? 100) / 100;
+    const faceClass = `flex h-12 w-12 items-center justify-center rounded-lg border bg-white/95 text-2xl shadow-sm ${
+        isActive ? 'border-[#855cd6] ring-2 ring-[#855cd6]/30' : 'border-white/80'
+    } ${canClick ? 'cursor-pointer hover:scale-105' : ''}`;
 
     const body = (
         <>
@@ -28,14 +51,7 @@ function SpriteVisual({ sprite, stage, activeSpriteId, interactive, onSpriteClic
                     {sprite.think}
                 </div>
             ) : null}
-            <div
-                className={`flex h-12 w-12 items-center justify-center rounded-lg border bg-white/95 text-2xl shadow-sm ${
-                    isActive ? 'border-[#855cd6] ring-2 ring-[#855cd6]/30' : 'border-white/80'
-                } ${canClick ? 'cursor-pointer hover:scale-105' : ''}`}
-                style={{ transform: `scale(${scale})` }}
-            >
-                {sprite.emoji}
-            </div>
+            <CostumeFace className={faceClass} lessonSlug={lessonSlug} scale={scale} sprite={sprite} />
         </>
     );
 
@@ -65,6 +81,7 @@ export default function BlockStage({
     variant = 'default',
     onSpriteClick = null,
     onPointerMove = null,
+    lessonSlug = null,
 }) {
     const stageRef = useRef(null);
     const stage = snapshot.stage;
@@ -103,6 +120,7 @@ export default function BlockStage({
                                 activeSpriteId={snapshot.activeSpriteId}
                                 interactive={interactive}
                                 key={sprite.id}
+                                lessonSlug={lessonSlug}
                                 onSpriteClick={onSpriteClick}
                                 sprite={sprite}
                                 stage={stage}
@@ -129,9 +147,12 @@ export default function BlockStage({
                 {snapshot.sprites.map((sprite) =>
                     sprite.visible ? (
                         <div key={sprite.id} className="absolute" style={spritePositionStyle(sprite, stage)}>
-                            <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-white/70 bg-white/90 text-3xl shadow-md">
-                                {sprite.emoji}
-                            </div>
+                            <CostumeFace
+                                className="flex h-16 w-16 items-center justify-center rounded-2xl border border-white/70 bg-white/90 text-3xl shadow-md"
+                                lessonSlug={lessonSlug}
+                                scale={1}
+                                sprite={sprite}
+                            />
                         </div>
                     ) : null,
                 )}

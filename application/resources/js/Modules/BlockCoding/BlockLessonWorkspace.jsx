@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import BlockStage from './BlockStage';
 import BlockWorkspace from './BlockWorkspace';
+import ScratchCostumesPane from './ScratchCostumesPane';
 import ScratchSoundsPane from './ScratchSoundsPane';
 import ScratchSpritePane from './ScratchSpritePane';
 import { runWorkspaceProgram } from './blocklySetup';
@@ -68,7 +69,7 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
     const [saveStatus, setSaveStatus] = useState(savedProject ? 'saved' : starterProject ? 'starter' : 'idle');
     const [activeTab, setActiveTab] = useState('code');
     const [projectSounds, setProjectSounds] = useState([]);
-    const [soundSaveRevision, setSoundSaveRevision] = useState(0);
+    const [assetSaveRevision, setAssetSaveRevision] = useState(0);
 
     const lessonSlug = workspaceConfig.lesson_slug;
 
@@ -152,8 +153,20 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
         [applySoundLibrary],
     );
 
-    const handleSoundSaveRequest = useCallback(() => {
-        setSoundSaveRevision((revision) => revision + 1);
+    const handleAssetSaveRequest = useCallback(() => {
+        setAssetSaveRevision((revision) => revision + 1);
+    }, []);
+
+    const handleAddCostume = useCallback((spriteId, costume) => {
+        runtimeRef.current?.addCostumeToSprite(spriteId, costume);
+    }, []);
+
+    const handleSelectCostume = useCallback((spriteId, index) => {
+        runtimeRef.current?.selectCostume(spriteId, index);
+    }, []);
+
+    const handleDeleteCostume = useCallback((spriteId, index) => {
+        runtimeRef.current?.removeCostume(spriteId, index);
     }, []);
 
     const handleSelectSprite = useCallback((spriteId) => {
@@ -238,7 +251,7 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
                 <div className="grid min-h-[min(720px,calc(100vh-11rem))] lg:grid-cols-[minmax(0,1fr)_420px]">
                     <div className="min-w-0 border-b border-[#d9d9d9] lg:border-b-0 lg:border-r">
                         <BlockWorkspace
-                            externalSaveTrigger={soundSaveRevision}
+                            externalSaveTrigger={assetSaveRevision}
                             getProjectExtras={getProjectExtras}
                             lessonSlug={lessonSlug}
                             onReady={handleWorkspaceReady}
@@ -270,6 +283,7 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
 
                         <BlockStage
                             isRunning={isRunning || snapshot.state === 'running'}
+                            lessonSlug={lessonSlug}
                             onPointerMove={handleStagePointerMove}
                             onSpriteClick={handleSpriteStageClick}
                             snapshot={snapshot}
@@ -278,6 +292,7 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
 
                         <ScratchSpritePane
                             activeSpriteId={snapshot.activeSpriteId}
+                            lessonSlug={lessonSlug}
                             onSelectSprite={handleSelectSprite}
                             snapshot={snapshot}
                         />
@@ -286,15 +301,23 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
             ) : null}
 
             {activeTab === 'costumes' ? (
-                <div className="flex min-h-[320px] items-center justify-center bg-[#fafafa] p-8 text-sm text-[#999]">
-                    Costume editor is coming in a later slice.
-                </div>
+                <ScratchCostumesPane
+                    activeSprite={
+                        snapshot.sprites.find((sprite) => sprite.id === snapshot.activeSpriteId) ??
+                        snapshot.sprites[0]
+                    }
+                    lessonSlug={lessonSlug}
+                    onAddCostume={handleAddCostume}
+                    onDeleteCostume={handleDeleteCostume}
+                    onSaveRequest={handleAssetSaveRequest}
+                    onSelectCostume={handleSelectCostume}
+                />
             ) : null}
 
             {activeTab === 'sounds' ? (
                 <ScratchSoundsPane
                     lessonSlug={lessonSlug}
-                    onSaveRequest={handleSoundSaveRequest}
+                    onSaveRequest={handleAssetSaveRequest}
                     onSoundsChange={handleSoundsChange}
                     sounds={projectSounds}
                 />

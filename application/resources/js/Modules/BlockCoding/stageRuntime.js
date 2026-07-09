@@ -1,3 +1,4 @@
+import { normalizeCostumeEntry } from './costumeAssets.js';
 import { SoundEngine } from './soundEngine.js';
 
 const DEFAULT_STAGE = {
@@ -15,7 +16,7 @@ const DEFAULT_SPRITE = {
     visible: true,
     size: 100,
     emoji: '🐱',
-    costumes: ['🐱'],
+    costumes: [{ type: 'emoji', emoji: '🐱', name: '🐱' }],
     costumeIndex: 0,
     say: null,
     think: null,
@@ -67,18 +68,99 @@ export class StageRuntime {
             };
 
             if (!Array.isArray(normalized.costumes) || normalized.costumes.length === 0) {
-                normalized.costumes = [normalized.emoji ?? DEFAULT_SPRITE.emoji];
+                normalized.costumes = [normalizeCostumeEntry(normalized.emoji ?? DEFAULT_SPRITE.emoji)];
+            } else {
+                normalized.costumes = normalized.costumes.map((costume) => normalizeCostumeEntry(costume));
             }
 
             normalized.costumeIndex = Math.min(
                 Math.max(0, normalized.costumeIndex ?? 0),
                 normalized.costumes.length - 1,
             );
-            normalized.emoji = normalized.costumes[normalized.costumeIndex] ?? normalized.emoji;
+            this.applyCostumeVisual(normalized);
             normalized.size = Number(normalized.size) || DEFAULT_SPRITE.size;
 
             return normalized;
         });
+    }
+
+    applyCostumeVisual(sprite) {
+        const costume = sprite.costumes[sprite.costumeIndex] ?? sprite.costumes[0];
+
+        if (!costume) {
+            sprite.emoji = DEFAULT_SPRITE.emoji;
+            sprite.costumeAssetUuid = null;
+
+            return;
+        }
+
+        if (costume.type === 'asset') {
+            sprite.emoji = costume.emoji ?? '🖼️';
+            sprite.costumeAssetUuid = costume.asset_uuid;
+        } else {
+            sprite.emoji = costume.emoji ?? DEFAULT_SPRITE.emoji;
+            sprite.costumeAssetUuid = null;
+        }
+    }
+
+    addCostumeToSprite(spriteId, costume) {
+        const sprite = this.sprites.find((item) => item.id === spriteId);
+
+        if (!sprite) {
+            return;
+        }
+
+        sprite.costumes.push(normalizeCostumeEntry(costume));
+        sprite.costumeIndex = sprite.costumes.length - 1;
+        this.applyCostumeVisual(sprite);
+        this.syncInitialSprite(sprite);
+        this.emitChange();
+    }
+
+    selectCostume(spriteId, index) {
+        const sprite = this.sprites.find((item) => item.id === spriteId);
+
+        if (!sprite || index < 0 || index >= sprite.costumes.length) {
+            return;
+        }
+
+        sprite.costumeIndex = index;
+        this.applyCostumeVisual(sprite);
+        this.syncInitialSprite(sprite);
+        this.emitChange();
+    }
+
+    removeCostume(spriteId, index) {
+        const sprite = this.sprites.find((item) => item.id === spriteId);
+
+        if (!sprite || sprite.costumes.length <= 1 || index < 0 || index >= sprite.costumes.length) {
+            return;
+        }
+
+        sprite.costumes.splice(index, 1);
+
+        if (sprite.costumeIndex >= sprite.costumes.length) {
+            sprite.costumeIndex = sprite.costumes.length - 1;
+        } else if (sprite.costumeIndex > index) {
+            sprite.costumeIndex -= 1;
+        }
+
+        this.applyCostumeVisual(sprite);
+        this.syncInitialSprite(sprite);
+        this.emitChange();
+    }
+
+    syncInitialSprite(sprite) {
+        const initial = this.initialSprites.find((item) => item.id === sprite.id);
+
+        if (!initial) {
+            return;
+        }
+
+        initial.costumes = structuredClone(sprite.costumes);
+        initial.costumeIndex = sprite.costumeIndex;
+        initial.emoji = sprite.emoji;
+        initial.costumeAssetUuid = sprite.costumeAssetUuid;
     }
 
     getSnapshot() {
@@ -582,7 +664,7 @@ export class StageRuntime {
         }
 
         sprite.costumeIndex = costumeIndex;
-        sprite.emoji = sprite.costumes[costumeIndex];
+        this.applyCostumeVisual(sprite);
         this.emitChange();
     }
 

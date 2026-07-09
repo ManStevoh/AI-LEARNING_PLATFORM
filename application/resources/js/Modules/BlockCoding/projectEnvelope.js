@@ -1,5 +1,7 @@
+import { normalizeCostumeEntry } from './costumeAssets.js';
+
 export const PROJECT_FORMAT = 'ace_project';
-export const PROJECT_VERSION = '1.3';
+export const PROJECT_VERSION = '1.4';
 
 export function isProjectEnvelope(value) {
     return (
@@ -68,8 +70,21 @@ export function buildProjectEnvelope(blocklyState, extras = {}) {
             direction: sprite.direction,
             visible: sprite.visible,
             size: sprite.size ?? 100,
-            emoji: sprite.emoji,
-            costumes: Array.isArray(sprite.costumes) ? sprite.costumes : [sprite.emoji],
+            emoji: typeof sprite.emoji === 'string' ? sprite.emoji : '🐱',
+            costumes: (Array.isArray(sprite.costumes) ? sprite.costumes : [sprite.emoji]).map((costume) => {
+                const entry = normalizeCostumeEntry(costume);
+
+                if (entry.type === 'asset') {
+                    return {
+                        type: 'asset',
+                        asset_uuid: entry.asset_uuid,
+                        name: entry.name,
+                        emoji: entry.emoji,
+                    };
+                }
+
+                return entry.emoji;
+            }),
             costumeIndex: sprite.costumeIndex ?? 0,
         }));
     }

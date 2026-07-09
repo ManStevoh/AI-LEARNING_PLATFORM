@@ -1,4 +1,6 @@
-export default function ScratchSpritePane({ snapshot, activeSpriteId, onSelectSprite }) {
+import { costumeImageUrl } from './costumeAssets.js';
+
+export default function ScratchSpritePane({ snapshot, activeSpriteId, onSelectSprite, lessonSlug }) {
     const activeSprite = snapshot.sprites.find((sprite) => sprite.id === activeSpriteId) ?? snapshot.sprites[0];
 
     return (
@@ -41,9 +43,17 @@ export default function ScratchSpritePane({ snapshot, activeSpriteId, onSelectSp
                             onClick={() => onSelectSprite?.(sprite.id)}
                             type="button"
                         >
-                            <div className="flex h-10 w-10 items-center justify-center rounded-md border border-[#e0e0e0] bg-[#f5f5f5] text-xl">
-                                {sprite.emoji}
-                            </div>
+                            {sprite.costumeAssetUuid && lessonSlug ? (
+                                <img
+                                    alt={sprite.name}
+                                    className="h-10 w-10 rounded-md border border-[#e0e0e0] bg-[#f5f5f5] object-contain"
+                                    src={costumeImageUrl(lessonSlug, sprite.costumeAssetUuid)}
+                                />
+                            ) : (
+                                <div className="flex h-10 w-10 items-center justify-center rounded-md border border-[#e0e0e0] bg-[#f5f5f5] text-xl">
+                                    {sprite.emoji}
+                                </div>
+                            )}
                             <p className="mt-1 max-w-[72px] truncate text-[10px] font-medium text-[#575e75]">{sprite.name}</p>
                         </button>
                     );

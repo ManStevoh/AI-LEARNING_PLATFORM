@@ -27,14 +27,14 @@ Raw Blockly serialization only:
 
 Loaders detect legacy format when `format` is absent.
 
-## ACE project envelope (schema `1.3`)
+## ACE project envelope (schema `1.4`)
 
-Current version. Includes Blockly workspace, sprite state, and uploaded sound refs.
+Current version. Includes Blockly workspace, sprite state with emoji/asset costumes, and uploaded sound refs.
 
 ```json
 {
   "format": "ace_project",
-  "version": "1.3",
+  "version": "1.4",
   "blockly": {
     "blocks": {
       "languageVersion": 0,
@@ -49,7 +49,17 @@ Current version. Includes Blockly workspace, sprite state, and uploaded sound re
       "y": 0,
       "direction": 90,
       "visible": true,
-      "emoji": "🐱"
+      "emoji": "🖼️",
+      "costumes": [
+        "🐱",
+        {
+          "type": "asset",
+          "asset_uuid": "550e8400-e29b-41d4-a716-446655440001",
+          "name": "Hero",
+          "emoji": "🖼️"
+        }
+      ],
+      "costumeIndex": 1
     }
   ],
   "active_sprite_id": "sprite-1",
@@ -62,6 +72,10 @@ Current version. Includes Blockly workspace, sprite state, and uploaded sound re
   ]
 }
 ```
+
+### Envelope `1.3` (legacy)
+
+Same as above with sound refs; costumes may still be emoji strings only.
 
 ### Envelope `1.1` (legacy)
 
@@ -109,8 +123,9 @@ Same as above without the `sounds` array.
 
 | Version | Planned additions |
 |---------|-------------------|
-| `1.2` | Stage backdrop, costume refs |
-| `1.3` | Sound asset refs | **current** |
+| `1.2` | Stage backdrop refs |
+| `1.3` | Sound asset refs |
+| `1.4` | Costume asset refs on sprites | **current** |
 | `2.0` | Full stage-runtime spec alignment (collisions, clones) |
 
 Migrations must accept all prior versions on read and write the latest supported version on save.
