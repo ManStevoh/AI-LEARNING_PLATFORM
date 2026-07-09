@@ -14,6 +14,7 @@ class WorkspaceNavigation
         return match ($role) {
             InstitutionRole::InstitutionAdmin => [
                 ['label' => 'Overview', 'href' => '/institution/workspace'],
+                ['label' => 'AI Prompts', 'href' => '/institution/prompts'],
                 ['label' => 'Learners', 'href' => '#'],
                 ['label' => 'Teachers', 'href' => '#'],
                 ['label' => 'Classes', 'href' => '#'],

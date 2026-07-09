@@ -11,4 +11,8 @@ final class AuditAction
     public const TENANT_INSTITUTION_SWITCHED = 'tenant.institution_switched';
 
     public const BLOCK_PROJECT_FEEDBACK_SAVED = 'block_project.feedback_saved';
+
+    public const AI_PROMPT_DRAFT_SAVED = 'ai_prompt.draft_saved';
+
+    public const AI_PROMPT_VERSION_PUBLISHED = 'ai_prompt.version_published';
 }

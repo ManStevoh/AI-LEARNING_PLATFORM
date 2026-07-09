@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InstitutionController;
+use App\Http\Controllers\Institution\AiPromptController;
 use App\Http\Controllers\Institution\DashboardController as InstitutionDashboardController;
 use App\Http\Controllers\Learner\BlockProjectController;
 use App\Http\Controllers\Learner\DashboardController as LearnerDashboardController;
@@ -60,6 +61,19 @@ Route::middleware(['auth', ResolveTenantContext::class])->group(function () {
     Route::get('institution/workspace', InstitutionDashboardController::class)
         ->middleware('workspace.role:institution_admin')
         ->name('institution.dashboard');
+    Route::get('institution/prompts', [AiPromptController::class, 'index'])
+        ->middleware('workspace.role:institution_admin')
+        ->name('institution.prompts.index');
+    Route::get('institution/prompts/{aiPrompt}', [AiPromptController::class, 'show'])
+        ->middleware('workspace.role:institution_admin')
+        ->name('institution.prompts.show');
+    Route::post('institution/prompts/{aiPrompt}/versions', [AiPromptController::class, 'storeVersion'])
+        ->middleware('workspace.role:institution_admin')
+        ->name('institution.prompts.versions.store');
+    Route::post('institution/prompts/{aiPrompt}/versions/{version}/publish', [AiPromptController::class, 'publishVersion'])
+        ->middleware('workspace.role:institution_admin')
+        ->where('version', 'v\d+')
+        ->name('institution.prompts.versions.publish');
 
     Route::get('institution/select', [InstitutionController::class, 'select'])->name('institution.select');
     Route::post('institution/switch', [InstitutionController::class, 'switchInstitution'])->name('institution.switch');
