@@ -32,6 +32,7 @@ Current local implementation status:
 - **Costume uploads** published in `7b0acd0`.
 - **Stage rendering ADR 0010** (PixiJS) published in `98a8a3e`.
 - **Scratch Motion/Looks/Sound/Events/Control palette parity** published in `f7c2d3c`.
+- **Scratch Control clones + Sensing/Operators/Lists/My Blocks parity** implemented locally (ready to publish).
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
@@ -168,27 +169,26 @@ Developed:
 - tenant-scoped block project sound uploads with envelope v1.3 refs,
 - tenant-scoped block project costume uploads with envelope v1.4 sprite costume refs,
 - ADR 0010: PixiJS for ACE stage rendering (Phaser rejected; DOM Level 1 default).
+- Scratch Control clones + Sensing/Operators/Lists/My Blocks palette parity (local; pending publish).
 
-### Block Coding (Published)
+### Block Coding (Published + local Phase 3)
 
-Status: Phase 1 complete; Phase 2 looks partial. See `documentation/06-block-coding/implementation-status.md`.
+Status: Phase 1–2 palettes published; Phase 3 clones/sensing/operators/lists/procedures local. See `documentation/06-block-coding/implementation-status.md`.
 
-Developed locally:
+Developed:
 
 - Scratch-style coding studio UI (tabs, stage, sprite pane, green flag/stop),
-- Blockly Zelos theme and Scratch palette,
-- collapsible app sidebar for coding focus,
-- Blockly layout fixes (flyout, variable dialog),
-- ACE Stage Engine Phase 1 complete + Phase 2 looks (think, show, hide, size, costume/backdrop presets),
-- active sprite selection and multi-sprite stage render,
-- project envelope v1.1 (Blockly + sprite state in save),
+- Blockly Zelos theme and Scratch palette order,
+- ACE Stage Engine Phases 1–2 + Phase 3 clones/sensing APIs,
+- Operators (math/logic/text), Lists (static Blockly), My Blocks (`PROCEDURE`),
+- project envelope through v1.4,
 - block registry and scratch parity strategy docs,
-- PHPUnit envelope save test (85 tests total).
+- StageRuntime smoke 25/25; PHPUnit 102.
 
 Next action:
 
-- commit and push block-coding Phase 1 slice,
-- begin Phase 2 (looks/sound/sensing) per registry.
+- publish Phase 3 palette parity slice,
+- backdrop asset uploads.
 
 ## Partially Developed Artifacts
 
@@ -290,7 +290,7 @@ Latest local verification:
 - block project sound upload/list/stream/delete routes with tenant and ownership tests,
 - block project costume upload/list/stream/delete routes with tenant and ownership tests,
 - block project envelope v1.1 save/load with sprite state (PHPUnit),
-- block coding Phase 1 runtime and UI (local manual smoke; not yet published).
+- Scratch Phase 3 clones/sensing/operators/lists/My Blocks (StageRuntime smoke 25/25; local pending publish).
 
 Learning:
 
@@ -388,15 +388,17 @@ Published:
 
 Not published (local only):
 
+- Scratch Control clones + Sensing/Operators/Lists/My Blocks palette parity,
 - PostgreSQL local setup (Docker unavailable).
 
 Not published (blocked):
 
 ## Immediate Next Build Sequence
 
-1. Backdrop asset uploads.
-2. Stage monitor checkboxes for reporter blocks.
-3. Configure PostgreSQL once local services are available.
+1. Publish Phase 3 Scratch palette parity (clones/sensing/operators/lists/My Blocks).
+2. Backdrop asset uploads.
+3. Stage monitor checkboxes for reporter blocks.
+4. Configure PostgreSQL once local services are available.
 
 ## Ledger Update Rule
 

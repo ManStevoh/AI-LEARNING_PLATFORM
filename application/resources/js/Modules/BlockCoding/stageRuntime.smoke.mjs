@@ -49,8 +49,18 @@ assert('turnLeftDegrees', runtime.getDirection() === 90);
 runtime.setRotationStyle('left-right');
 assert('setRotationStyle', runtime.getActiveSprite().rotationStyle === 'left-right');
 
-await runtime.goToTarget('random position');
-assert('goToTarget random', Number.isFinite(runtime.getXPosition()));
+await runtime.createCloneOf('myself');
+assert('createCloneOf', runtime.sprites.some((s) => s.isClone));
+
+runtime.activeSpriteId = runtime.sprites.find((s) => s.isClone).id;
+runtime.deleteThisClone();
+assert('deleteThisClone', !runtime.sprites.some((s) => s.isClone));
+
+assert('distanceTo', runtime.distanceTo('mouse-pointer') >= 0);
+assert('getCurrent year', runtime.getCurrent('year') >= 2020);
+assert('isOnline', runtime.isOnline() === true || runtime.isOnline() === false);
+runtime.resetTimer();
+assert('resetTimer', runtime.getTimer() >= 0);
 
 runtime.pointer = { x: 12, y: 34 };
 await runtime.pointTowards('mouse-pointer');

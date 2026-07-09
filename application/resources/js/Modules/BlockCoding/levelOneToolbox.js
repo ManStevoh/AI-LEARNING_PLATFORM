@@ -226,18 +226,6 @@ export function getLevelOneToolbox(preset = 'level_1_default') {
             },
             {
                 kind: 'category',
-                name: 'Sensing',
-                categorystyle: 'sensing_category',
-                contents: [
-                    { kind: 'block', type: 'ace_sensing_touching' },
-                    { kind: 'block', type: 'ace_sensing_mouse_x' },
-                    { kind: 'block', type: 'ace_sensing_mouse_y' },
-                    { kind: 'block', type: 'ace_sensing_key_pressed' },
-                    { kind: 'block', type: 'ace_sensing_timer' },
-                ],
-            },
-            {
-                kind: 'category',
                 name: 'Control',
                 categorystyle: 'control_category',
                 contents: [
@@ -263,37 +251,175 @@ export function getLevelOneToolbox(preset = 'level_1_default') {
                         fields: { MODE: 'UNTIL' },
                     },
                     { kind: 'block', type: 'ace_control_stop' },
+                    { kind: 'block', type: 'ace_control_clone_start' },
+                    { kind: 'block', type: 'ace_control_create_clone' },
+                    { kind: 'block', type: 'ace_control_delete_clone' },
                 ],
             },
             {
                 kind: 'category',
-                name: 'Logic',
+                name: 'Sensing',
+                categorystyle: 'sensing_category',
+                contents: [
+                    { kind: 'block', type: 'ace_sensing_touching' },
+                    { kind: 'block', type: 'ace_sensing_touching_color' },
+                    { kind: 'block', type: 'ace_sensing_color_touching' },
+                    { kind: 'block', type: 'ace_sensing_distance' },
+                    {
+                        kind: 'block',
+                        type: 'ace_sensing_ask',
+                        inputs: {
+                            MESSAGE: {
+                                shadow: { type: 'text', fields: { TEXT: "What's your name?" } },
+                            },
+                        },
+                    },
+                    { kind: 'block', type: 'ace_sensing_answer' },
+                    { kind: 'block', type: 'ace_sensing_key_pressed' },
+                    { kind: 'block', type: 'ace_sensing_mouse_down' },
+                    { kind: 'block', type: 'ace_sensing_mouse_x' },
+                    { kind: 'block', type: 'ace_sensing_mouse_y' },
+                    { kind: 'block', type: 'ace_sensing_set_drag_mode' },
+                    { kind: 'block', type: 'ace_sensing_loudness' },
+                    { kind: 'block', type: 'ace_sensing_timer' },
+                    { kind: 'block', type: 'ace_sensing_reset_timer' },
+                    { kind: 'block', type: 'ace_sensing_current' },
+                    { kind: 'block', type: 'ace_sensing_username' },
+                    { kind: 'block', type: 'ace_sensing_online' },
+                ],
+            },
+            {
+                kind: 'category',
+                name: 'Operators',
                 categorystyle: 'operators_category',
                 contents: [
-                    { kind: 'block', type: 'logic_compare' },
+                    {
+                        kind: 'block',
+                        type: 'math_arithmetic',
+                        fields: { OP: 'ADD' },
+                        inputs: {
+                            A: { shadow: { type: 'math_number', fields: { NUM: 1 } } },
+                            B: { shadow: { type: 'math_number', fields: { NUM: 1 } } },
+                        },
+                    },
+                    {
+                        kind: 'block',
+                        type: 'math_arithmetic',
+                        fields: { OP: 'MINUS' },
+                        inputs: {
+                            A: { shadow: { type: 'math_number', fields: { NUM: 1 } } },
+                            B: { shadow: { type: 'math_number', fields: { NUM: 1 } } },
+                        },
+                    },
+                    {
+                        kind: 'block',
+                        type: 'math_arithmetic',
+                        fields: { OP: 'MULTIPLY' },
+                        inputs: {
+                            A: { shadow: { type: 'math_number', fields: { NUM: 1 } } },
+                            B: { shadow: { type: 'math_number', fields: { NUM: 1 } } },
+                        },
+                    },
+                    {
+                        kind: 'block',
+                        type: 'math_arithmetic',
+                        fields: { OP: 'DIVIDE' },
+                        inputs: {
+                            A: { shadow: { type: 'math_number', fields: { NUM: 1 } } },
+                            B: { shadow: { type: 'math_number', fields: { NUM: 1 } } },
+                        },
+                    },
+                    {
+                        kind: 'block',
+                        type: 'math_random_int',
+                        inputs: {
+                            FROM: { shadow: { type: 'math_number', fields: { NUM: 1 } } },
+                            TO: { shadow: { type: 'math_number', fields: { NUM: 10 } } },
+                        },
+                    },
+                    {
+                        kind: 'block',
+                        type: 'logic_compare',
+                        fields: { OP: 'GT' },
+                        inputs: {
+                            A: { shadow: { type: 'math_number', fields: { NUM: 0 } } },
+                            B: { shadow: { type: 'math_number', fields: { NUM: 0 } } },
+                        },
+                    },
+                    {
+                        kind: 'block',
+                        type: 'logic_compare',
+                        fields: { OP: 'LT' },
+                        inputs: {
+                            A: { shadow: { type: 'math_number', fields: { NUM: 0 } } },
+                            B: { shadow: { type: 'math_number', fields: { NUM: 0 } } },
+                        },
+                    },
+                    {
+                        kind: 'block',
+                        type: 'logic_compare',
+                        fields: { OP: 'EQ' },
+                        inputs: {
+                            A: { shadow: { type: 'math_number', fields: { NUM: 0 } } },
+                            B: { shadow: { type: 'math_number', fields: { NUM: 0 } } },
+                        },
+                    },
                     { kind: 'block', type: 'logic_operation' },
                     { kind: 'block', type: 'logic_negate' },
-                    { kind: 'block', type: 'logic_boolean' },
-                ],
-            },
-            {
-                kind: 'category',
-                name: 'Math',
-                categorystyle: 'math_category',
-                contents: [
-                    { kind: 'block', type: 'math_number' },
-                    { kind: 'block', type: 'math_arithmetic' },
-                    { kind: 'block', type: 'math_random_int' },
-                ],
-            },
-            {
-                kind: 'category',
-                name: 'Text',
-                categorystyle: 'text_category',
-                contents: [
-                    { kind: 'block', type: 'text' },
-                    { kind: 'block', type: 'text_join' },
-                    { kind: 'block', type: 'text_print' },
+                    {
+                        kind: 'block',
+                        type: 'text_join',
+                        inputs: {
+                            ADD0: { shadow: { type: 'text', fields: { TEXT: 'apple ' } } },
+                            ADD1: { shadow: { type: 'text', fields: { TEXT: 'banana' } } },
+                        },
+                    },
+                    {
+                        kind: 'block',
+                        type: 'text_charAt',
+                        inputs: {
+                            VALUE: { shadow: { type: 'text', fields: { TEXT: 'apple' } } },
+                            AT: { shadow: { type: 'math_number', fields: { NUM: 1 } } },
+                        },
+                    },
+                    {
+                        kind: 'block',
+                        type: 'text_length',
+                        inputs: {
+                            VALUE: { shadow: { type: 'text', fields: { TEXT: 'apple' } } },
+                        },
+                    },
+                    {
+                        kind: 'block',
+                        type: 'text_indexOf',
+                        inputs: {
+                            VALUE: { shadow: { type: 'text', fields: { TEXT: 'apple' } } },
+                            FIND: { shadow: { type: 'text', fields: { TEXT: 'p' } } },
+                        },
+                    },
+                    {
+                        kind: 'block',
+                        type: 'math_modulo',
+                        inputs: {
+                            DIVIDEND: { shadow: { type: 'math_number', fields: { NUM: 10 } } },
+                            DIVISOR: { shadow: { type: 'math_number', fields: { NUM: 3 } } },
+                        },
+                    },
+                    {
+                        kind: 'block',
+                        type: 'math_round',
+                        inputs: {
+                            NUM: { shadow: { type: 'math_number', fields: { NUM: 3.1 } } },
+                        },
+                    },
+                    {
+                        kind: 'block',
+                        type: 'math_single',
+                        fields: { OP: 'ABS' },
+                        inputs: {
+                            NUM: { shadow: { type: 'math_number', fields: { NUM: -9 } } },
+                        },
+                    },
                 ],
             },
             {
@@ -301,6 +427,30 @@ export function getLevelOneToolbox(preset = 'level_1_default') {
                 name: 'Variables',
                 categorystyle: 'variable_category',
                 custom: 'VARIABLE',
+            },
+            {
+                kind: 'category',
+                name: 'Lists',
+                categorystyle: 'list_category',
+                contents: [
+                    { kind: 'block', type: 'lists_create_with' },
+                    { kind: 'block', type: 'lists_repeat' },
+                    { kind: 'block', type: 'lists_length' },
+                    { kind: 'block', type: 'lists_isEmpty' },
+                    { kind: 'block', type: 'lists_indexOf' },
+                    { kind: 'block', type: 'lists_getIndex' },
+                    { kind: 'block', type: 'lists_setIndex' },
+                    { kind: 'block', type: 'lists_getSublist' },
+                    { kind: 'block', type: 'lists_sort' },
+                    { kind: 'block', type: 'lists_split' },
+                    { kind: 'block', type: 'lists_reverse' },
+                ],
+            },
+            {
+                kind: 'category',
+                name: 'My Blocks',
+                categorystyle: 'procedure_category',
+                custom: 'PROCEDURE',
             },
         ],
     };

@@ -99,6 +99,8 @@ export default function BlockStage({
     variant = 'default',
     onSpriteClick = null,
     onPointerMove = null,
+    onPointerDown = null,
+    onPointerUp = null,
     lessonSlug = null,
 }) {
     const stageRef = useRef(null);
@@ -119,7 +121,13 @@ export default function BlockStage({
             <div className="relative flex-1 overflow-hidden border-b border-[#d9d9d9] bg-white">
                 <div
                     className="relative h-full min-h-[220px] w-full"
+                    onMouseDown={(event) => {
+                        onPointerDown?.(true);
+                        reportPointer(event.clientX, event.clientY);
+                    }}
+                    onMouseLeave={() => onPointerUp?.(false)}
                     onMouseMove={(event) => reportPointer(event.clientX, event.clientY)}
+                    onMouseUp={() => onPointerUp?.(false)}
                     ref={stageRef}
                     style={{ backgroundColor: stage.background }}
                 >

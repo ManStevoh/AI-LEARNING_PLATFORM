@@ -38,6 +38,9 @@ const DEFAULT_SPRITE = {
     },
     say: null,
     think: null,
+    isClone: false,
+    cloneOf: null,
+    dragMode: 'draggable',
 };
 
 export class StageRuntime {
@@ -54,6 +57,7 @@ export class StageRuntime {
         this.spriteClickHandlers = new Map();
         this.backdropSwitchHandlers = new Map();
         this.greaterThanHandlers = [];
+        this.cloneStartHandlers = [];
         this.stopRequested = false;
         this.activeScriptContext = null;
         this.loopCount = 0;
@@ -62,13 +66,19 @@ export class StageRuntime {
         this.boundKeyDown = null;
         this.boundKeyUp = null;
         this.keysHeld = new Set();
-        this.pointer = { x: 0, y: 0 };
+        this.pointer = { x: 0, y: 0, down: false };
         this.runStartedAt = null;
+        this.timerOffsetMs = 0;
         this.inputListenersAttached = false;
         this.greaterThanPollId = null;
         this.soundEngine = new SoundEngine();
         this.soundLibrary = config.sound_library ?? {};
         this.soundEffects = { pitch: 100, pan: 0 };
+        this.answer = '';
+        this.asking = null;
+        this.askResolve = null;
+        this.username = config.username ?? 'learner';
+        this.cloneCounter = 0;
         this.stage = structuredClone(this.initialStage);
         this.sprites = structuredClone(this.initialSprites);
         this.ensureSpriteLayers();
@@ -226,6 +236,8 @@ export class StageRuntime {
             sprites: structuredClone(this.sprites).sort((a, b) => (a.layer ?? 0) - (b.layer ?? 0)),
             activeSpriteId: this.activeSpriteId,
             soundVolume: Math.round((this.soundEngine.volume ?? 1) * 100),
+            answer: this.answer,
+            asking: this.asking,
         };
     }
 
@@ -267,6 +279,7 @@ export class StageRuntime {
         this.spriteClickHandlers = new Map();
         this.backdropSwitchHandlers = new Map();
         this.greaterThanHandlers = [];
+        this.cloneStartHandlers = [];
         this.stopRequested = false;
         this.activeScriptContext = null;
         this.stopResolve = null;
@@ -276,9 +289,17 @@ export class StageRuntime {
         this.sprites = structuredClone(this.initialSprites);
         this.ensureSpriteLayers();
         this.keysHeld.clear();
-        this.pointer = { x: 0, y: 0 };
+        this.pointer = { x: 0, y: 0, down: false };
         this.runStartedAt = null;
+        this.timerOffsetMs = 0;
         this.soundEffects = { pitch: 100, pan: 0 };
+        this.answer = '';
+        this.asking = null;
+        if (this.askResolve) {
+            this.askResolve('');
+            this.askResolve = null;
+        }
+        this.cloneCounter = 0;
         this.soundEngine.stopAll();
         this.finishEventLoop();
         this.setState('idle');
@@ -342,6 +363,12 @@ export class StageRuntime {
         });
     }
 
+    onCloneStart(handler) {
+        if (typeof handler === 'function') {
+            this.cloneStartHandlers.push(handler);
+        }
+    }
+
     async handleSpriteClick(spriteId) {
         if (this.state !== 'running' || this.shouldStop()) {
             return;
@@ -373,7 +400,8 @@ export class StageRuntime {
             this.broadcastHandlers.size > 0 ||
             this.spriteClickHandlers.size > 0 ||
             this.backdropSwitchHandlers.size > 0 ||
-            this.greaterThanHandlers.length > 0
+            this.greaterThanHandlers.length > 0 ||
+            this.cloneStartHandlers.length > 0
         );
     }
 
@@ -1196,6 +1224,190 @@ export class StageRuntime {
         return Math.round((this.soundEngine.volume ?? 1) * 100);
     }
 
+    async createCloneOf(target = 'myself') {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const source =
+            target === 'myself'
+                ? this.getActiveSprite()
+                : this.sprites.find((sprite) => sprite.id === target || sprite.name === target) ?? this.getActiveSprite();
+
+        this.cloneCounter += 1;
+        const clone = structuredClone(source);
+        clone.id = `${source.cloneOf ?? source.id}-clone-${this.cloneCounter}`;
+        clone.name = `${source.name} clone`;
+        clone.isClone = true;
+        clone.cloneOf = source.cloneOf ?? source.id;
+        clone.layer = (source.layer ?? 0) + 1;
+        clone.say = null;
+        clone.think = null;
+        this.sprites.push(clone);
+        this.emitChange();
+
+        const previousActive = this.activeSpriteId;
+        this.activeSpriteId = clone.id;
+
+        try {
+            for (const handler of this.cloneStartHandlers) {
+                await this.runScript(handler);
+            }
+        } finally {
+            if (this.sprites.some((sprite) => sprite.id === previousActive)) {
+                this.activeSpriteId = previousActive;
+            }
+            this.emitChange();
+        }
+    }
+
+    deleteThisClone() {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const sprite = this.getActiveSprite();
+
+        if (!sprite?.isClone) {
+            return;
+        }
+
+        const index = this.sprites.findIndex((item) => item.id === sprite.id);
+
+        if (index < 0) {
+            return;
+        }
+
+        this.sprites.splice(index, 1);
+        this.activeSpriteId = sprite.cloneOf ?? this.sprites[0]?.id ?? this.activeSpriteId;
+        this.emitChange();
+    }
+
+    isTouchingColor(_color = '#000000') {
+        // DOM stage has no pixel sampling yet; keep API for Scratch parity.
+        return false;
+    }
+
+    isColorTouchingColor(_a = '#000000', _b = '#000000') {
+        return false;
+    }
+
+    distanceTo(target = 'mouse-pointer') {
+        const sprite = this.getActiveSprite();
+        let targetX = this.pointer.x;
+        let targetY = this.pointer.y;
+
+        if (target !== 'mouse-pointer') {
+            const other = this.sprites.find((item) => item.id === target || item.name === target);
+            if (other) {
+                targetX = other.x;
+                targetY = other.y;
+            }
+        }
+
+        const dx = targetX - sprite.x;
+        const dy = targetY - sprite.y;
+
+        return Math.round(Math.sqrt(dx * dx + dy * dy));
+    }
+
+    async askAndWait(prompt = "What's your name?") {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        this.asking = String(prompt ?? '');
+        this.emitChange();
+
+        const answer = await new Promise((resolve) => {
+            this.askResolve = resolve;
+
+            if (typeof window !== 'undefined' && typeof window.prompt === 'function') {
+                const value = window.prompt(this.asking, this.answer || '');
+                resolve(value ?? '');
+            }
+        });
+
+        this.answer = String(answer ?? '');
+        this.asking = null;
+        this.askResolve = null;
+        this.emitChange();
+    }
+
+    submitAskAnswer(value = '') {
+        if (!this.askResolve) {
+            return;
+        }
+
+        const resolve = this.askResolve;
+        this.askResolve = null;
+        this.answer = String(value ?? '');
+        this.asking = null;
+        this.emitChange();
+        resolve(this.answer);
+    }
+
+    getAnswer() {
+        return this.answer;
+    }
+
+    isMouseDown() {
+        return Boolean(this.pointer.down);
+    }
+
+    setDragMode(mode = 'draggable') {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const sprite = this.getActiveSprite();
+        sprite.dragMode = mode === 'not draggable' ? 'not draggable' : 'draggable';
+        this.emitChange();
+    }
+
+    resetTimer() {
+        this.timerOffsetMs = Date.now() - (this.runStartedAt ?? Date.now());
+    }
+
+    getCurrent(property = 'year') {
+        const now = new Date();
+
+        switch (String(property)) {
+            case 'year':
+                return now.getFullYear();
+            case 'month':
+                return now.getMonth() + 1;
+            case 'date':
+                return now.getDate();
+            case 'day of week':
+                return now.getDay() + 1;
+            case 'hour':
+                return now.getHours();
+            case 'minute':
+                return now.getMinutes();
+            case 'second':
+                return now.getSeconds();
+            default:
+                return now.getFullYear();
+        }
+    }
+
+    getUsername() {
+        return this.username;
+    }
+
+    isOnline() {
+        if (typeof navigator !== 'undefined' && typeof navigator.onLine === 'boolean') {
+            return navigator.onLine;
+        }
+
+        return true;
+    }
+
+    setPointerDown(isDown) {
+        this.pointer.down = Boolean(isDown);
+    }
+
     updatePointer(clientX, clientY, rect) {
         if (!rect || rect.width <= 0 || rect.height <= 0) {
             return;
@@ -1254,7 +1466,7 @@ export class StageRuntime {
             return 0;
         }
 
-        return (Date.now() - this.runStartedAt) / 1000;
+        return (Date.now() - this.runStartedAt - this.timerOffsetMs) / 1000;
     }
 
     applyPersistedSprites(sprites, activeSpriteId = null) {

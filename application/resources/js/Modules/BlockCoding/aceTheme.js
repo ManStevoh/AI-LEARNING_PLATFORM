@@ -50,5 +50,8 @@ export const aceTheme = Theme.defineTheme('ace', {
         control_category: { colour: '#FFAB19' },
         sensing_category: { colour: '#5CB1D6' },
         operators_category: { colour: '#59C059' },
+        variable_category: { colour: '#FF8C1A' },
+        list_category: { colour: '#FF661A' },
+        procedure_category: { colour: '#FF6680' },
     },
 });

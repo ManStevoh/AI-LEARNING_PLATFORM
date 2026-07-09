@@ -181,6 +181,14 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
         runtimeRef.current?.updatePointer(clientX, clientY, rect);
     }, []);
 
+    const handleStagePointerDown = useCallback(() => {
+        runtimeRef.current?.setPointerDown(true);
+    }, []);
+
+    const handleStagePointerUp = useCallback(() => {
+        runtimeRef.current?.setPointerDown(false);
+    }, []);
+
     const handleGreenFlag = useCallback(async () => {
         const runtime = runtimeRef.current;
         const workspace = workspaceRef.current;
@@ -284,7 +292,9 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
                         <BlockStage
                             isRunning={isRunning || snapshot.state === 'running'}
                             lessonSlug={lessonSlug}
+                            onPointerDown={handleStagePointerDown}
                             onPointerMove={handleStagePointerMove}
+                            onPointerUp={handleStagePointerUp}
                             onSpriteClick={handleSpriteStageClick}
                             snapshot={snapshot}
                             variant="scratch"

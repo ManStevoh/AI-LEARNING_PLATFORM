@@ -1076,6 +1076,55 @@ javascriptGenerator.forBlock.ace_control_stop = function (block) {
     return target === 'THIS' ? 'runtime.stopThisScript();\n' : 'runtime.stopAll();\n';
 };
 
+Blockly.Blocks.ace_control_clone_start = {
+    init() {
+        this.appendDummyInput().appendField('when I start as a clone');
+        this.appendStatementInput('STACK');
+        this.setStyle('ace_event_hat');
+        this.setTooltip('Runs when a clone of this sprite is created.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_control_clone_start = function (block, generator) {
+    const branch = generator.statementToCode(block, 'STACK');
+
+    return `runtime.onCloneStart(async () => {\n${branch}});\n`;
+};
+
+const CLONE_TARGET_OPTIONS = [['myself', 'myself']];
+
+Blockly.Blocks.ace_control_create_clone = {
+    init() {
+        this.appendDummyInput()
+            .appendField('create clone of')
+            .appendField(new Blockly.FieldDropdown(CLONE_TARGET_OPTIONS), 'TARGET');
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('ace_control_blocks');
+        this.setTooltip('Create a clone of this sprite.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_control_create_clone = function (block) {
+    const target = block.getFieldValue('TARGET');
+
+    return `await runtime.createCloneOf(${JSON.stringify(target)});\n`;
+};
+
+Blockly.Blocks.ace_control_delete_clone = {
+    init() {
+        this.appendDummyInput().appendField('delete this clone');
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('ace_control_blocks');
+        this.setTooltip('Delete this clone (does nothing on the original sprite).');
+    },
+};
+
+javascriptGenerator.forBlock.ace_control_delete_clone = function () {
+    return 'runtime.deleteThisClone();\n';
+};
+
 const TOUCHING_OPTIONS = [
     ['edge', 'edge'],
     ['mouse-pointer', 'mouse-pointer'],
@@ -1157,6 +1206,224 @@ Blockly.Blocks.ace_sensing_timer = {
 
 javascriptGenerator.forBlock.ace_sensing_timer = function () {
     return ['runtime.getTimer()', Order.FUNCTION_CALL];
+};
+
+const COLOUR_OPTIONS = [
+    ['red', '#ff0000'],
+    ['green', '#00ff00'],
+    ['blue', '#0000ff'],
+    ['yellow', '#ffff00'],
+    ['orange', '#ff8800'],
+    ['purple', '#9900ff'],
+    ['black', '#000000'],
+    ['white', '#ffffff'],
+];
+
+Blockly.Blocks.ace_sensing_touching_color = {
+    init() {
+        this.appendDummyInput()
+            .appendField('touching color')
+            .appendField(new Blockly.FieldDropdown(COLOUR_OPTIONS), 'COLOR')
+            .appendField('?');
+        this.setOutput(true, 'Boolean');
+        this.setStyle('ace_sensing_blocks');
+        this.setTooltip('True when the sprite is touching the chosen color.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_sensing_touching_color = function (block) {
+    const color = block.getFieldValue('COLOR');
+
+    return [`runtime.isTouchingColor(${JSON.stringify(color)})`, Order.FUNCTION_CALL];
+};
+
+Blockly.Blocks.ace_sensing_color_touching = {
+    init() {
+        this.appendDummyInput()
+            .appendField('color')
+            .appendField(new Blockly.FieldDropdown(COLOUR_OPTIONS), 'COLOR_A')
+            .appendField('is touching')
+            .appendField(new Blockly.FieldDropdown(COLOUR_OPTIONS), 'COLOR_B')
+            .appendField('?');
+        this.setOutput(true, 'Boolean');
+        this.setStyle('ace_sensing_blocks');
+        this.setTooltip('True when the first color is touching the second color.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_sensing_color_touching = function (block) {
+    const colorA = block.getFieldValue('COLOR_A');
+    const colorB = block.getFieldValue('COLOR_B');
+
+    return [
+        `runtime.isColorTouchingColor(${JSON.stringify(colorA)}, ${JSON.stringify(colorB)})`,
+        Order.FUNCTION_CALL,
+    ];
+};
+
+const DISTANCE_TARGET_OPTIONS = [['mouse-pointer', 'mouse-pointer']];
+
+Blockly.Blocks.ace_sensing_distance = {
+    init() {
+        this.appendDummyInput()
+            .appendField('distance to')
+            .appendField(new Blockly.FieldDropdown(DISTANCE_TARGET_OPTIONS), 'TARGET');
+        this.setOutput(true, 'Number');
+        this.setStyle('ace_sensing_blocks');
+        this.setTooltip('Distance from this sprite to the mouse pointer.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_sensing_distance = function (block) {
+    const target = block.getFieldValue('TARGET');
+
+    return [`runtime.distanceTo(${JSON.stringify(target)})`, Order.FUNCTION_CALL];
+};
+
+Blockly.Blocks.ace_sensing_ask = {
+    init() {
+        this.appendValueInput('MESSAGE').setCheck('String').appendField('ask');
+        this.appendDummyInput().appendField('and wait');
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('ace_sensing_blocks');
+        this.setTooltip('Ask a question and wait for an answer.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_sensing_ask = function (block, generator) {
+    const msg = generator.valueToCode(block, 'MESSAGE', Order.NONE) || "''";
+
+    return `await runtime.askAndWait(${msg});\n`;
+};
+
+Blockly.Blocks.ace_sensing_answer = {
+    init() {
+        this.appendDummyInput().appendField('answer');
+        this.setOutput(true, 'String');
+        this.setStyle('ace_sensing_blocks');
+        this.setTooltip('The most recent answer from ask and wait.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_sensing_answer = function () {
+    return ['runtime.getAnswer()', Order.FUNCTION_CALL];
+};
+
+Blockly.Blocks.ace_sensing_mouse_down = {
+    init() {
+        this.appendDummyInput().appendField('mouse down?');
+        this.setOutput(true, 'Boolean');
+        this.setStyle('ace_sensing_blocks');
+        this.setTooltip('True while the mouse button is held down.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_sensing_mouse_down = function () {
+    return ['runtime.isMouseDown()', Order.FUNCTION_CALL];
+};
+
+const DRAG_MODE_OPTIONS = [
+    ['draggable', 'draggable'],
+    ['not draggable', 'not draggable'],
+];
+
+Blockly.Blocks.ace_sensing_set_drag_mode = {
+    init() {
+        this.appendDummyInput()
+            .appendField('set drag mode')
+            .appendField(new Blockly.FieldDropdown(DRAG_MODE_OPTIONS), 'MODE');
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('ace_sensing_blocks');
+        this.setTooltip('Allow or prevent dragging this sprite.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_sensing_set_drag_mode = function (block) {
+    const mode = block.getFieldValue('MODE');
+
+    return `runtime.setDragMode(${JSON.stringify(mode)});\n`;
+};
+
+Blockly.Blocks.ace_sensing_loudness = {
+    init() {
+        this.appendDummyInput().appendField('loudness');
+        this.setOutput(true, 'Number');
+        this.setStyle('ace_sensing_blocks');
+        this.setTooltip('Current loudness level.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_sensing_loudness = function () {
+    return ['runtime.getLoudness()', Order.FUNCTION_CALL];
+};
+
+Blockly.Blocks.ace_sensing_reset_timer = {
+    init() {
+        this.appendDummyInput().appendField('reset timer');
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('ace_sensing_blocks');
+        this.setTooltip('Reset the timer to zero.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_sensing_reset_timer = function () {
+    return 'runtime.resetTimer();\n';
+};
+
+const CURRENT_PROPERTY_OPTIONS = [
+    ['year', 'year'],
+    ['month', 'month'],
+    ['date', 'date'],
+    ['day of week', 'day of week'],
+    ['hour', 'hour'],
+    ['minute', 'minute'],
+    ['second', 'second'],
+];
+
+Blockly.Blocks.ace_sensing_current = {
+    init() {
+        this.appendDummyInput()
+            .appendField('current')
+            .appendField(new Blockly.FieldDropdown(CURRENT_PROPERTY_OPTIONS), 'PROPERTY');
+        this.setOutput(true, 'Number');
+        this.setStyle('ace_sensing_blocks');
+        this.setTooltip('A part of the current date or time.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_sensing_current = function (block) {
+    const property = block.getFieldValue('PROPERTY');
+
+    return [`runtime.getCurrent(${JSON.stringify(property)})`, Order.FUNCTION_CALL];
+};
+
+Blockly.Blocks.ace_sensing_username = {
+    init() {
+        this.appendDummyInput().appendField('username');
+        this.setOutput(true, 'String');
+        this.setStyle('ace_sensing_blocks');
+        this.setTooltip('The current username.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_sensing_username = function () {
+    return ['runtime.getUsername()', Order.FUNCTION_CALL];
+};
+
+Blockly.Blocks.ace_sensing_online = {
+    init() {
+        this.appendDummyInput().appendField('online?');
+        this.setOutput(true, 'Boolean');
+        this.setStyle('ace_sensing_blocks');
+        this.setTooltip('True when the browser reports an online connection.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_sensing_online = function () {
+    return ['runtime.isOnline()', Order.FUNCTION_CALL];
 };
 
 javascriptGenerator.addReservedWords('runtime,await');

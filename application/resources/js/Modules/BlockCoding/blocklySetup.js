@@ -1,5 +1,15 @@
 import * as Blockly from 'blockly/core';
-import { blocks, loops, logic, math, texts, variables, variablesDynamic } from 'blockly/blocks';
+import {
+    blocks,
+    loops,
+    logic,
+    math,
+    texts,
+    lists,
+    variables,
+    variablesDynamic,
+    procedures,
+} from 'blockly/blocks';
 import { javascriptGenerator } from 'blockly/javascript';
 import * as En from 'blockly/msg/en';
 import './aceBlocks.js';
@@ -11,8 +21,10 @@ void loops;
 void logic;
 void math;
 void texts;
+void lists;
 void variables;
 void variablesDynamic;
+void procedures;
 
 Blockly.setLocale(En);
 
@@ -72,11 +84,12 @@ export async function runWorkspaceProgram(workspace, runtime) {
         code.includes('runtime.onBroadcastReceived') ||
         code.includes('runtime.onSpriteClicked') ||
         code.includes('runtime.onBackdropSwitched') ||
-        code.includes('runtime.onGreaterThan');
+        code.includes('runtime.onGreaterThan') ||
+        code.includes('runtime.onCloneStart');
 
     if (!hasEventHat) {
         runtime.setError(
-            'Add an event block (green flag, key pressed, sprite clicked, backdrop, greater than, or broadcast received) before running.',
+            'Add an event block (green flag, key, sprite, backdrop, clone, greater than, or broadcast) before running.',
         );
         return { ok: false, reason: 'missing_hat' };
     }

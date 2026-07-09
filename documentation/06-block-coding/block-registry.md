@@ -76,6 +76,9 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 | Blockly `controls_repeat_ext` | repeat | repeat | yes | yes | 1 | done |
 | Blockly `controls_whileUntil` | repeat until | repeat until | yes | yes | 1 | done |
 | Blockly `controls_if` / `controls_ifelse` | if / if else | if / if else | yes | yes | 1 | done |
+| `ace_control_clone_start` | when I start as a clone | when I start as a clone | yes | yes | 3 | done |
+| `ace_control_create_clone` | create clone of | create clone of | yes | yes | 3 | done |
+| `ace_control_delete_clone` | delete this clone | delete this clone | yes | yes | 3 | done |
 
 ## Sound
 
@@ -96,10 +99,28 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 | Block ID | Label | Scratch equivalent | Generator | Runtime | Phase | Status |
 |----------|-------|--------------------|-----------|---------|-------|--------|
 | `ace_sensing_touching` | touching edge / mouse-pointer | touching | yes | yes | 2–3 | done |
+| `ace_sensing_touching_color` | touching color | touching color | yes | stub | 3 | partial |
+| `ace_sensing_color_touching` | color is touching | color is touching | yes | stub | 3 | partial |
+| `ace_sensing_distance` | distance to | distance to | yes | yes | 3 | done |
+| `ace_sensing_ask` | ask and wait | ask and wait | yes | yes | 3 | done |
+| `ace_sensing_answer` | answer | answer | yes | yes | 3 | done |
+| `ace_sensing_key_pressed` | key pressed? | key pressed | yes | yes | 2–3 | done |
+| `ace_sensing_mouse_down` | mouse down? | mouse down | yes | yes | 3 | done |
 | `ace_sensing_mouse_x` | mouse x | mouse x | yes | yes | 2–3 | done |
 | `ace_sensing_mouse_y` | mouse y | mouse y | yes | yes | 2–3 | done |
-| `ace_sensing_key_pressed` | key pressed? | key pressed | yes | yes | 2–3 | done |
+| `ace_sensing_set_drag_mode` | set drag mode | set drag mode | yes | yes | 3 | done |
+| `ace_sensing_loudness` | loudness | loudness | yes | stub | 3 | partial |
 | `ace_sensing_timer` | timer | timer | yes | yes | 2–3 | done |
+| `ace_sensing_reset_timer` | reset timer | reset timer | yes | yes | 3 | done |
+| `ace_sensing_current` | current [year…] | current | yes | yes | 3 | done |
+| `ace_sensing_username` | username | username | yes | yes | 3 | done |
+| `ace_sensing_online` | online? | online | yes | yes | 3 | done |
+
+## Operators
+
+| Source | Label | Scratch equivalent | Phase | Status |
+|--------|-------|--------------------|-------|--------|
+| Blockly math/logic/text | + − × ÷, random, compare, and/or/not, join, letter of, length, contains, mod, round, abs | Operators | 1–3 | done |
 
 ## Variables
 
@@ -107,13 +128,26 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 |--------|-------|--------------------|-------|--------|
 | Blockly `VARIABLE` category | set / change / get | variables | 1 | done |
 
+## Lists
+
+| Source | Label | Scratch equivalent | Phase | Status |
+|--------|-------|--------------------|-------|--------|
+| Blockly static list blocks | create / length / get / set / … | lists | 3 | done |
+
+## My Blocks
+
+| Source | Label | Scratch equivalent | Phase | Status |
+|--------|-------|--------------------|-------|--------|
+| Blockly `PROCEDURE` category | define / call | My Blocks | 3 | done |
+
 ## Not in this slice (later)
 
 | Item | Reason |
 |------|--------|
 | Stage monitor checkboxes | UI chrome; reporters work in scripts |
-| Clones (`create clone of`, etc.) | Phase 3 |
-| My Blocks / procedures | Phase 3 |
+| Pixel-accurate color touching | Needs canvas/Pixi sampling; stubs return false |
+| Scratch-style dynamic “Make a List” | Blockly 13 has no `listsDynamic`; static list blocks used |
+| Microphone loudness | Stub until media permission path exists |
 | Video sensing / pen / extensions | Phase 3+ |
 | ACE-only AI / robotics blocks | Phase 4 |
 
