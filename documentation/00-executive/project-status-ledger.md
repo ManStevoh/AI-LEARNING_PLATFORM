@@ -174,9 +174,7 @@ Next action:
 Application:
 
 - full role/permission implementation beyond institution membership roles,
-- additional database migrations,
-- additional seeders,
-- broader authorization and tenant isolation tests,
+- audit logging foundation,
 - API implementation.
 
 ## Latest Verification
