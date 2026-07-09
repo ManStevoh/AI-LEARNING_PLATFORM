@@ -6,7 +6,7 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 
 - **Last updated:** 2026-07-10
 - **Engine phase:** Phase 2–3 — **partial** (looks costumes + sound uploads; rendering ADR accepted)
-- **Published to GitHub:** pending ADR 0010 publish
+- **Published to GitHub:** `98a8a3e`
 - **Custom ACE blocks:** 27 done / ~35 Level 1 documented
 - **Tests:** 102 PHPUnit (unchanged this slice)
 

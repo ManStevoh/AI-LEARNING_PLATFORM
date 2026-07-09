@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `7b0acd0` — Add tenant-scoped costume uploads with envelope v1.4 and Costumes tab.
+- `98a8a3e` — Accept ADR 0010: PixiJS for ACE stage rendering, reject Phaser.
 
 Current local implementation status:
 
