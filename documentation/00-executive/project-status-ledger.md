@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `6c33eb9 Add tenant-scoped block project persistence with PHPUnit coverage.`
+- `e85f0c8 Add AI Gateway fake provider shell with mentor endpoint and usage logging.`
 
 Current local implementation status:
 
@@ -184,7 +184,7 @@ Completed baseline:
 
 Next action:
 
-- configure PostgreSQL once local services are available.
+- add starter Blockly projects per Level 1 lesson.
 
 ## Not Yet Developed
 
@@ -198,7 +198,7 @@ Application:
 Application verification:
 
 - `php artisan route:list` passes,
-- `php artisan test` passes with 42 tests and 216 assertions,
+- `php artisan test` passes with 48 tests and 235 assertions,
 - `npm run build` passes,
 - `application/.env` is ignored,
 - `application/vendor`, `application/node_modules`, and `application/public/build` are ignored.
@@ -209,7 +209,7 @@ Latest local verification:
 - learner dashboard and learning-path pages render published Level 1 curriculum,
 - auth login/logout and institution switch actions are audit logged,
 - block project save/load with tenant-scoped persistence and auto-save on lesson pages,
-- Cursor rule requiring PHPUnit for all backend implementation slices.
+- AI Gateway fake provider mentor endpoint with usage logging tests.
 
 Learning:
 
@@ -286,17 +286,18 @@ Published:
 - Blockly workspace shell,
 - stage runtime and green-flag execution,
 - block project save/load persistence,
-- PHPUnit-required backend rule.
+- PHPUnit-required backend rule,
+- AI Gateway fake provider shell.
 
 Not published:
 
-- PostgreSQL local setup (next slice).
+- starter Blockly projects per lesson (next slice).
 
 ## Immediate Next Build Sequence
 
-1. Configure database for PostgreSQL once local services are available.
-2. Add AI Gateway fake provider shell.
-3. Add starter Blockly projects per Level 1 lesson.
+1. Add starter Blockly projects per Level 1 lesson.
+2. Configure database for PostgreSQL once local services are available.
+3. Wire learner lesson UI to AI mentor endpoint.
 
 ## Ledger Update Rule
 
