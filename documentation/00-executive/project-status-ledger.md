@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `2f7318f Add learner lesson detail pages with skills and unit context.`
+- `7151fe8 Update status ledger after learner lesson detail slice.` (pending Blockly push)
 
 Current local implementation status:
 
@@ -139,7 +139,8 @@ Developed:
 - demo learner seed user (`learner@example.com`),
 - learner curriculum dashboard feature tests,
 - audit logging foundation (`audit_logs` table, `AuditLogger`, auth and tenant switch events),
-- learner lesson detail page (`/learner/learn/{slug}`) with skills and unit context.
+- learner lesson detail page (`/learner/learn/{slug}`) with skills and unit context,
+- Blockly workspace shell with Level 1 toolbox, stage preview placeholder, and generated JavaScript panel.
 
 ## Partially Developed Artifacts
 
@@ -180,7 +181,7 @@ Completed baseline:
 
 Next action:
 
-- add Blockly workspace shell for lesson activities.
+- wire stage runtime and green-flag execution loop.
 
 ## Not Yet Developed
 
@@ -194,7 +195,7 @@ Application:
 Application verification:
 
 - `php artisan route:list` passes,
-- `php artisan test` passes with 37 tests and 164 assertions,
+- `php artisan test` passes with 38 tests and 176 assertions,
 - `npm run build` passes,
 - `application/.env` is ignored,
 - `application/vendor`, `application/node_modules`, and `application/public/build` are ignored.
@@ -277,15 +278,16 @@ Published:
 - Learning Core curriculum foundation,
 - learner workspace curriculum catalog UI,
 - audit logging foundation,
-- learner lesson detail pages (local, pending commit).
+- learner lesson detail pages,
+- Blockly workspace shell (local, pending commit).
 
 Not published:
 
-- Blockly workspace shell (next slice).
+- stage runtime and green-flag execution (next slice).
 
 ## Immediate Next Build Sequence
 
-1. Add Blockly workspace shell for Level 1 lessons.
+1. Wire stage runtime and green-flag execution loop for Level 1 lessons.
 2. Configure database for PostgreSQL once local services are available.
 3. Add AI Gateway fake provider shell.
 

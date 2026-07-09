@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Learner;
 
 use App\Http\Controllers\Controller;
+use App\Modules\BlockCoding\Services\BlockWorkspaceShellService;
 use App\Modules\Curriculum\Services\CurriculumCatalogService;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -11,6 +12,7 @@ class LearnController extends Controller
 {
     public function __construct(
         private CurriculumCatalogService $catalog,
+        private BlockWorkspaceShellService $workspaceShell,
     ) {}
 
     public function index(): Response
@@ -32,6 +34,7 @@ class LearnController extends Controller
 
         return Inertia::render('Learner/Lesson', [
             'lesson' => $lesson,
+            'workspace' => $this->workspaceShell->configForLesson($lesson),
         ]);
     }
 }

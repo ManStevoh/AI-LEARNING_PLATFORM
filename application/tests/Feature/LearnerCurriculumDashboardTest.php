@@ -74,6 +74,12 @@ class LearnerCurriculumDashboardTest extends TestCase
                 ->has('skills', 3)
                 ->etc()
             )
+            ->has('workspace', fn (Assert $workspace) => $workspace
+                ->where('preset', 'level_1_default')
+                ->where('lesson_slug', 'unit-01-meet-the-coding-studio')
+                ->where('stage.status', 'placeholder')
+                ->etc()
+            )
         );
     }
 
