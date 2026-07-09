@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `c0a067e` — Add sensing blocks with mouse, edge, key, and timer reporters.
+- `b900247` — Add Phase 2 motion blocks: glide, point direction, edge bounce.
 
 Current local implementation status:
 
