@@ -9,6 +9,7 @@ use App\Modules\AI\Gateway\ProviderRouter;
 use App\Modules\AI\Prompts\PromptRegistry;
 use App\Modules\AI\Prompts\PromptRenderer;
 use App\Modules\AI\Providers\FakeAiProvider;
+use App\Modules\AI\Services\AiPromptRegistryService;
 use App\Modules\AI\Services\AiUsageLogger;
 use App\Modules\AI\Services\MentorContextBuilder;
 use Illuminate\Support\ServiceProvider;
@@ -26,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ProviderRouter::class);
         $this->app->singleton(AiUsageLogger::class);
         $this->app->singleton(AiGateway::class);
+        $this->app->singleton(AiPromptRegistryService::class);
         $this->app->singleton(PromptRegistry::class);
         $this->app->singleton(PromptRenderer::class);
         $this->app->singleton(MentorContextBuilder::class);

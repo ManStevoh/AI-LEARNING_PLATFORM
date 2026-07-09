@@ -4,10 +4,12 @@ namespace Tests\Feature;
 
 use App\Modules\AI\Prompts\PromptRegistry;
 use App\Modules\AI\Prompts\PromptRenderer;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class PromptRegistryTest extends TestCase
 {
+    use RefreshDatabase;
     public function test_it_resolves_registered_prompt_version(): void
     {
         $prompt = app(PromptRegistry::class)->resolve('learner.mentor.hint', 'v1');

@@ -31,7 +31,7 @@ class MentorController extends Controller
             $request->validated('lesson_slug'),
         );
 
-        $prompt = $this->promptRegistry->resolve('learner.mentor.hint', 'v1');
+        $prompt = $this->promptRegistry->resolve('learner.mentor.hint');
         $rendered = $this->promptRenderer->render($prompt, $context);
 
         $response = $this->gateway->complete(new AiRequest(

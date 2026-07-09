@@ -48,5 +48,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call(CurriculumFoundationSeeder::class);
+        $this->call(AiPromptFoundationSeeder::class);
     }
 }
