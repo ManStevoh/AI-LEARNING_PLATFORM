@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `828be6b` — Add Scratch block coding studio with ACE Stage Engine Phases 1–2.
+- `36f35d4` — Add Phase 2 sound blocks with Web Audio presets.
 
 Current local implementation status:
 
