@@ -59,7 +59,17 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 | `ace_sound_stop_all` | stop all sounds | stop all sounds | yes | yes | 2 | done |
 | `ace_sound_set_volume` | set volume to | change volume by / set volume | yes | yes | 2 | partial |
 
-## Sensing, Procedures, ACE-only
+## Sensing
+
+| Block ID | Label | Scratch equivalent | Generator | Runtime | Phase | Status |
+|----------|-------|--------------------|-----------|---------|-------|--------|
+| `ace_sensing_touching` | touching edge / mouse-pointer | touching | yes | yes | 2–3 | done |
+| `ace_sensing_mouse_x` | mouse x | mouse x | yes | yes | 2–3 | done |
+| `ace_sensing_mouse_y` | mouse y | mouse y | yes | yes | 2–3 | done |
+| `ace_sensing_key_pressed` | key pressed? | key pressed | yes | yes | 2–3 | done |
+| `ace_sensing_timer` | timer | timer | yes | yes | 2–3 | done |
+
+## Procedures, ACE-only
 
 See [block-taxonomy-and-custom-blocks.md](./block-taxonomy-and-custom-blocks.md) and [scratch-parity-and-custom-engine-strategy.md](./scratch-parity-and-custom-engine-strategy.md). Rows to be added as phases are scheduled.
 

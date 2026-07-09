@@ -364,6 +364,89 @@ javascriptGenerator.forBlock.ace_control_stop = function (block) {
     return target === 'THIS' ? 'runtime.stopThisScript();\n' : 'runtime.stopAll();\n';
 };
 
+const TOUCHING_OPTIONS = [
+    ['edge', 'edge'],
+    ['mouse-pointer', 'mouse-pointer'],
+];
+
+Blockly.Blocks.ace_sensing_touching = {
+    init() {
+        this.appendDummyInput()
+            .appendField('touching')
+            .appendField(new Blockly.FieldDropdown(TOUCHING_OPTIONS), 'TARGET');
+        this.setOutput(true, 'Boolean');
+        this.setStyle('ace_sensing_blocks');
+        this.setTooltip('True when the sprite is touching the edge or the mouse pointer.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_sensing_touching = function (block) {
+    const target = block.getFieldValue('TARGET');
+
+    if (target === 'mouse-pointer') {
+        return ['runtime.isTouchingMouse()', Order.FUNCTION_CALL];
+    }
+
+    return ['runtime.isTouchingEdge()', Order.FUNCTION_CALL];
+};
+
+Blockly.Blocks.ace_sensing_mouse_x = {
+    init() {
+        this.appendDummyInput().appendField('mouse x');
+        this.setOutput(true, 'Number');
+        this.setStyle('ace_sensing_blocks');
+        this.setTooltip('X position of the mouse on the stage.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_sensing_mouse_x = function () {
+    return ['runtime.getMouseX()', Order.FUNCTION_CALL];
+};
+
+Blockly.Blocks.ace_sensing_mouse_y = {
+    init() {
+        this.appendDummyInput().appendField('mouse y');
+        this.setOutput(true, 'Number');
+        this.setStyle('ace_sensing_blocks');
+        this.setTooltip('Y position of the mouse on the stage.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_sensing_mouse_y = function () {
+    return ['runtime.getMouseY()', Order.FUNCTION_CALL];
+};
+
+Blockly.Blocks.ace_sensing_key_pressed = {
+    init() {
+        this.appendDummyInput()
+            .appendField('key')
+            .appendField(new Blockly.FieldDropdown(KEY_OPTIONS), 'KEY')
+            .appendField('pressed?');
+        this.setOutput(true, 'Boolean');
+        this.setStyle('ace_sensing_blocks');
+        this.setTooltip('True while the key is held down.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_sensing_key_pressed = function (block) {
+    const key = block.getFieldValue('KEY');
+
+    return [`runtime.isKeyPressed(${JSON.stringify(key)})`, Order.FUNCTION_CALL];
+};
+
+Blockly.Blocks.ace_sensing_timer = {
+    init() {
+        this.appendDummyInput().appendField('timer');
+        this.setOutput(true, 'Number');
+        this.setStyle('ace_sensing_blocks');
+        this.setTooltip('Seconds since the program started running.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_sensing_timer = function () {
+    return ['runtime.getTimer()', Order.FUNCTION_CALL];
+};
+
 javascriptGenerator.addReservedWords('runtime,await');
 
 javascriptGenerator.INFINITE_LOOP_TRAP = 'await runtime.checkLoop();\n';

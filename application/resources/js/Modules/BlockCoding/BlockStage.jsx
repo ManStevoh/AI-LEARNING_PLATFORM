@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+
 function spritePositionStyle(sprite, stage) {
     const halfWidth = stage.width / 2;
     const halfHeight = stage.height / 2;
@@ -57,17 +59,37 @@ function SpriteVisual({ sprite, stage, activeSpriteId, interactive, onSpriteClic
     );
 }
 
-export default function BlockStage({ snapshot, isRunning, variant = 'default', onSpriteClick = null }) {
+export default function BlockStage({
+    snapshot,
+    isRunning,
+    variant = 'default',
+    onSpriteClick = null,
+    onPointerMove = null,
+}) {
+    const stageRef = useRef(null);
     const stage = snapshot.stage;
     const scratch = variant === 'scratch';
     const interactive = isRunning || snapshot.state === 'running';
 
+    const reportPointer = (clientX, clientY) => {
+        if (!stageRef.current) {
+            return;
+        }
+
+        onPointerMove?.(clientX, clientY, stageRef.current.getBoundingClientRect());
+    };
+
     if (scratch) {
         return (
             <div className="relative flex-1 overflow-hidden border-b border-[#d9d9d9] bg-white">
-                <div className="relative h-full min-h-[220px] w-full" style={{ backgroundColor: stage.background }}>
+                <div
+                    className="relative h-full min-h-[220px] w-full"
+                    onMouseMove={(event) => reportPointer(event.clientX, event.clientY)}
+                    ref={stageRef}
+                    style={{ backgroundColor: stage.background }}
+                >
                     <div
-                        className="absolute inset-0 opacity-25"
+                        className="pointer-events-none absolute inset-0 opacity-25"
                         style={{
                             backgroundImage:
                                 'linear-gradient(to right, rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.5) 1px, transparent 1px)',

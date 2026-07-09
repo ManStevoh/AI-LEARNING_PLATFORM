@@ -36,6 +36,11 @@ export const aceTheme = Theme.defineTheme('ace', {
             colourSecondary: '#C94FC9',
             colourTertiary: '#BD42BD',
         },
+        ace_sensing_blocks: {
+            colourPrimary: '#5CB1D6',
+            colourSecondary: '#47A8D1',
+            colourTertiary: '#3A91B8',
+        },
     },
     categoryStyles: {
         event_category: { colour: '#FFBF00' },

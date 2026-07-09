@@ -5,43 +5,39 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 ## Snapshot
 
 - **Last updated:** 2026-07-10
-- **Engine phase:** Phase 2 (looks + sound) — **partial**
-- **Published to GitHub:** `36f35d4`
-- **Custom ACE blocks:** 19 done / ~35 Level 1 documented
+- **Engine phase:** Phase 2–3 (looks, sound, sensing) — **partial**
+- **Published to GitHub:** `87a7ea9` (sensing slice pending commit)
+- **Custom ACE blocks:** 24 done / ~35 Level 1 documented
 - **Tests:** 85 PHPUnit
 
 ## Done
 
 | Area | Item | Evidence |
 |------|------|----------|
-| Editor | Blockly 13 + Zelos + Scratch-style theme | `aceTheme.js`, `blocklySetup.js` |
-| Editor | Sound category in toolbox | `levelOneToolbox.js` |
-| Runtime | Phase 1 events + control (complete) | `stageRuntime.js`, `aceBlocks.js` |
-| Runtime | Phase 2 looks (think, show, hide, size, costume/backdrop presets) | partial |
-| Runtime | Phase 2 sound: play, stop all, set volume | `soundEngine.js`, `stageRuntime.js` |
-| Persistence | Project envelope v1.1 | `projectEnvelope.js` |
-| Backend | Tenant-scoped save/load + teacher review | `BlockProject*` services |
+| Runtime | Phase 1 events + control | complete |
+| Runtime | Phase 2 looks + sound | partial (presets only) |
+| Runtime | Phase 2–3 sensing: touching, mouse x/y, key?, timer | `stageRuntime.js`, `BlockStage.jsx` |
+| Editor | Sensing category in toolbox | `levelOneToolbox.js` |
 
-### Blocks done
+### Blocks done (24)
 
-Events, motion, looks (incl. partial costume/backdrop), control, **play sound**, **stop all sounds**, **set volume**.  
-Sound uses Web Audio presets (pop, click, success, drum) — no uploaded assets yet.
+All Phase 1 blocks, looks/sound blocks, plus **touching**, **mouse x/y**, **key pressed?**, **timer**.
 
 ## In Progress / Partial
 
 | Area | Item | Remaining |
 |------|------|-----------|
-| Sound | Uploaded sound assets | Tenant storage adapter + envelope v1.3 |
-| Looks | Costume/backdrop | Asset libraries beyond emoji/color presets |
-| Sensing | All blocks | Phase 2–3 |
+| Sensing | Touching another sprite | Multi-sprite collision |
+| Sound | Uploaded assets | Storage adapter |
+| Looks | Costume/backdrop libraries | Asset pipeline |
 
 ## Pending (Next Slices)
 
 | Priority | Item | Phase | Ref |
 |----------|------|-------|-----|
-| P1 | Sensing blocks (touching, key, mouse) | 2–3 | registry |
-| P2 | Motion: glide, bounce, point direction | 2 | registry |
-| P3 | Teacher skill mastery view | app | ledger |
+| P1 | Motion: glide, bounce on edge | 2 | registry |
+| P2 | Teacher skill mastery view | app | ledger |
+| P3 | Stage rendering ADR | 2 | parity strategy |
 
 ## Verification (Latest)
 
@@ -52,9 +48,9 @@ npm run build      → pass
 
 Manual smoke:
 
-- **play sound pop** after green flag (browser may require user gesture — green flag counts)
-- **set volume to** 50 then play sounds
-- **stop all sounds** during a script
+- **if touching edge** inside forever + move loop
+- **mouse x** / **mouse y** in say block while moving mouse over stage
+- **key space pressed?** with if during run
 
 ## Related
 

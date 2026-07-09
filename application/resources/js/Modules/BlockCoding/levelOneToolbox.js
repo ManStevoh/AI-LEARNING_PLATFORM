@@ -102,6 +102,18 @@ export function getLevelOneToolbox(preset = 'level_1_default') {
             },
             {
                 kind: 'category',
+                name: 'Sensing',
+                categorystyle: 'sensing_category',
+                contents: [
+                    { kind: 'block', type: 'ace_sensing_touching' },
+                    { kind: 'block', type: 'ace_sensing_mouse_x' },
+                    { kind: 'block', type: 'ace_sensing_mouse_y' },
+                    { kind: 'block', type: 'ace_sensing_key_pressed' },
+                    { kind: 'block', type: 'ace_sensing_timer' },
+                ],
+            },
+            {
+                kind: 'category',
                 name: 'Control',
                 categorystyle: 'control_category',
                 contents: [

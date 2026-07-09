@@ -42,6 +42,11 @@ export class StageRuntime {
         this.state = 'idle';
         this.error = null;
         this.boundKeyDown = null;
+        this.boundKeyUp = null;
+        this.keysHeld = new Set();
+        this.pointer = { x: 0, y: 0 };
+        this.runStartedAt = null;
+        this.inputListenersAttached = false;
         this.soundEngine = new SoundEngine();
         this.stage = structuredClone(this.initialStage);
         this.sprites = structuredClone(this.initialSprites);
@@ -128,6 +133,9 @@ export class StageRuntime {
         this.error = null;
         this.stage = structuredClone(this.initialStage);
         this.sprites = structuredClone(this.initialSprites);
+        this.keysHeld.clear();
+        this.pointer = { x: 0, y: 0 };
+        this.runStartedAt = null;
         this.soundEngine.stopAll();
         this.finishEventLoop();
         this.setState('idle');
@@ -233,11 +241,14 @@ export class StageRuntime {
     }
 
     attachInputListeners() {
-        if (this.boundKeyDown) {
+        if (this.inputListenersAttached) {
             return;
         }
 
         this.boundKeyDown = (event) => {
+            this.keysHeld.add(event.key);
+            this.keysHeld.add(event.code);
+
             if (this.state !== 'running' || this.shouldStop()) {
                 return;
             }
@@ -258,16 +269,29 @@ export class StageRuntime {
             }
         };
 
+        this.boundKeyUp = (event) => {
+            this.keysHeld.delete(event.key);
+            this.keysHeld.delete(event.code);
+        };
+
         window.addEventListener('keydown', this.boundKeyDown);
+        window.addEventListener('keyup', this.boundKeyUp);
+        this.inputListenersAttached = true;
     }
 
     detachInputListeners() {
-        if (!this.boundKeyDown) {
-            return;
+        if (this.boundKeyDown) {
+            window.removeEventListener('keydown', this.boundKeyDown);
+            this.boundKeyDown = null;
         }
 
-        window.removeEventListener('keydown', this.boundKeyDown);
-        this.boundKeyDown = null;
+        if (this.boundKeyUp) {
+            window.removeEventListener('keyup', this.boundKeyUp);
+            this.boundKeyUp = null;
+        }
+
+        this.keysHeld.clear();
+        this.inputListenersAttached = false;
     }
 
     runTimeout() {
@@ -298,6 +322,7 @@ export class StageRuntime {
     }
 
     async start() {
+        this.runStartedAt = Date.now();
         this.attachInputListeners();
         this.setState('running');
 
@@ -508,6 +533,67 @@ export class StageRuntime {
 
     setSoundVolume(percent = 100) {
         this.soundEngine.setVolume(percent);
+    }
+
+    updatePointer(clientX, clientY, rect) {
+        if (!rect || rect.width <= 0 || rect.height <= 0) {
+            return;
+        }
+
+        const relX = (clientX - rect.left) / rect.width;
+        const relY = (clientY - rect.top) / rect.height;
+
+        this.pointer.x = Math.round((relX - 0.5) * this.stage.width);
+        this.pointer.y = Math.round((0.5 - relY) * this.stage.height);
+    }
+
+    spriteRadius(sprite) {
+        return 24 * ((sprite.size ?? 100) / 100);
+    }
+
+    isTouchingEdge() {
+        const sprite = this.getActiveSprite();
+        const halfWidth = this.stage.width / 2;
+        const halfHeight = this.stage.height / 2;
+        const radius = this.spriteRadius(sprite);
+
+        return (
+            sprite.x + radius >= halfWidth ||
+            sprite.x - radius <= -halfWidth ||
+            sprite.y + radius >= halfHeight ||
+            sprite.y - radius <= -halfHeight
+        );
+    }
+
+    isTouchingMouse() {
+        const sprite = this.getActiveSprite();
+        const deltaX = sprite.x - this.pointer.x;
+        const deltaY = sprite.y - this.pointer.y;
+        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+        return distance <= this.spriteRadius(sprite);
+    }
+
+    getMouseX() {
+        return this.pointer.x;
+    }
+
+    getMouseY() {
+        return this.pointer.y;
+    }
+
+    isKeyPressed(key) {
+        const normalized = this.normalizeKey(key);
+
+        return this.keysHeld.has(normalized) || this.keysHeld.has(String(key ?? ''));
+    }
+
+    getTimer() {
+        if (!this.runStartedAt) {
+            return 0;
+        }
+
+        return (Date.now() - this.runStartedAt) / 1000;
     }
 
     applyPersistedSprites(sprites, activeSpriteId = null) {
