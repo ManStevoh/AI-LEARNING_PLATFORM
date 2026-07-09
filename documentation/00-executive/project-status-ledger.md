@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `f40d74c Add Level 1 starter Blockly projects and wire lesson AI mentor UI.`
+- `6f11a03 Add AI prompt registry and mentor context builder for lesson-aware hints.`
 
 Current local implementation status:
 
@@ -201,7 +201,7 @@ Application:
 Application verification:
 
 - `php artisan route:list` passes,
-- `php artisan test` passes with 52 tests and 300 assertions,
+- `php artisan test` passes with 58 tests and 319 assertions,
 - `npm run build` passes,
 - `application/.env` is ignored,
 - `application/vendor`, `application/node_modules`, and `application/public/build` are ignored.
@@ -213,7 +213,8 @@ Latest local verification:
 - auth login/logout and institution switch actions are audit logged,
 - block project save/load with tenant-scoped persistence and auto-save on lesson pages,
 - AI Gateway fake provider mentor endpoint with usage logging tests,
-- starter Blockly projects and lesson mentor UI integration.
+- starter Blockly projects and lesson mentor UI integration,
+- prompt registry and mentor context builder with PHPUnit coverage.
 
 Learning:
 
@@ -293,17 +294,18 @@ Published:
 - PHPUnit-required backend rule,
 - AI Gateway fake provider shell,
 - Level 1 starter Blockly projects,
-- learner lesson AI mentor UI.
+- learner lesson AI mentor UI,
+- AI prompt registry and mentor context builder.
 
 Not published:
 
-- PostgreSQL local setup (next slice).
+- teacher review view for learner block projects (next slice).
 
 ## Immediate Next Build Sequence
 
-1. Configure database for PostgreSQL once local services are available.
-2. Add prompt registry and context builder for mentor responses.
-3. Add teacher review view for learner block projects.
+1. Add teacher review view for learner block projects.
+2. Configure database for PostgreSQL once local services are available.
+3. Persist prompt registry to database tables with version publishing workflow.
 
 ## Ledger Update Rule
 
