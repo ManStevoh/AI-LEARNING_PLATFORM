@@ -173,11 +173,11 @@ Developed:
 - ADR 0010: PixiJS for ACE stage rendering (Phaser rejected; DOM Level 1 default).
 - Scratch Control clones + Sensing/Operators/Lists/My Blocks palette parity.
 - tenant-scoped block project backdrop uploads with envelope v1.5 stage refs.
-- stage reporter monitors with toolbox checkboxes and overlay (envelope v1.6; local pending publish).
+- stage reporter monitors with toolbox checkboxes and overlay (envelope v1.6).
 
-### Block Coding (Published + local monitors)
+### Block Coding (Published)
 
-Status: Phase 1–3 Scratch palette parity + backdrop uploads published; stage monitors local. See `documentation/06-block-coding/implementation-status.md`.
+Status: Phase 1–3 Scratch palette parity + backdrop uploads + stage monitors published. See `documentation/06-block-coding/implementation-status.md`.
 
 Developed:
 
@@ -185,14 +185,13 @@ Developed:
 - Blockly Zelos theme and Scratch palette order,
 - ACE Stage Engine Phases 1–3,
 - Operators/Lists/My Blocks,
-- project envelope through v1.6 (local),
+- project envelope through v1.6,
 - stage reporter monitors (checkbox + overlay),
 - block registry and scratch parity strategy docs,
 - StageRuntime smoke 31/31; PHPUnit 109.
 
 Next action:
 
-- publish stage monitor checkboxes,
 - configure PostgreSQL once local services are available.
 
 ## Partially Developed Artifacts
@@ -297,7 +296,7 @@ Latest local verification:
 - block project envelope v1.1 save/load with sprite state (PHPUnit),
 - Scratch Phase 3 clones/sensing/operators/lists/My Blocks (StageRuntime smoke 25/25; published `a79c32b`).
 - block project backdrop upload/list/stream/delete with envelope v1.5 (PHPUnit 6; smoke 27/27; published `e39ec5d`).
-- stage reporter monitors with envelope v1.6 (PHPUnit persistence; smoke 31/31; local pending publish).
+- stage reporter monitors with envelope v1.6 (PHPUnit persistence; smoke 31/31; published `ae12511`).
 
 Learning:
 
@@ -392,20 +391,20 @@ Published:
 - Scratch Motion/Looks/Sound/Events/Control palette parity,
 - Scratch Control clones + Sensing/Operators/Lists/My Blocks palette parity,
 - block project backdrop uploads with Backdrops tab and envelope v1.5,
+- stage reporter monitors with toolbox checkboxes and overlay (envelope v1.6),
 - Scratch block coding studio and ACE Stage Engine Phases 1–3,
 - block coding docs (registry, parity strategy, status procedure).
 
 Not published (local only):
 
-- stage reporter monitors with toolbox checkboxes and overlay (envelope v1.6),
 - PostgreSQL local setup (Docker unavailable).
 
 Not published (blocked):
 
 ## Immediate Next Build Sequence
 
-1. Publish stage reporter monitors (envelope v1.6).
-2. Configure PostgreSQL once local services are available.
+1. Configure PostgreSQL once local services are available.
+2. Pixel color sensing (canvas/Pixi) when needed.
 
 ## Ledger Update Rule
 
