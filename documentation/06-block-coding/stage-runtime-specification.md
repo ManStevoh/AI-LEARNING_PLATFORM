@@ -22,19 +22,19 @@ The stage runtime should support:
 
 ## Recommended Frontend Technologies
 
-Recommended options:
+Recommended stack:
 
 - React for UI shell,
 - Blockly for block workspace,
-- PixiJS or Phaser for 2D stage,
-- Zustand or equivalent lightweight state store for editor state,
-- Web Workers where useful for safe execution/control separation.
+- **HTML/CSS stage renderer** for Level 1 default,
+- **PixiJS** as the approved canvas renderer when effects/pen/multi-sprite performance require it ([ADR 0010](../../architecture/decisions/0010-use-pixijs-for-ace-stage-rendering.md)),
+- Web Workers only if a future execution-model ADR requires them.
 
-Decision guidance:
+Decision (accepted):
 
-- PixiJS is strong for custom rendering and animation.
-- Phaser is strong for game-oriented features.
-- Prototype both if game mechanics become complex.
+- **PixiJS** for custom 2D rendering upgrade — does not own game logic.
+- **Phaser** is not used for the ACE Stage Engine (duplicates runtime concerns).
+- `StageRuntime` remains the source of truth; renderers only mirror snapshots.
 
 ## Stage Concepts
 

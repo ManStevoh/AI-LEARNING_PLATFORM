@@ -92,7 +92,7 @@ Target: complete Units 1–6 without pretending to be full Scratch.
 - Sound play/stop (tenant-scoped asset storage via platform adapters)
 - Sensing: touching edge/sprite/color, distance, mouse x/y, ask/answer
 - Collision model per [stage-runtime-specification.md](./stage-runtime-specification.md)
-- Rendering upgrade: **PixiJS or Phaser** (requires new ADR — see open decisions)
+- Rendering upgrade: **PixiJS** when DOM stage is insufficient (see ADR 0010; Phaser rejected)
 
 ### Phase 3 — Full block parity + procedures
 
@@ -155,7 +155,7 @@ These docs are the contract for “all Scratch + ours”:
 | **block-registry.md** | Started | Per-block status and metadata |
 | block-project-data-model.md | **Needed** | Full save format v1+ |
 | generated-code-mapping-specification.md | **Needed** | JS now, Python later |
-| stage-rendering-engine ADR | **Needed** | PixiJS vs Phaser vs hybrid |
+| stage-rendering-engine ADR | **Done** | [0010-use-pixijs-for-ace-stage-rendering.md](../../architecture/decisions/0010-use-pixijs-for-ace-stage-rendering.md) — PixiJS renderer; Phaser rejected; DOM default until needed |
 | execution-model ADR | **Needed** | AsyncFunction vs worker vs VM |
 
 Update [project-status-ledger.md](../00-executive/project-status-ledger.md) when each phase lands.
@@ -164,13 +164,15 @@ Update [project-status-ledger.md](../00-executive/project-status-ledger.md) when
 
 ---
 
-## Open Decisions (Must Be Resolved Before Phase 2)
+## Open Decisions (Remaining)
 
-1. **Rendering engine** — PixiJS (flexible 2D) vs Phaser (game primitives) vs extend HTML/CSS (limited).
-2. **Generated language** — JavaScript first; Python mapping rules for Level 2.
-3. **Project file version** — Migration strategy when sprite/costume data joins workspace saves.
-4. **Clone semantics** — Match Scratch or simplified ACE subset.
-5. **Offline** — Which blocks/assets work offline per ADR 0007.
+1. **Generated language** — JavaScript first; Python mapping rules for Level 2.
+2. **Clone semantics** — Match Scratch or simplified ACE subset.
+3. **Offline** — Which blocks/assets work offline per ADR 0007.
+4. **Execution model** — Keep AsyncFunction (current) vs worker/VM (future ADR).
+
+**Resolved:** Rendering engine — PixiJS as upgrade renderer; HTML/CSS remains Level 1 default ([ADR 0010](../../architecture/decisions/0010-use-pixijs-for-ace-stage-rendering.md)).
+**Resolved:** Project file versioning — envelope v1.1–v1.4 with backward-compatible load ([block-project-data-model.md](./block-project-data-model.md)).
 
 ---
 

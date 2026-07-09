@@ -5,10 +5,10 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 ## Snapshot
 
 - **Last updated:** 2026-07-10
-- **Engine phase:** Phase 2–3 — **partial** (looks costumes + sound uploads)
-- **Published to GitHub:** `7b0acd0`
+- **Engine phase:** Phase 2–3 — **partial** (looks costumes + sound uploads; rendering ADR accepted)
+- **Published to GitHub:** pending ADR 0010 publish
 - **Custom ACE blocks:** 27 done / ~35 Level 1 documented
-- **Tests:** 102 PHPUnit
+- **Tests:** 102 PHPUnit (unchanged this slice)
 
 ## Done
 
@@ -21,6 +21,7 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 | Teacher | Skill mastery view + support gaps | `TeacherSkillMasteryService`, `/teacher/skills` |
 | Sounds | Tenant-scoped upload + envelope v1.3 | `BlockProjectSoundService`, Sounds tab |
 | Costumes | Tenant-scoped upload + envelope v1.4 | `BlockProjectCostumeService`, Costumes tab |
+| Architecture | Stage rendering ADR | [ADR 0010](../../architecture/decisions/0010-use-pixijs-for-ace-stage-rendering.md) — PixiJS; Phaser rejected; DOM default |
 
 ### Motion blocks (all done)
 
@@ -30,23 +31,19 @@ move, turn, go to x/y, **glide**, **point in direction**, **if on edge bounce**.
 
 | Priority | Item | Phase | Ref |
 |----------|------|-------|-----|
-| P1 | Stage rendering ADR | 2 | parity strategy |
-| P2 | Backdrop asset uploads | 2 | data model |
+| P1 | Backdrop asset uploads | 2 | data model |
+| P2 | PixiJS renderer adapter (when needed) | 2 | ADR 0010 |
+| P3 | Execution-model ADR | 2–3 | parity strategy |
 
 ## Verification (Latest)
 
 ```text
-php artisan test   → 102 passed
-npm run build      → pass
+php artisan test   → 102 passed (no code change this slice)
+npm run build      → n/a (docs-only)
 ```
-
-Manual smoke:
-
-- **glide 1 secs to x 100 y 0** — smooth animation
-- **forever** move + **if on edge bounce** — paddle/ball style
-- **Costumes tab** — upload image, switch costume, stage shows image
 
 ## Related
 
 - [block-registry.md](./block-registry.md)
 - [project-status-ledger.md](../00-executive/project-status-ledger.md)
+- [ADR 0010](../../architecture/decisions/0010-use-pixijs-for-ace-stage-rendering.md)

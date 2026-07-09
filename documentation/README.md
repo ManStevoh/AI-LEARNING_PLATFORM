@@ -277,6 +277,7 @@ Initial ADRs:
 - `0007-design-offline-ready-from-start.md`
 - `0008-use-shared-database-tenant-scoped-model.md`
 - `0009-build-owned-design-system.md`
+- `0010-use-pixijs-for-ace-stage-rendering.md`
 
 ## Working Rule
 

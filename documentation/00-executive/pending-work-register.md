@@ -468,7 +468,7 @@ Still pending:
 - sprite-clicked event (Phase 1 remainder),
 - looks/sound/sensing blocks (Phase 2+),
 - generated code mapping specification,
-- PixiJS/Phaser rendering ADR,
+- PixiJS renderer adapter implementation (ADR 0010 accepted; DOM remains default),
 - full Level 1 block inventory (~35 blocks),
 - curriculum starter assets for Units 5–10,
 - Blockly accessibility and mobile strategy.
