@@ -41,7 +41,16 @@ export default function Index({ projects }) {
                                         <p className="font-medium text-[var(--color-text-primary)]">{project.learner.name}</p>
                                         <p className="text-xs text-[var(--color-text-muted)]">{project.learner.email}</p>
                                     </td>
-                                    <td className="px-4 py-4 text-sm text-[var(--color-text-secondary)]">{project.lesson_title}</td>
+                                    <td className="px-4 py-4 text-sm text-[var(--color-text-secondary)]">
+                                        <div className="flex items-center gap-2">
+                                            <span>{project.lesson_title}</span>
+                                            {project.has_feedback ? (
+                                                <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700">
+                                                    Feedback
+                                                </span>
+                                            ) : null}
+                                        </div>
+                                    </td>
                                     <td className="px-4 py-4 text-sm text-[var(--color-text-muted)]">
                                         {project.last_saved_at
                                             ? new Date(project.last_saved_at).toLocaleString()

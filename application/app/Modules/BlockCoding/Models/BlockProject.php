@@ -6,6 +6,7 @@ use App\Models\Institution;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class BlockProject extends Model
 {
@@ -35,5 +36,10 @@ class BlockProject extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function feedback(): HasOne
+    {
+        return $this->hasOne(BlockProjectFeedback::class);
     }
 }

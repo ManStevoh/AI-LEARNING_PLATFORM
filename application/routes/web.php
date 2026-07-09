@@ -54,6 +54,9 @@ Route::middleware(['auth', ResolveTenantContext::class])->group(function () {
     Route::get('teacher/block-projects/{blockProject}', [BlockProjectReviewController::class, 'show'])
         ->middleware('workspace.role:teacher')
         ->name('teacher.block-projects.show');
+    Route::post('teacher/block-projects/{blockProject}/feedback', [BlockProjectReviewController::class, 'storeFeedback'])
+        ->middleware('workspace.role:teacher')
+        ->name('teacher.block-projects.feedback.store');
     Route::get('institution/workspace', InstitutionDashboardController::class)
         ->middleware('workspace.role:institution_admin')
         ->name('institution.dashboard');

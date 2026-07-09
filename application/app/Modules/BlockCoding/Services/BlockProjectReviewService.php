@@ -10,6 +10,7 @@ class BlockProjectReviewService
 {
     public function __construct(
         private CurriculumCatalogService $catalog,
+        private BlockProjectFeedbackService $feedbackService,
     ) {}
 
     /**
@@ -19,7 +20,7 @@ class BlockProjectReviewService
     {
         return BlockProject::query()
             ->where('institution_id', $institutionId)
-            ->with('user:id,name,email')
+            ->with(['user:id,name,email', 'feedback'])
             ->orderByDesc('last_saved_at')
             ->orderByDesc('updated_at')
             ->get()
@@ -31,7 +32,7 @@ class BlockProjectReviewService
         return BlockProject::query()
             ->where('institution_id', $institutionId)
             ->whereKey($projectId)
-            ->with('user:id,name,email')
+            ->with(['user:id,name,email', 'feedback.teacher:id,name'])
             ->first();
     }
 
@@ -50,6 +51,7 @@ class BlockProjectReviewService
             'lesson_title' => $this->lessonTitle($project->lesson_slug),
             'last_saved_at' => $project->last_saved_at?->toIso8601String(),
             'has_generated_code' => filled($project->generated_code),
+            'has_feedback' => $project->feedback !== null,
         ];
     }
 
@@ -63,6 +65,7 @@ class BlockProjectReviewService
             'schema_version' => $project->schema_version,
             'generated_code' => $project->generated_code,
             'workspace_block_count' => count($project->workspace['blocks']['blocks'] ?? []),
+            'feedback' => $this->feedbackService->toFrontendPayload($project->feedback),
         ];
     }
 
