@@ -172,7 +172,7 @@ Update [project-status-ledger.md](../00-executive/project-status-ledger.md) when
 4. **Execution model** — Keep AsyncFunction (current) vs worker/VM (future ADR).
 
 **Resolved:** Rendering engine — PixiJS as upgrade renderer; HTML/CSS remains Level 1 default ([ADR 0010](../../architecture/decisions/0010-use-pixijs-for-ace-stage-rendering.md)).
-**Resolved:** Project file versioning — envelope v1.1–v1.4 with backward-compatible load ([block-project-data-model.md](./block-project-data-model.md)).
+**Resolved:** Project file versioning — envelope v1.1–v1.5 with backward-compatible load ([block-project-data-model.md](./block-project-data-model.md)).
 
 ---
 

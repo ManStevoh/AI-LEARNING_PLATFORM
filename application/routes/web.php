@@ -7,6 +7,7 @@ use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\Institution\AiPromptController;
 use App\Http\Controllers\Institution\DashboardController as InstitutionDashboardController;
 use App\Http\Controllers\Learner\BlockProjectController;
+use App\Http\Controllers\Learner\BlockProjectBackdropController;
 use App\Http\Controllers\Learner\BlockProjectCostumeController;
 use App\Http\Controllers\Learner\BlockProjectSoundController;
 use App\Http\Controllers\Learner\DashboardController as LearnerDashboardController;
@@ -71,6 +72,18 @@ Route::middleware(['auth', ResolveTenantContext::class])->group(function () {
     Route::delete('learner/learn/{lessonSlug}/costumes/{costume}', [BlockProjectCostumeController::class, 'destroy'])
         ->middleware('workspace.role:learner,parent')
         ->name('learner.costumes.destroy');
+    Route::get('learner/learn/{lessonSlug}/backdrops', [BlockProjectBackdropController::class, 'index'])
+        ->middleware('workspace.role:learner,parent')
+        ->name('learner.backdrops.index');
+    Route::post('learner/learn/{lessonSlug}/backdrops', [BlockProjectBackdropController::class, 'store'])
+        ->middleware('workspace.role:learner,parent')
+        ->name('learner.backdrops.store');
+    Route::get('learner/learn/{lessonSlug}/backdrops/{backdrop}/image', [BlockProjectBackdropController::class, 'image'])
+        ->middleware('workspace.role:learner,parent')
+        ->name('learner.backdrops.image');
+    Route::delete('learner/learn/{lessonSlug}/backdrops/{backdrop}', [BlockProjectBackdropController::class, 'destroy'])
+        ->middleware('workspace.role:learner,parent')
+        ->name('learner.backdrops.destroy');
     Route::post('learner/mentor/ask', [LearnerMentorController::class, 'ask'])
         ->middleware('workspace.role:learner,parent')
         ->name('learner.mentor.ask');

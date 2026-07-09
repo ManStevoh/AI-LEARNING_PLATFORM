@@ -14,4 +14,9 @@ return [
         'max_kilobytes' => (int) env('LEARNING_BLOCK_COSTUME_MAX_KB', 1024),
         'allowed_mimes' => ['jpg', 'jpeg', 'png', 'gif', 'webp'],
     ],
+
+    'block_backdrop' => [
+        'max_kilobytes' => (int) env('LEARNING_BLOCK_BACKDROP_MAX_KB', 2048),
+        'allowed_mimes' => ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+    ],
 ];

@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { backdropImageUrl } from './backdropAssets.js';
 import { costumeImageUrl } from './costumeAssets.js';
 
 function spritePositionStyle(sprite, stage) {
@@ -131,6 +132,13 @@ export default function BlockStage({
                     ref={stageRef}
                     style={{ backgroundColor: stage.background }}
                 >
+                    {stage.backdropAssetUuid && lessonSlug ? (
+                        <img
+                            alt=""
+                            className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+                            src={backdropImageUrl(lessonSlug, stage.backdropAssetUuid)}
+                        />
+                    ) : null}
                     <div
                         className="pointer-events-none absolute inset-0 opacity-25"
                         style={{
@@ -170,6 +178,13 @@ export default function BlockStage({
                 className="relative flex-1 overflow-hidden"
                 style={{ backgroundColor: stage.background }}
             >
+                {stage.backdropAssetUuid && lessonSlug ? (
+                    <img
+                        alt=""
+                        className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+                        src={backdropImageUrl(lessonSlug, stage.backdropAssetUuid)}
+                    />
+                ) : null}
                 {snapshot.sprites.map((sprite) =>
                     sprite.visible ? (
                         <div key={sprite.id} className="absolute" style={spritePositionStyle(sprite, stage)}>

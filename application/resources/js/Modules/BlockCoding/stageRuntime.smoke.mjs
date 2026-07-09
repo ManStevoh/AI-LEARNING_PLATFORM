@@ -84,6 +84,16 @@ assert('nextCostume', runtime.getCostume('number') >= 1);
 runtime.nextBackdrop();
 assert('nextBackdrop', runtime.getBackdrop('number') >= 1);
 
+runtime.addBackdrop({
+    type: 'asset',
+    asset_uuid: '00000000-0000-4000-8000-000000000099',
+    name: 'Uploaded Park',
+    color: '#e5e7eb',
+});
+assert('addBackdrop asset', runtime.stage.backdropAssetUuid === '00000000-0000-4000-8000-000000000099');
+runtime.selectBackdrop(0);
+assert('selectBackdrop', runtime.stage.backdropIndex === 0);
+
 runtime.goToLayer('front');
 assert('goToLayer', typeof runtime.getActiveSprite().layer === 'number');
 

@@ -5,21 +5,21 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 ## Snapshot
 
 - **Last updated:** 2026-07-10
-- **Engine phase:** Phase 3 — Control clones + Sensing/Operators/Lists/My Blocks palette parity
-- **Published to GitHub:** `a79c32b`
+- **Engine phase:** Phase 3 — palette parity + backdrop asset uploads (envelope v1.5)
+- **Published to GitHub:** pending (local slice ready)
 - **Custom ACE blocks:** ~78 done (plus Blockly control/math/text/variables/lists/procedures)
-- **Tests:** 102 PHPUnit + StageRuntime smoke 25/25
+- **Tests:** 108 PHPUnit + StageRuntime smoke 27/27
 
 ## Done
 
 | Area | Item | Evidence |
 |------|------|----------|
-| Runtime | Phase 1 events + control | complete |
+| Runtime | Phase 1–3 events/control/clones/sensing | complete |
 | Runtime | Phase 2 motion/looks/sound (Scratch palettes) | `stageRuntime.js`, `aceBlocks.js` |
-| Runtime | Phase 3 clones | `createCloneOf`, `deleteThisClone`, `onCloneStart` |
-| Runtime | Phase 3 sensing (ask, mouse, timer, distance, current, …) | `aceBlocks.js` + runtime APIs |
 | Toolbox | Scratch category order + Operators/Lists/My Blocks | `levelOneToolbox.js` |
-| Assets | Sound + costume uploads | envelope v1.3 / v1.4 |
+| Assets | Sound uploads | envelope v1.3 |
+| Assets | Costume uploads | envelope v1.4 |
+| Assets | Backdrop uploads | envelope v1.5, Backdrops tab |
 | Architecture | Stage rendering ADR | ADR 0010 |
 | Teacher | Skill mastery | `/teacher/skills` |
 
@@ -35,21 +35,21 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 
 | Priority | Item | Phase | Ref |
 |----------|------|-------|-----|
-| P1 | Backdrop asset uploads | 2 | data model |
-| P2 | Stage monitor checkboxes for reporters | 2 | Scratch UI |
-| P3 | Pixel color sensing (canvas/Pixi) | 3 | ADR 0010 |
-| P4 | PixiJS renderer adapter when needed | 2 | ADR 0010 |
+| P1 | Stage monitor checkboxes for reporters | 2 | Scratch UI |
+| P2 | Pixel color sensing (canvas/Pixi) | 3 | ADR 0010 |
+| P3 | PixiJS renderer adapter when needed | 2 | ADR 0010 |
 
 ## Verification (Latest)
 
 ```text
-php artisan test              → 102 passed
-node stageRuntime.smoke.mjs   → 25/25 passed
+php artisan test              → 108 passed
+node stageRuntime.smoke.mjs   → 27/27 passed
 npm run build                 → pass
 ```
 
 ## Related
 
 - [block-registry.md](./block-registry.md)
+- [block-project-data-model.md](./block-project-data-model.md)
 - [project-status-ledger.md](../00-executive/project-status-ledger.md)
 - [ADR 0010](../../architecture/decisions/0010-use-pixijs-for-ace-stage-rendering.md)

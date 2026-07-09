@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import BlockStage from './BlockStage';
 import BlockWorkspace from './BlockWorkspace';
+import ScratchBackdropsPane from './ScratchBackdropsPane';
 import ScratchCostumesPane from './ScratchCostumesPane';
 import ScratchSoundsPane from './ScratchSoundsPane';
 import ScratchSpritePane from './ScratchSpritePane';
@@ -9,6 +10,7 @@ import {
     extractActiveSpriteId,
     extractInitialSounds,
     extractInitialSprites,
+    extractInitialStage,
 } from './projectEnvelope';
 import { listLessonSounds } from './soundAssets.js';
 import { buildSoundLibraryMap, setProjectSounds as syncSoundLibrary } from './soundLibrary.js';
@@ -84,6 +86,7 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
     useEffect(() => {
         const projectState = resolveProjectState(savedProject, starterProject);
         const sprites = extractInitialSprites(projectState, workspaceConfig.stage?.sprites);
+        const stageExtras = extractInitialStage(projectState);
         const activeSpriteId = extractActiveSpriteId(projectState);
         const envelopeSounds = extractInitialSounds(projectState);
 
@@ -92,6 +95,7 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
                 ...workspaceConfig,
                 stage: {
                     ...workspaceConfig.stage,
+                    ...(stageExtras ?? {}),
                     ...(sprites ? { sprites } : {}),
                 },
                 active_sprite_id: activeSpriteId,
@@ -142,6 +146,10 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
             sprites: runtimeSnapshot.sprites,
             active_sprite_id: runtimeSnapshot.activeSpriteId,
             sounds: projectSounds,
+            stage: {
+                backdrops: runtimeSnapshot.stage?.backdrops ?? [],
+                backdropIndex: runtimeSnapshot.stage?.backdropIndex ?? 0,
+            },
         };
     }, [projectSounds]);
 
@@ -167,6 +175,18 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
 
     const handleDeleteCostume = useCallback((spriteId, index) => {
         runtimeRef.current?.removeCostume(spriteId, index);
+    }, []);
+
+    const handleAddBackdrop = useCallback((backdrop) => {
+        runtimeRef.current?.addBackdrop(backdrop);
+    }, []);
+
+    const handleSelectBackdrop = useCallback((index) => {
+        runtimeRef.current?.selectBackdrop(index);
+    }, []);
+
+    const handleDeleteBackdrop = useCallback((index) => {
+        runtimeRef.current?.removeBackdrop(index);
     }, []);
 
     const handleSelectSprite = useCallback((spriteId) => {
@@ -224,6 +244,7 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
                     {[
                         ['code', 'Code'],
                         ['costumes', 'Costumes'],
+                        ['backdrops', 'Backdrops'],
                         ['sounds', 'Sounds'],
                     ].map(([tab, label]) => (
                         <button
@@ -321,6 +342,17 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
                     onDeleteCostume={handleDeleteCostume}
                     onSaveRequest={handleAssetSaveRequest}
                     onSelectCostume={handleSelectCostume}
+                />
+            ) : null}
+
+            {activeTab === 'backdrops' ? (
+                <ScratchBackdropsPane
+                    lessonSlug={lessonSlug}
+                    onAddBackdrop={handleAddBackdrop}
+                    onDeleteBackdrop={handleDeleteBackdrop}
+                    onSaveRequest={handleAssetSaveRequest}
+                    onSelectBackdrop={handleSelectBackdrop}
+                    stage={snapshot.stage}
                 />
             ) : null}
 

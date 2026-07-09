@@ -27,14 +27,14 @@ Raw Blockly serialization only:
 
 Loaders detect legacy format when `format` is absent.
 
-## ACE project envelope (schema `1.4`)
+## ACE project envelope (schema `1.5`)
 
-Current version. Includes Blockly workspace, sprite state with emoji/asset costumes, and uploaded sound refs.
+Current version. Includes Blockly workspace, sprite costumes, uploaded sounds, and stage backdrop refs (color presets or uploaded images).
 
 ```json
 {
   "format": "ace_project",
-  "version": "1.4",
+  "version": "1.5",
   "blockly": {
     "blocks": {
       "languageVersion": 0,
@@ -69,9 +69,30 @@ Current version. Includes Blockly workspace, sprite state with emoji/asset costu
       "name": "Meow",
       "asset_uuid": "550e8400-e29b-41d4-a716-446655440000"
     }
-  ]
+  ],
+  "stage": {
+    "backdrops": [
+      {
+        "id": "backdrop-1",
+        "name": "blue sky",
+        "color": "#dbeafe"
+      },
+      {
+        "type": "asset",
+        "id": "backdrop-asset-1",
+        "asset_uuid": "550e8400-e29b-41d4-a716-446655440002",
+        "name": "Park",
+        "color": "#e5e7eb"
+      }
+    ],
+    "backdropIndex": 1
+  }
 }
 ```
+
+### Envelope `1.4` (legacy)
+
+Same as above without `stage.backdrops` asset refs (color-only stage defaults still work via runtime).
 
 ### Envelope `1.3` (legacy)
 
@@ -119,14 +140,15 @@ Same as above without the `sounds` array.
 - `projectEnvelope.js` — build, parse, migrate detection
 - `projectPersistence.js` — Blockly load/save through envelope extractors
 
-## Future versions
+## Version history
 
-| Version | Planned additions |
-|---------|-------------------|
-| `1.2` | Stage backdrop refs |
-| `1.3` | Sound asset refs |
-| `1.4` | Costume asset refs on sprites | **current** |
-| `2.0` | Full stage-runtime spec alignment (collisions, clones) |
+| Version | Additions | Status |
+|---------|-----------|--------|
+| `1.2` | Stage backdrop color refs (planned early; superseded) | legacy |
+| `1.3` | Sound asset refs | legacy |
+| `1.4` | Costume asset refs on sprites | legacy |
+| `1.5` | Stage backdrop asset refs | **current** |
+| `2.0` | Full stage-runtime spec alignment | planned |
 
 Migrations must accept all prior versions on read and write the latest supported version on save.
 

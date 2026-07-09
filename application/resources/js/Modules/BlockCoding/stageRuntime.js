@@ -1,3 +1,4 @@
+import { normalizeBackdropEntry } from './backdropAssets.js';
 import { normalizeCostumeEntry } from './costumeAssets.js';
 import { SoundEngine } from './soundEngine.js';
 
@@ -92,6 +93,10 @@ export class StageRuntime {
 
         if (!Array.isArray(normalized.backdrops) || normalized.backdrops.length === 0) {
             normalized.backdrops = structuredClone(DEFAULT_STAGE.backdrops);
+        } else {
+            normalized.backdrops = normalized.backdrops.map((backdrop, index) =>
+                normalizeBackdropEntry(backdrop, index),
+            );
         }
 
         normalized.backdropIndex = Math.min(
@@ -99,10 +104,70 @@ export class StageRuntime {
             normalized.backdrops.length - 1,
         );
 
-        const current = normalized.backdrops[normalized.backdropIndex];
-        normalized.background = current?.color ?? normalized.background ?? DEFAULT_STAGE.background;
+        this.applyBackdropVisual(normalized);
 
         return normalized;
+    }
+
+    applyBackdropVisual(stage = this.stage) {
+        const current = stage.backdrops?.[stage.backdropIndex] ?? stage.backdrops?.[0];
+
+        if (!current) {
+            stage.background = DEFAULT_STAGE.background;
+            stage.backdropAssetUuid = null;
+
+            return;
+        }
+
+        stage.background = current.color ?? DEFAULT_STAGE.background;
+        stage.backdropAssetUuid = current.type === 'asset' ? current.asset_uuid : null;
+    }
+
+    addBackdrop(backdrop) {
+        this.stage.backdrops = this.stage.backdrops ?? [];
+        this.stage.backdrops.push(normalizeBackdropEntry(backdrop, this.stage.backdrops.length));
+        this.stage.backdropIndex = this.stage.backdrops.length - 1;
+        this.applyBackdropVisual();
+        this.syncInitialStage();
+        this.emitChange();
+        this.fireBackdropSwitchHandlers(this.stage.backdrops[this.stage.backdropIndex]?.name);
+    }
+
+    selectBackdrop(index) {
+        if (!this.stage.backdrops || index < 0 || index >= this.stage.backdrops.length) {
+            return;
+        }
+
+        this.stage.backdropIndex = index;
+        this.applyBackdropVisual();
+        this.syncInitialStage();
+        this.emitChange();
+        this.fireBackdropSwitchHandlers(this.stage.backdrops[index]?.name);
+    }
+
+    removeBackdrop(index) {
+        if (!this.stage.backdrops || this.stage.backdrops.length <= 1 || index < 0 || index >= this.stage.backdrops.length) {
+            return;
+        }
+
+        this.stage.backdrops.splice(index, 1);
+
+        if (this.stage.backdropIndex >= this.stage.backdrops.length) {
+            this.stage.backdropIndex = this.stage.backdrops.length - 1;
+        } else if (this.stage.backdropIndex > index) {
+            this.stage.backdropIndex -= 1;
+        }
+
+        this.applyBackdropVisual();
+        this.syncInitialStage();
+        this.emitChange();
+    }
+
+    syncInitialStage() {
+        this.initialStage.backdrops = structuredClone(this.stage.backdrops);
+        this.initialStage.backdropIndex = this.stage.backdropIndex;
+        this.initialStage.background = this.stage.background;
+        this.initialStage.backdropAssetUuid = this.stage.backdropAssetUuid;
     }
 
     ensureSpriteLayers() {
@@ -1095,7 +1160,9 @@ export class StageRuntime {
         }
 
         const value = String(nameOrColor);
-        const byName = this.stage.backdrops?.findIndex((backdrop) => backdrop.name === value || backdrop.color === value);
+        const byName = this.stage.backdrops?.findIndex(
+            (backdrop) => backdrop.name === value || backdrop.color === value || backdrop.asset_uuid === value,
+        );
         const byIndex = Number(value);
 
         if (byName >= 0) {
@@ -1108,13 +1175,18 @@ export class StageRuntime {
                 this.stage.backdropIndex = existing;
             } else {
                 this.stage.backdrops = this.stage.backdrops ?? [];
-                this.stage.backdrops.push({ id: `backdrop-${this.stage.backdrops.length + 1}`, name: value, color: value });
+                this.stage.backdrops.push(
+                    normalizeBackdropEntry(
+                        { id: `backdrop-${this.stage.backdrops.length + 1}`, name: value, color: value },
+                        this.stage.backdrops.length,
+                    ),
+                );
                 this.stage.backdropIndex = this.stage.backdrops.length - 1;
             }
         }
 
         const current = this.stage.backdrops[this.stage.backdropIndex];
-        this.stage.background = current?.color ?? value;
+        this.applyBackdropVisual();
         this.emitChange();
         this.fireBackdropSwitchHandlers(current?.name ?? value);
     }
@@ -1130,7 +1202,7 @@ export class StageRuntime {
 
         this.stage.backdropIndex = (this.stage.backdropIndex + 1) % this.stage.backdrops.length;
         const current = this.stage.backdrops[this.stage.backdropIndex];
-        this.stage.background = current.color;
+        this.applyBackdropVisual();
         this.emitChange();
         this.fireBackdropSwitchHandlers(current.name);
     }

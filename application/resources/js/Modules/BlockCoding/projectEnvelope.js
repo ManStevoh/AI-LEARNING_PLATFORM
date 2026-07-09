@@ -1,7 +1,8 @@
 import { normalizeCostumeEntry } from './costumeAssets.js';
+import { normalizeBackdropEntry, serializeBackdropEntry } from './backdropAssets.js';
 
 export const PROJECT_FORMAT = 'ace_project';
-export const PROJECT_VERSION = '1.4';
+export const PROJECT_VERSION = '1.5';
 
 export function isProjectEnvelope(value) {
     return (
@@ -44,6 +45,26 @@ export function extractInitialSounds(projectState) {
             name: sound.name,
             asset_uuid: sound.asset_uuid,
         }));
+}
+
+export function extractInitialStage(projectState) {
+    if (!isProjectEnvelope(projectState) || !projectState.stage || typeof projectState.stage !== 'object') {
+        return null;
+    }
+
+    const stage = projectState.stage;
+    const backdrops = Array.isArray(stage.backdrops)
+        ? stage.backdrops.map((backdrop, index) => normalizeBackdropEntry(backdrop, index))
+        : null;
+
+    if (!backdrops || backdrops.length === 0) {
+        return null;
+    }
+
+    return {
+        backdrops,
+        backdropIndex: Math.min(Math.max(0, stage.backdropIndex ?? 0), backdrops.length - 1),
+    };
 }
 
 export function extractActiveSpriteId(projectState, fallbackId = null) {
@@ -99,6 +120,13 @@ export function buildProjectEnvelope(blocklyState, extras = {}) {
             name: sound.name,
             asset_uuid: sound.asset_uuid,
         }));
+    }
+
+    if (extras.stage && Array.isArray(extras.stage.backdrops) && extras.stage.backdrops.length > 0) {
+        envelope.stage = {
+            backdrops: extras.stage.backdrops.map((backdrop, index) => serializeBackdropEntry(backdrop, index)),
+            backdropIndex: extras.stage.backdropIndex ?? 0,
+        };
     }
 
     return envelope;
