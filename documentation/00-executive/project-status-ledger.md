@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `4f8c725 Add Blockly workspace shell for Level 1 learner lessons.`
+- `a71e458 Add stage runtime with green-flag execution for Level 1 lessons.`
 
 Current local implementation status:
 
@@ -182,7 +182,7 @@ Completed baseline:
 
 Next action:
 
-- wire stage runtime and green-flag execution loop.
+- add project save/load and Blockly workspace persistence.
 
 ## Not Yet Developed
 
@@ -196,7 +196,7 @@ Application:
 Application verification:
 
 - `php artisan route:list` passes,
-- `php artisan test` passes with 38 tests and 176 assertions,
+- `php artisan test` passes with 38 tests and 184 assertions,
 - `npm run build` passes,
 - `application/.env` is ignored,
 - `application/vendor`, `application/node_modules`, and `application/public/build` are ignored.
@@ -280,15 +280,16 @@ Published:
 - learner workspace curriculum catalog UI,
 - audit logging foundation,
 - learner lesson detail pages,
-- Blockly workspace shell.
+- Blockly workspace shell,
+- stage runtime and green-flag execution (local, pending commit).
 
 Not published:
 
-- stage runtime and green-flag execution (next slice).
+- project save/load persistence (next slice).
 
 ## Immediate Next Build Sequence
 
-1. Wire stage runtime and green-flag execution loop for Level 1 lessons.
+1. Add project save/load and Blockly workspace persistence for learner lessons.
 2. Configure database for PostgreSQL once local services are available.
 3. Add AI Gateway fake provider shell.
 
