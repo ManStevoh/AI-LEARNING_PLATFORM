@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `a398180` — Update status ledger after teacher class overview slice.
+- `828be6b` — Add Scratch block coding studio with ACE Stage Engine Phases 1–2.
 
 Current local implementation status:
 
@@ -26,7 +26,7 @@ Current local implementation status:
 - GitHub Pages documentation portal published from repository root.
 - Phase 2 identity/tenancy foundation implemented locally with typed institution roles, tenant context, and role-aware workspaces.
 - Learning Core curriculum foundation seeded and exposed in the learner workspace UI.
-- **Block coding Phase 1 complete + Phase 2 looks partial** implemented locally (commit pending).
+- **Block coding Phase 1 complete + Phase 2 looks partial** published in `828be6b`.
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
