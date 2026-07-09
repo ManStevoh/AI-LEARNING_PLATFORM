@@ -94,6 +94,17 @@ assert('addBackdrop asset', runtime.stage.backdropAssetUuid === '00000000-0000-4
 runtime.selectBackdrop(0);
 assert('selectBackdrop', runtime.stage.backdropIndex === 0);
 
+runtime.setMonitorVisible('x_position', true);
+assert('setMonitorVisible', runtime.getMonitors().some((m) => m.id === 'x_position' && m.visible));
+runtime.moveMonitor('x_position', { x: 40, y: 50 });
+assert('moveMonitor', runtime.getMonitors().find((m) => m.id === 'x_position')?.x === 40);
+assert(
+    'monitor snapshot value',
+    runtime.getMonitorSnapshot().find((m) => m.id === 'x_position')?.value === Math.round(runtime.getXPosition()),
+);
+runtime.setMonitorVisible('x_position', false);
+assert('hide monitor', runtime.getMonitorSnapshot().every((m) => m.id !== 'x_position'));
+
 runtime.goToLayer('front');
 assert('goToLayer', typeof runtime.getActiveSprite().layer === 'number');
 

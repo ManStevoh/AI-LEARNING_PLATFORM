@@ -13,6 +13,7 @@ import {
 import { javascriptGenerator } from 'blockly/javascript';
 import * as En from 'blockly/msg/en';
 import './aceBlocks.js';
+import { attachReporterMonitorCheckboxes } from './monitorCheckbox.js';
 import { aceTheme } from './aceTheme.js';
 import { getLevelOneToolbox } from './levelOneToolbox';
 
@@ -27,6 +28,7 @@ void variablesDynamic;
 void procedures;
 
 Blockly.setLocale(En);
+attachReporterMonitorCheckboxes();
 
 if (typeof document !== 'undefined' && !Blockly.common.getParentContainer()) {
     Blockly.common.setParentContainer(document.body);

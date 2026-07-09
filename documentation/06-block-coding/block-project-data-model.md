@@ -27,9 +27,32 @@ Raw Blockly serialization only:
 
 Loaders detect legacy format when `format` is absent.
 
-## ACE project envelope (schema `1.5`)
+## ACE project envelope (schema `1.6`)
 
-Current version. Includes Blockly workspace, sprite costumes, uploaded sounds, and stage backdrop refs (color presets or uploaded images).
+Current version. Includes Blockly workspace, sprite costumes, uploaded sounds, stage backdrop refs, and stage reporter monitors.
+
+```json
+{
+  "format": "ace_project",
+  "version": "1.6",
+  "blockly": { "blocks": { "languageVersion": 0, "blocks": [] } },
+  "sprites": [],
+  "active_sprite_id": "sprite-1",
+  "sounds": [],
+  "stage": {
+    "backdrops": [{ "id": "backdrop-1", "name": "blue sky", "color": "#dbeafe" }],
+    "backdropIndex": 0
+  },
+  "monitors": [
+    { "id": "x_position", "visible": true, "x": 8, "y": 8 },
+    { "id": "timer", "visible": true, "x": 8, "y": 42 }
+  ]
+}
+```
+
+### Envelope `1.5` (legacy)
+
+Includes Blockly workspace, sprite costumes, uploaded sounds, and stage backdrop refs (color presets or uploaded images).
 
 ```json
 {
@@ -147,7 +170,8 @@ Same as above without the `sounds` array.
 | `1.2` | Stage backdrop color refs (planned early; superseded) | legacy |
 | `1.3` | Sound asset refs | legacy |
 | `1.4` | Costume asset refs on sprites | legacy |
-| `1.5` | Stage backdrop asset refs | **current** |
+| `1.5` | Stage backdrop asset refs | legacy |
+| `1.6` | Stage reporter monitors | **current** |
 | `2.0` | Full stage-runtime spec alignment | planned |
 
 Migrations must accept all prior versions on read and write the latest supported version on save.

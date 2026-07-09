@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `e39ec5d` — Add tenant-scoped backdrop uploads with envelope v1.5.
+- `adaadda` — Complete ledger publish markers for backdrop uploads.
 
 Current local implementation status:
 
@@ -34,6 +34,7 @@ Current local implementation status:
 - **Scratch Motion/Looks/Sound/Events/Control palette parity** published in `f7c2d3c`.
 - **Scratch Control clones + Sensing/Operators/Lists/My Blocks parity** published in `a79c32b`.
 - **Backdrop asset uploads (envelope v1.5)** published in `e39ec5d`.
+- **Stage reporter monitors (envelope v1.6)** implemented locally (ready to publish).
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
@@ -172,10 +173,11 @@ Developed:
 - ADR 0010: PixiJS for ACE stage rendering (Phaser rejected; DOM Level 1 default).
 - Scratch Control clones + Sensing/Operators/Lists/My Blocks palette parity.
 - tenant-scoped block project backdrop uploads with envelope v1.5 stage refs.
+- stage reporter monitors with toolbox checkboxes and overlay (envelope v1.6; local pending publish).
 
-### Block Coding (Published)
+### Block Coding (Published + local monitors)
 
-Status: Phase 1–3 Scratch palette parity + backdrop uploads published. See `documentation/06-block-coding/implementation-status.md`.
+Status: Phase 1–3 Scratch palette parity + backdrop uploads published; stage monitors local. See `documentation/06-block-coding/implementation-status.md`.
 
 Developed:
 
@@ -183,13 +185,15 @@ Developed:
 - Blockly Zelos theme and Scratch palette order,
 - ACE Stage Engine Phases 1–3,
 - Operators/Lists/My Blocks,
-- project envelope through v1.5,
+- project envelope through v1.6 (local),
+- stage reporter monitors (checkbox + overlay),
 - block registry and scratch parity strategy docs,
-- StageRuntime smoke 27/27; PHPUnit 108.
+- StageRuntime smoke 31/31; PHPUnit 109.
 
 Next action:
 
-- stage monitor checkboxes for reporter blocks.
+- publish stage monitor checkboxes,
+- configure PostgreSQL once local services are available.
 
 ## Partially Developed Artifacts
 

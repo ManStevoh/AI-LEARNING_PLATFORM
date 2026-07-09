@@ -1,8 +1,9 @@
 import { normalizeCostumeEntry } from './costumeAssets.js';
 import { normalizeBackdropEntry, serializeBackdropEntry } from './backdropAssets.js';
+import { normalizeMonitorState, serializeMonitors } from './stageMonitors.js';
 
 export const PROJECT_FORMAT = 'ace_project';
-export const PROJECT_VERSION = '1.5';
+export const PROJECT_VERSION = '1.6';
 
 export function isProjectEnvelope(value) {
     return (
@@ -67,6 +68,16 @@ export function extractInitialStage(projectState) {
     };
 }
 
+export function extractInitialMonitors(projectState) {
+    if (!isProjectEnvelope(projectState) || !Array.isArray(projectState.monitors)) {
+        return [];
+    }
+
+    return projectState.monitors
+        .map((monitor, index) => normalizeMonitorState(monitor, index))
+        .filter(Boolean);
+}
+
 export function extractActiveSpriteId(projectState, fallbackId = null) {
     if (isProjectEnvelope(projectState) && typeof projectState.active_sprite_id === 'string') {
         return projectState.active_sprite_id;
@@ -127,6 +138,12 @@ export function buildProjectEnvelope(blocklyState, extras = {}) {
             backdrops: extras.stage.backdrops.map((backdrop, index) => serializeBackdropEntry(backdrop, index)),
             backdropIndex: extras.stage.backdropIndex ?? 0,
         };
+    }
+
+    const monitors = serializeMonitors(extras.monitors);
+
+    if (monitors.length > 0) {
+        envelope.monitors = monitors;
     }
 
     return envelope;

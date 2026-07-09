@@ -170,6 +170,64 @@ class BlockProjectPersistenceTest extends TestCase
             );
     }
 
+    public function test_learner_can_save_project_envelope_with_stage_monitors(): void
+    {
+        $this->seed(CurriculumFoundationSeeder::class);
+
+        $user = User::factory()->create();
+        $institution = Institution::factory()->create();
+        $this->attachLearner($user, $institution);
+
+        $lessonSlug = 'unit-01-meet-the-coding-studio';
+        $workspace = [
+            'format' => 'ace_project',
+            'version' => '1.6',
+            'blockly' => $this->sampleWorkspace(),
+            'sprites' => [
+                [
+                    'id' => 'sprite-1',
+                    'name' => 'Sprite1',
+                    'x' => 0,
+                    'y' => 0,
+                    'direction' => 90,
+                    'visible' => true,
+                    'emoji' => '🐱',
+                ],
+            ],
+            'active_sprite_id' => 'sprite-1',
+            'monitors' => [
+                [
+                    'id' => 'x_position',
+                    'visible' => true,
+                    'x' => 12,
+                    'y' => 24,
+                ],
+                [
+                    'id' => 'timer',
+                    'visible' => true,
+                    'x' => 12,
+                    'y' => 58,
+                ],
+            ],
+        ];
+
+        $this->actingAs($user)->postJson("/learner/learn/{$lessonSlug}/project", [
+            'workspace' => $workspace,
+            'generated_code' => 'runtime.getXPosition();',
+        ])->assertOk()->assertJsonPath('saved_project.schema_version', '1.6');
+
+        $this->withoutVite()->actingAs($user)->get("/learner/learn/{$lessonSlug}")
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('savedProject', fn (Assert $project) => $project
+                    ->where('schema_version', '1.6')
+                    ->where('workspace.monitors.0.id', 'x_position')
+                    ->where('workspace.monitors.1.id', 'timer')
+                    ->etc()
+                )
+            );
+    }
+
     private function attachLearner(User $user, Institution $institution): void
     {
         $institution->users()->attach($user, [

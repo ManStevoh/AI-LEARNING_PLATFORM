@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { backdropImageUrl } from './backdropAssets.js';
 import { costumeImageUrl } from './costumeAssets.js';
+import StageMonitorOverlay from './StageMonitorOverlay';
 
 function spritePositionStyle(sprite, stage) {
     const halfWidth = stage.width / 2;
@@ -102,6 +103,8 @@ export default function BlockStage({
     onPointerMove = null,
     onPointerDown = null,
     onPointerUp = null,
+    onMoveMonitor = null,
+    onMoveMonitorEnd = null,
     lessonSlug = null,
 }) {
     const stageRef = useRef(null);
@@ -148,6 +151,12 @@ export default function BlockStage({
                         }}
                     />
 
+                    <StageMonitorOverlay
+                        monitors={snapshot.monitors}
+                        onMoveMonitor={onMoveMonitor}
+                        onMoveMonitorEnd={onMoveMonitorEnd}
+                    />
+
                     {snapshot.sprites.map((sprite) =>
                         sprite.visible ? (
                             <SpriteVisual
@@ -185,6 +194,11 @@ export default function BlockStage({
                         src={backdropImageUrl(lessonSlug, stage.backdropAssetUuid)}
                     />
                 ) : null}
+                <StageMonitorOverlay
+                    monitors={snapshot.monitors}
+                    onMoveMonitor={onMoveMonitor}
+                    onMoveMonitorEnd={onMoveMonitorEnd}
+                />
                 {snapshot.sprites.map((sprite) =>
                     sprite.visible ? (
                         <div key={sprite.id} className="absolute" style={spritePositionStyle(sprite, stage)}>

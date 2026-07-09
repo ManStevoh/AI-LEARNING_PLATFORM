@@ -5,10 +5,10 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 ## Snapshot
 
 - **Last updated:** 2026-07-10
-- **Engine phase:** Phase 3 — palette parity + backdrop asset uploads (envelope v1.5)
-- **Published to GitHub:** `e39ec5d`
+- **Engine phase:** Phase 3 — palette parity + assets + stage monitors (envelope v1.6)
+- **Published to GitHub:** pending (local slice ready)
 - **Custom ACE blocks:** ~78 done (plus Blockly control/math/text/variables/lists/procedures)
-- **Tests:** 108 PHPUnit + StageRuntime smoke 27/27
+- **Tests:** 109 PHPUnit + StageRuntime smoke 31/31
 
 ## Done
 
@@ -17,9 +17,8 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 | Runtime | Phase 1–3 events/control/clones/sensing | complete |
 | Runtime | Phase 2 motion/looks/sound (Scratch palettes) | `stageRuntime.js`, `aceBlocks.js` |
 | Toolbox | Scratch category order + Operators/Lists/My Blocks | `levelOneToolbox.js` |
-| Assets | Sound uploads | envelope v1.3 |
-| Assets | Costume uploads | envelope v1.4 |
-| Assets | Backdrop uploads | envelope v1.5, Backdrops tab |
+| Assets | Sound / costume / backdrop uploads | envelope v1.3–v1.5 |
+| UI | Stage monitor checkboxes + overlay | envelope v1.6, `StageMonitorOverlay.jsx` |
 | Architecture | Stage rendering ADR | ADR 0010 |
 | Teacher | Skill mastery | `/teacher/skills` |
 
@@ -29,21 +28,21 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 |------|---------------------------|
 | Color-touching sensing | API present; returns `false` until pixel sampling |
 | Loudness | Stub until microphone path |
-| Stage monitor checkboxes | Scratch UI chrome only |
+| Variable/list monitors | Scratch variable monitors not yet wired |
 
 ## Pending (Next Slices)
 
 | Priority | Item | Phase | Ref |
 |----------|------|-------|-----|
-| P1 | Stage monitor checkboxes for reporters | 2 | Scratch UI |
-| P2 | Pixel color sensing (canvas/Pixi) | 3 | ADR 0010 |
-| P3 | PixiJS renderer adapter when needed | 2 | ADR 0010 |
+| P1 | Pixel color sensing (canvas/Pixi) | 3 | ADR 0010 |
+| P2 | PixiJS renderer adapter when needed | 2 | ADR 0010 |
+| P3 | Variable/list stage monitors | 3 | Scratch UI |
 
 ## Verification (Latest)
 
 ```text
-php artisan test              → 108 passed
-node stageRuntime.smoke.mjs   → 27/27 passed
+php artisan test              → 109 passed
+node stageRuntime.smoke.mjs   → 31/31 passed
 npm run build                 → pass
 ```
 

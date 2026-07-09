@@ -8,10 +8,15 @@ import ScratchSpritePane from './ScratchSpritePane';
 import { runWorkspaceProgram } from './blocklySetup';
 import {
     extractActiveSpriteId,
+    extractInitialMonitors,
     extractInitialSounds,
     extractInitialSprites,
     extractInitialStage,
 } from './projectEnvelope';
+import {
+    applyMonitorVisibilityToWorkspace,
+    createMonitorChangeListener,
+} from './monitorCheckbox.js';
 import { listLessonSounds } from './soundAssets.js';
 import { buildSoundLibraryMap, setProjectSounds as syncSoundLibrary } from './soundLibrary.js';
 import { StageRuntime } from './stageRuntime';
@@ -87,6 +92,7 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
         const projectState = resolveProjectState(savedProject, starterProject);
         const sprites = extractInitialSprites(projectState, workspaceConfig.stage?.sprites);
         const stageExtras = extractInitialStage(projectState);
+        const monitors = extractInitialMonitors(projectState);
         const activeSpriteId = extractActiveSpriteId(projectState);
         const envelopeSounds = extractInitialSounds(projectState);
 
@@ -99,6 +105,7 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
                     ...(sprites ? { sprites } : {}),
                 },
                 active_sprite_id: activeSpriteId,
+                monitors,
                 sound_library: buildSoundLibraryMap(lessonSlug, envelopeSounds),
             },
             setSnapshot,
@@ -127,12 +134,30 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
 
         return () => {
             cancelled = true;
-            runtimeRef.current?.stop();
+            runtimeRef.current?.dispose?.() ?? runtimeRef.current?.stop();
         };
     }, [workspaceConfig, savedProject, starterProject, lessonSlug, applySoundLibrary]);
 
     const handleWorkspaceReady = useCallback((workspace) => {
         workspaceRef.current = workspace;
+
+        const runtime = runtimeRef.current;
+
+        if (!runtime) {
+            return;
+        }
+
+        applyMonitorVisibilityToWorkspace(workspace, runtime.getMonitors());
+
+        if (workspace.__aceMonitorListener) {
+            workspace.removeChangeListener(workspace.__aceMonitorListener);
+        }
+
+        const listener = createMonitorChangeListener(workspace, runtime, () => {
+            setAssetSaveRevision((revision) => revision + 1);
+        });
+        workspace.__aceMonitorListener = listener;
+        workspace.addChangeListener(listener);
     }, []);
 
     const getProjectExtras = useCallback(() => {
@@ -150,6 +175,7 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
                 backdrops: runtimeSnapshot.stage?.backdrops ?? [],
                 backdropIndex: runtimeSnapshot.stage?.backdropIndex ?? 0,
             },
+            monitors: runtimeRef.current?.getMonitors() ?? [],
         };
     }, [projectSounds]);
 
@@ -207,6 +233,14 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
 
     const handleStagePointerUp = useCallback(() => {
         runtimeRef.current?.setPointerDown(false);
+    }, []);
+
+    const handleMoveMonitor = useCallback((id, position) => {
+        runtimeRef.current?.moveMonitor(id, position);
+    }, []);
+
+    const handleMoveMonitorEnd = useCallback(() => {
+        setAssetSaveRevision((revision) => revision + 1);
     }, []);
 
     const handleGreenFlag = useCallback(async () => {
@@ -313,6 +347,8 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
                         <BlockStage
                             isRunning={isRunning || snapshot.state === 'running'}
                             lessonSlug={lessonSlug}
+                            onMoveMonitor={handleMoveMonitor}
+                            onMoveMonitorEnd={handleMoveMonitorEnd}
                             onPointerDown={handleStagePointerDown}
                             onPointerMove={handleStagePointerMove}
                             onPointerUp={handleStagePointerUp}

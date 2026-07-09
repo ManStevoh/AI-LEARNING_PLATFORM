@@ -1,6 +1,12 @@
 import { normalizeBackdropEntry } from './backdropAssets.js';
 import { normalizeCostumeEntry } from './costumeAssets.js';
 import { SoundEngine } from './soundEngine.js';
+import {
+    MONITOR_BY_ID,
+    STAGE_MONITORS,
+    defaultMonitorLayout,
+    normalizeMonitorState,
+} from './stageMonitors.js';
 
 const DEFAULT_STAGE = {
     width: 480,
@@ -80,9 +86,12 @@ export class StageRuntime {
         this.askResolve = null;
         this.username = config.username ?? 'learner';
         this.cloneCounter = 0;
+        this.monitors = this.normalizeMonitors(config.monitors);
         this.stage = structuredClone(this.initialStage);
         this.sprites = structuredClone(this.initialSprites);
         this.ensureSpriteLayers();
+        this.monitorPollId = null;
+        this.startMonitorPolling();
     }
 
     normalizeStage(stage = {}) {
@@ -303,7 +312,115 @@ export class StageRuntime {
             soundVolume: Math.round((this.soundEngine.volume ?? 1) * 100),
             answer: this.answer,
             asking: this.asking,
+            monitors: this.getMonitorSnapshot(),
         };
+    }
+
+    normalizeMonitors(monitors) {
+        if (!Array.isArray(monitors)) {
+            return [];
+        }
+
+        const seen = new Set();
+        const normalized = [];
+
+        for (const [index, entry] of monitors.entries()) {
+            const monitor = normalizeMonitorState(entry, index);
+
+            if (!monitor || seen.has(monitor.id)) {
+                continue;
+            }
+
+            seen.add(monitor.id);
+            normalized.push(monitor);
+        }
+
+        return normalized;
+    }
+
+    getMonitors() {
+        return structuredClone(this.monitors);
+    }
+
+    getMonitorSnapshot() {
+        return this.monitors
+            .filter((monitor) => monitor.visible !== false)
+            .map((monitor) => {
+                const meta = MONITOR_BY_ID[monitor.id];
+
+                return {
+                    ...monitor,
+                    value: meta ? meta.read(this) : null,
+                };
+            });
+    }
+
+    setMonitors(monitors) {
+        this.monitors = this.normalizeMonitors(monitors);
+        this.emitChange();
+    }
+
+    setMonitorVisible(id, visible) {
+        if (!MONITOR_BY_ID[id]) {
+            return;
+        }
+
+        const existing = this.monitors.find((monitor) => monitor.id === id);
+
+        if (visible) {
+            if (existing) {
+                existing.visible = true;
+            } else {
+                this.monitors.push({
+                    id,
+                    visible: true,
+                    ...defaultMonitorLayout(this.monitors.length),
+                });
+            }
+        } else if (existing) {
+            existing.visible = false;
+        }
+
+        this.emitChange();
+    }
+
+    moveMonitor(id, position = {}) {
+        const monitor = this.monitors.find((item) => item.id === id);
+
+        if (!monitor) {
+            return;
+        }
+
+        if (Number.isFinite(position.x)) {
+            monitor.x = Math.max(0, position.x);
+        }
+
+        if (Number.isFinite(position.y)) {
+            monitor.y = Math.max(0, position.y);
+        }
+
+        this.emitChange();
+    }
+
+    startMonitorPolling() {
+        if (typeof window === 'undefined' || this.monitorPollId !== null) {
+            return;
+        }
+
+        this.monitorPollId = window.setInterval(() => {
+            if (this.monitors.some((monitor) => monitor.visible !== false)) {
+                this.emitChange();
+            }
+        }, 200);
+    }
+
+    stopMonitorPolling() {
+        if (this.monitorPollId === null || typeof window === 'undefined') {
+            return;
+        }
+
+        window.clearInterval(this.monitorPollId);
+        this.monitorPollId = null;
     }
 
     emitChange() {
@@ -490,6 +607,11 @@ export class StageRuntime {
         if (this.state === 'running') {
             this.setState('stopped');
         }
+    }
+
+    dispose() {
+        this.stopMonitorPolling();
+        this.stopAll();
     }
 
     stopThisScript() {
