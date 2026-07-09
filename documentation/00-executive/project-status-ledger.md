@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `26cfcbd Add teacher feedback notes on reviewed block projects.`
+- `3a34295 Persist AI prompt registry to database with publish workflow.`
 
 Current local implementation status:
 
@@ -148,7 +148,8 @@ Developed:
 - learner lesson AI mentor panel wired to the gateway endpoint,
 - AI prompt registry, renderer, and mentor context builder for lesson-aware responses,
 - teacher block project review list and detail views with tenant-scoped access,
-- teacher feedback notes on reviewed block projects with upsert, audit logging, and tenant isolation.
+- teacher feedback notes on reviewed block projects with upsert, audit logging, and tenant isolation,
+- database-backed AI prompt registry with version publishing workflow and config fallback.
 
 ## Partially Developed Artifacts
 
@@ -203,7 +204,7 @@ Application:
 Application verification:
 
 - `php artisan route:list` passes,
-- `php artisan test` passes with 67 tests and 373 assertions,
+- `php artisan test` passes with 72 tests and 386 assertions,
 - `npm run build` passes,
 - `application/.env` is ignored,
 - `application/vendor`, `application/node_modules`, and `application/public/build` are ignored.
@@ -218,7 +219,8 @@ Latest local verification:
 - starter Blockly projects and lesson mentor UI integration,
 - prompt registry and mentor context builder with PHPUnit coverage,
 - teacher block project review routes and UI,
-- teacher block project feedback save with audit logging and tenant isolation tests.
+- teacher block project feedback save with audit logging and tenant isolation tests,
+- AI prompt registry database persistence, publish workflow, and seeder tests.
 
 Learning:
 
@@ -301,7 +303,8 @@ Published:
 - learner lesson AI mentor UI,
 - AI prompt registry and mentor context builder,
 - teacher block project review views,
-- teacher feedback notes on reviewed block projects.
+- teacher feedback notes on reviewed block projects,
+- database-backed AI prompt registry with version publishing workflow.
 
 Not published:
 
@@ -310,7 +313,7 @@ Not published:
 ## Immediate Next Build Sequence
 
 1. Configure database for PostgreSQL once local services are available.
-2. Persist prompt registry to database tables with version publishing workflow.
+2. Add institution-admin prompt management UI for draft and publish workflows.
 
 ## Ledger Update Rule
 
