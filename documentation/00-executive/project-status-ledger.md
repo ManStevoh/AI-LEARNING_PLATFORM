@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `f7c2d3c` — Add Scratch Motion/Looks/Sound/Events/Control palette parity blocks.
+- `a79c32b` — Add Scratch Control clones and Sensing/Operators/Lists/My Blocks parity.
 
 Current local implementation status:
 
@@ -32,7 +32,7 @@ Current local implementation status:
 - **Costume uploads** published in `7b0acd0`.
 - **Stage rendering ADR 0010** (PixiJS) published in `98a8a3e`.
 - **Scratch Motion/Looks/Sound/Events/Control palette parity** published in `f7c2d3c`.
-- **Scratch Control clones + Sensing/Operators/Lists/My Blocks parity** implemented locally (ready to publish).
+- **Scratch Control clones + Sensing/Operators/Lists/My Blocks parity** published in `a79c32b`.
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
@@ -169,11 +169,11 @@ Developed:
 - tenant-scoped block project sound uploads with envelope v1.3 refs,
 - tenant-scoped block project costume uploads with envelope v1.4 sprite costume refs,
 - ADR 0010: PixiJS for ACE stage rendering (Phaser rejected; DOM Level 1 default).
-- Scratch Control clones + Sensing/Operators/Lists/My Blocks palette parity (local; pending publish).
+- Scratch Control clones + Sensing/Operators/Lists/My Blocks palette parity.
 
-### Block Coding (Published + local Phase 3)
+### Block Coding (Published)
 
-Status: Phase 1–2 palettes published; Phase 3 clones/sensing/operators/lists/procedures local. See `documentation/06-block-coding/implementation-status.md`.
+Status: Phase 1–3 Scratch palette parity published through clones/sensing/operators/lists/procedures. See `documentation/06-block-coding/implementation-status.md`.
 
 Developed:
 
@@ -187,7 +187,6 @@ Developed:
 
 Next action:
 
-- publish Phase 3 palette parity slice,
 - backdrop asset uploads.
 
 ## Partially Developed Artifacts
@@ -290,7 +289,7 @@ Latest local verification:
 - block project sound upload/list/stream/delete routes with tenant and ownership tests,
 - block project costume upload/list/stream/delete routes with tenant and ownership tests,
 - block project envelope v1.1 save/load with sprite state (PHPUnit),
-- Scratch Phase 3 clones/sensing/operators/lists/My Blocks (StageRuntime smoke 25/25; local pending publish).
+- Scratch Phase 3 clones/sensing/operators/lists/My Blocks (StageRuntime smoke 25/25; published `a79c32b`).
 
 Learning:
 
@@ -383,22 +382,21 @@ Published:
 - block project costume uploads with Costumes tab and envelope v1.4,
 - ADR 0010 PixiJS stage rendering decision,
 - Scratch Motion/Looks/Sound/Events/Control palette parity,
-- Scratch block coding studio and ACE Stage Engine Phases 1–2,
+- Scratch Control clones + Sensing/Operators/Lists/My Blocks palette parity,
+- Scratch block coding studio and ACE Stage Engine Phases 1–3,
 - block coding docs (registry, parity strategy, status procedure).
 
 Not published (local only):
 
-- Scratch Control clones + Sensing/Operators/Lists/My Blocks palette parity,
 - PostgreSQL local setup (Docker unavailable).
 
 Not published (blocked):
 
 ## Immediate Next Build Sequence
 
-1. Publish Phase 3 Scratch palette parity (clones/sensing/operators/lists/My Blocks).
-2. Backdrop asset uploads.
-3. Stage monitor checkboxes for reporter blocks.
-4. Configure PostgreSQL once local services are available.
+1. Backdrop asset uploads.
+2. Stage monitor checkboxes for reporter blocks.
+3. Configure PostgreSQL once local services are available.
 
 ## Ledger Update Rule
 
