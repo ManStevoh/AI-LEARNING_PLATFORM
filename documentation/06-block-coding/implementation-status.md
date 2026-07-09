@@ -6,9 +6,9 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 
 - **Last updated:** 2026-07-10
 - **Engine phase:** Phase 2–3 — **partial** (motion Level 1 complete)
-- **Published to GitHub:** `65ddc0b`
+- **Published to GitHub:** `65ddc0b` (sound uploads publishing next)
 - **Custom ACE blocks:** 27 done / ~35 Level 1 documented
-- **Tests:** 90 PHPUnit
+- **Tests:** 96 PHPUnit
 
 ## Done
 
@@ -16,9 +16,10 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 |------|------|----------|
 | Runtime | Phase 1 events + control | complete |
 | Runtime | Phase 2 motion (all documented L1 blocks) | `stageRuntime.js`, `aceBlocks.js` |
-| Runtime | Phase 2 looks + sound | partial |
+| Runtime | Phase 2 looks + sound | partial (presets + uploads) |
 | Runtime | Phase 2–3 sensing | complete for L1 scope |
 | Teacher | Skill mastery view + support gaps | `TeacherSkillMasteryService`, `/teacher/skills` |
+| Sounds | Tenant-scoped upload + envelope v1.3 | `BlockProjectSoundService`, Sounds tab |
 
 ### Motion blocks (all done)
 
@@ -28,13 +29,13 @@ move, turn, go to x/y, **glide**, **point in direction**, **if on edge bounce**.
 
 | Priority | Item | Phase | Ref |
 |----------|------|-------|-----|
-| P1 | Sound asset uploads | 2 | data model v1.3 |
+| P1 | Costume editor / uploads | 2 | data model v1.2 |
 | P2 | Stage rendering ADR | 2 | parity strategy |
 
 ## Verification (Latest)
 
 ```text
-php artisan test   → 90 passed
+php artisan test   → 96 passed
 npm run build      → pass
 ```
 

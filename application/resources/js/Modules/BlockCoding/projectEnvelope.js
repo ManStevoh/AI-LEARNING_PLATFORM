@@ -1,5 +1,5 @@
 export const PROJECT_FORMAT = 'ace_project';
-export const PROJECT_VERSION = '1.1';
+export const PROJECT_VERSION = '1.3';
 
 export function isProjectEnvelope(value) {
     return (
@@ -28,6 +28,20 @@ export function extractInitialSprites(projectState, fallbackSprites = null) {
     }
 
     return null;
+}
+
+export function extractInitialSounds(projectState) {
+    if (!isProjectEnvelope(projectState) || !Array.isArray(projectState.sounds)) {
+        return [];
+    }
+
+    return projectState.sounds
+        .filter((sound) => typeof sound?.asset_uuid === 'string' && typeof sound?.name === 'string')
+        .map((sound) => ({
+            id: sound.id ?? sound.asset_uuid,
+            name: sound.name,
+            asset_uuid: sound.asset_uuid,
+        }));
 }
 
 export function extractActiveSpriteId(projectState, fallbackId = null) {
@@ -62,6 +76,14 @@ export function buildProjectEnvelope(blocklyState, extras = {}) {
 
     if (typeof extras.active_sprite_id === 'string') {
         envelope.active_sprite_id = extras.active_sprite_id;
+    }
+
+    if (Array.isArray(extras.sounds) && extras.sounds.length > 0) {
+        envelope.sounds = extras.sounds.map((sound) => ({
+            id: sound.id ?? sound.asset_uuid,
+            name: sound.name,
+            asset_uuid: sound.asset_uuid,
+        }));
     }
 
     return envelope;

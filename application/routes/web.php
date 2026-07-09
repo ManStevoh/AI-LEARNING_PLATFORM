@@ -7,6 +7,7 @@ use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\Institution\AiPromptController;
 use App\Http\Controllers\Institution\DashboardController as InstitutionDashboardController;
 use App\Http\Controllers\Learner\BlockProjectController;
+use App\Http\Controllers\Learner\BlockProjectSoundController;
 use App\Http\Controllers\Learner\DashboardController as LearnerDashboardController;
 use App\Http\Controllers\Learner\LearnController as LearnerLearnController;
 use App\Http\Controllers\Learner\MentorController as LearnerMentorController;
@@ -45,6 +46,18 @@ Route::middleware(['auth', ResolveTenantContext::class])->group(function () {
     Route::post('learner/learn/{lessonSlug}/project', [BlockProjectController::class, 'store'])
         ->middleware('workspace.role:learner,parent')
         ->name('learner.project.store');
+    Route::get('learner/learn/{lessonSlug}/sounds', [BlockProjectSoundController::class, 'index'])
+        ->middleware('workspace.role:learner,parent')
+        ->name('learner.sounds.index');
+    Route::post('learner/learn/{lessonSlug}/sounds', [BlockProjectSoundController::class, 'store'])
+        ->middleware('workspace.role:learner,parent')
+        ->name('learner.sounds.store');
+    Route::get('learner/learn/{lessonSlug}/sounds/{sound}/audio', [BlockProjectSoundController::class, 'audio'])
+        ->middleware('workspace.role:learner,parent')
+        ->name('learner.sounds.audio');
+    Route::delete('learner/learn/{lessonSlug}/sounds/{sound}', [BlockProjectSoundController::class, 'destroy'])
+        ->middleware('workspace.role:learner,parent')
+        ->name('learner.sounds.destroy');
     Route::post('learner/mentor/ask', [LearnerMentorController::class, 'ask'])
         ->middleware('workspace.role:learner,parent')
         ->name('learner.mentor.ask');

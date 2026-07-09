@@ -27,7 +27,45 @@ Raw Blockly serialization only:
 
 Loaders detect legacy format when `format` is absent.
 
-## ACE project envelope (schema `1.1`)
+## ACE project envelope (schema `1.3`)
+
+Current version. Includes Blockly workspace, sprite state, and uploaded sound refs.
+
+```json
+{
+  "format": "ace_project",
+  "version": "1.3",
+  "blockly": {
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": []
+    }
+  },
+  "sprites": [
+    {
+      "id": "sprite-1",
+      "name": "Sprite1",
+      "x": 0,
+      "y": 0,
+      "direction": 90,
+      "visible": true,
+      "emoji": "🐱"
+    }
+  ],
+  "active_sprite_id": "sprite-1",
+  "sounds": [
+    {
+      "id": "sound-1",
+      "name": "Meow",
+      "asset_uuid": "550e8400-e29b-41d4-a716-446655440000"
+    }
+  ]
+}
+```
+
+### Envelope `1.1` (legacy)
+
+Same as above without the `sounds` array.
 
 ```json
 {
@@ -72,7 +110,7 @@ Loaders detect legacy format when `format` is absent.
 | Version | Planned additions |
 |---------|-------------------|
 | `1.2` | Stage backdrop, costume refs |
-| `1.3` | Sound asset refs |
+| `1.3` | Sound asset refs | **current** |
 | `2.0` | Full stage-runtime spec alignment (collisions, clones) |
 
 Migrations must accept all prior versions on read and write the latest supported version on save.

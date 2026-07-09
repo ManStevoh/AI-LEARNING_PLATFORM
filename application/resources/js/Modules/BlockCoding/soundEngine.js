@@ -94,6 +94,50 @@ export class SoundEngine {
         return durationMs;
     }
 
+    async playUrl(urlOrUuid, urlResolver = null) {
+        const url = typeof urlResolver === 'function'
+            ? urlResolver(urlOrUuid)
+            : urlOrUuid;
+
+        if (!url || typeof url !== 'string') {
+            return 100;
+        }
+
+        const context = this.ensureContext();
+
+        if (!context) {
+            return 100;
+        }
+
+        try {
+            const response = await fetch(url, { credentials: 'same-origin' });
+
+            if (!response.ok) {
+                return 100;
+            }
+
+            const arrayBuffer = await response.arrayBuffer();
+            const audioBuffer = await context.decodeAudioData(arrayBuffer);
+            const source = context.createBufferSource();
+            const gain = context.createGain();
+
+            source.buffer = audioBuffer;
+            gain.gain.value = this.volume;
+            source.connect(gain);
+            gain.connect(context.destination);
+            source.start();
+            this.trackNode(source);
+
+            await new Promise((resolve) => {
+                window.setTimeout(resolve, audioBuffer.duration * 1000);
+            });
+
+            return audioBuffer.duration * 1000;
+        } catch {
+            return 100;
+        }
+    }
+
     playTone(context, frequency, durationSeconds, type = 'sine') {
         const oscillator = context.createOscillator();
         const gain = context.createGain();

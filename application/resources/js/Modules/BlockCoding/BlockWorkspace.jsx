@@ -34,6 +34,7 @@ export default function BlockWorkspace({
     starterProject,
     onSaveStatusChange,
     getProjectExtras,
+    externalSaveTrigger = 0,
     variant = 'default',
 }) {
     const containerRef = useRef(null);
@@ -41,6 +42,7 @@ export default function BlockWorkspace({
     const saveTimeoutRef = useRef(null);
     const hasLoadedProjectRef = useRef(false);
     const allowAutoSaveRef = useRef(false);
+    const queueSaveRef = useRef(null);
     const [generatedCode, setGeneratedCode] = useState('// Drag blocks into the workspace to generate code.');
     const [saveStatus, setSaveStatus] = useState(
         savedProject ? 'saved' : starterProject ? 'starter' : 'idle',
@@ -106,6 +108,8 @@ export default function BlockWorkspace({
             }, 1500);
         };
 
+        queueSaveRef.current = queueSave;
+
         const updateCode = () => {
             const code = workspaceToJavaScript(workspace).trim();
             setGeneratedCode(code === '' ? '// Drag blocks into the workspace to generate code.' : code);
@@ -150,6 +154,14 @@ export default function BlockWorkspace({
             allowAutoSaveRef.current = false;
         };
     }, [preset, lessonSlug, onReady, savedProject, starterProject, onSaveStatusChange, getProjectExtras]);
+
+    useEffect(() => {
+        if (!allowAutoSaveRef.current || !queueSaveRef.current) {
+            return;
+        }
+
+        queueSaveRef.current();
+    }, [externalSaveTrigger]);
 
     const workspacePanel = (
         <>

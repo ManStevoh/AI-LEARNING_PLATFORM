@@ -48,6 +48,7 @@ export class StageRuntime {
         this.runStartedAt = null;
         this.inputListenersAttached = false;
         this.soundEngine = new SoundEngine();
+        this.soundLibrary = config.sound_library ?? {};
         this.stage = structuredClone(this.initialStage);
         this.sprites = structuredClone(this.initialSprites);
     }
@@ -594,12 +595,29 @@ export class StageRuntime {
         this.emitChange();
     }
 
+    setSoundLibrary(library) {
+        this.soundLibrary = library ?? {};
+    }
+
     async playSound(name = 'pop') {
         if (this.shouldStop()) {
             return;
         }
 
-        await this.soundEngine.playPreset(name);
+        const soundKey = String(name);
+
+        if (soundKey.startsWith('asset:')) {
+            const assetUuid = soundKey.slice(6);
+            const url = this.soundLibrary[assetUuid];
+
+            if (url) {
+                await this.soundEngine.playUrl(url);
+            }
+
+            return;
+        }
+
+        await this.soundEngine.playPreset(soundKey);
     }
 
     stopAllSounds() {

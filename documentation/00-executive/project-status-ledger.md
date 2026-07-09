@@ -28,6 +28,7 @@ Current local implementation status:
 - Learning Core curriculum foundation seeded and exposed in the learner workspace UI.
 - **Block coding Phase 1 complete + Phase 2 looks partial** published in `828be6b`.
 - **Teacher skill mastery view** published in `65ddc0b`.
+- **Sound asset uploads** implemented locally (not yet published).
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation

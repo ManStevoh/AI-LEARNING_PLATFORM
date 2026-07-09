@@ -1,7 +1,7 @@
 import * as Blockly from 'blockly/core';
 import { extractBlocklyState } from './projectEnvelope.js';
 
-export { buildProjectEnvelope, extractBlocklyState, isProjectEnvelope } from './projectEnvelope.js';
+export { buildProjectEnvelope, extractBlocklyState, extractInitialSounds, isProjectEnvelope } from './projectEnvelope.js';
 
 export function serializeWorkspace(workspace) {
     return Blockly.serialization.workspaces.save(workspace);
