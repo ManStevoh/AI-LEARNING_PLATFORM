@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `6f11a03 Add AI prompt registry and mentor context builder for lesson-aware hints.`
+- `5d9eeab Add teacher review views for institution-scoped learner block projects.`
 
 Current local implementation status:
 
@@ -202,7 +202,7 @@ Application:
 Application verification:
 
 - `php artisan route:list` passes,
-- `php artisan test` passes with 58 tests and 319 assertions,
+- `php artisan test` passes with 63 tests and 352 assertions,
 - `npm run build` passes,
 - `application/.env` is ignored,
 - `application/vendor`, `application/node_modules`, and `application/public/build` are ignored.
@@ -215,7 +215,8 @@ Latest local verification:
 - block project save/load with tenant-scoped persistence and auto-save on lesson pages,
 - AI Gateway fake provider mentor endpoint with usage logging tests,
 - starter Blockly projects and lesson mentor UI integration,
-- prompt registry and mentor context builder with PHPUnit coverage.
+- prompt registry and mentor context builder with PHPUnit coverage,
+- teacher block project review routes and UI.
 
 Learning:
 
@@ -296,17 +297,18 @@ Published:
 - AI Gateway fake provider shell,
 - Level 1 starter Blockly projects,
 - learner lesson AI mentor UI,
-- AI prompt registry and mentor context builder.
+- AI prompt registry and mentor context builder,
+- teacher block project review views (local, pending commit).
 
 Not published:
 
-- teacher review view for learner block projects (next slice).
+- PostgreSQL local setup (next slice).
 
 ## Immediate Next Build Sequence
 
-1. Add teacher review view for learner block projects.
-2. Configure database for PostgreSQL once local services are available.
-3. Persist prompt registry to database tables with version publishing workflow.
+1. Configure database for PostgreSQL once local services are available.
+2. Persist prompt registry to database tables with version publishing workflow.
+3. Add teacher feedback notes on reviewed block projects.
 
 ## Ledger Update Rule
 
