@@ -7,6 +7,7 @@ use App\Enums\MembershipStatus;
 use App\Models\Institution;
 use App\Models\User;
 use App\Modules\AI\Models\AiUsageRecord;
+use Database\Seeders\CurriculumFoundationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
@@ -33,7 +34,8 @@ class LearnerMentorAskTest extends TestCase
 
         $response->assertOk()
             ->assertJsonPath('provider', 'fake')
-            ->assertJsonStructure(['reply', 'request_id', 'provider', 'model']);
+            ->assertJsonPath('prompt_id', 'learner.mentor.hint@v1')
+            ->assertJsonStructure(['reply', 'request_id', 'provider', 'model', 'prompt_id']);
 
         $this->assertSame(1, AiUsageRecord::query()->count());
         $this->assertDatabaseHas('ai_usage_records', [
@@ -41,6 +43,28 @@ class LearnerMentorAskTest extends TestCase
             'user_id' => $user->id,
             'task_type' => 'learner_mentor_hint',
         ]);
+    }
+
+    public function test_mentor_reply_includes_lesson_context_when_lesson_slug_is_provided(): void
+    {
+        config([
+            'ai.default_provider' => 'fake',
+            'ai.providers.fake.enabled' => true,
+        ]);
+
+        $this->seed(CurriculumFoundationSeeder::class);
+
+        $user = User::factory()->create();
+        $institution = Institution::factory()->create();
+        $this->attachLearner($user, $institution);
+
+        $response = $this->actingAs($user)->postJson('/learner/mentor/ask', [
+            'message' => 'How do I use a repeat loop?',
+            'lesson_slug' => 'unit-06-repeat-loops',
+        ]);
+
+        $response->assertOk();
+        $this->assertStringContainsString('Repeat Loops', (string) $response->json('reply'));
     }
 
     public function test_mentor_ask_requires_institution_context(): void

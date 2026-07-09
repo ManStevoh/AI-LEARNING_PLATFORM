@@ -9,4 +9,6 @@ return [
             'model' => 'fake-mentor-v1',
         ],
     ],
+
+    'prompts' => require __DIR__.'/ai/prompts.php',
 ];

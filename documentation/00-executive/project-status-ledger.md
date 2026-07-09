@@ -145,7 +145,8 @@ Developed:
 - tenant-scoped block project persistence with auto-save and reload on lesson pages,
 - AI Gateway shell with fake provider, usage logging, and learner mentor endpoint,
 - Level 1 starter Blockly projects for all ten lessons with lesson-page load fallback,
-- learner lesson AI mentor panel wired to the gateway endpoint.
+- learner lesson AI mentor panel wired to the gateway endpoint,
+- AI prompt registry, renderer, and mentor context builder for lesson-aware responses.
 
 ## Partially Developed Artifacts
 

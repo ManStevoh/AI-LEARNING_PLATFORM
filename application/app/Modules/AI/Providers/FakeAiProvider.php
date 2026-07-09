@@ -23,7 +23,7 @@ class FakeAiProvider implements AiProvider
     {
         $startedAt = hrtime(true);
         $userMessage = $this->latestUserMessage($request);
-        $content = $this->buildMentorReply($request->taskType, $userMessage, $request->metadata);
+        $content = $this->buildMentorReply($request, $userMessage);
 
         return new AiResponse(
             requestId: $requestId,
@@ -37,25 +37,40 @@ class FakeAiProvider implements AiProvider
             ],
             metadata: [
                 'simulated' => true,
+                'prompt_id' => $request->promptId,
             ],
         );
     }
 
-    /**
-     * @param  array<string, mixed>  $metadata
-     */
-    private function buildMentorReply(string $taskType, string $userMessage, array $metadata): string
+    private function buildMentorReply(AiRequest $request, string $userMessage): string
     {
-        $lessonSlug = is_string($metadata['lesson_slug'] ?? null) ? $metadata['lesson_slug'] : null;
-        $lessonHint = $lessonSlug ? " You are working in {$lessonSlug}." : '';
+        /** @var array<string, string> $context */
+        $context = is_array($request->metadata['context'] ?? null)
+            ? $request->metadata['context']
+            : [];
 
-        return match ($taskType) {
-            'learner_mentor_hint' => 'Try one small change at a time and watch the stage. '
-                .'For your question, focus on the next block that moves you closer to the goal without giving away the full answer.'
-                .$lessonHint,
+        $lessonTitle = $context['lesson_title'] ?? null;
+        $skillNames = $context['skill_names'] ?? null;
+        $lessonHint = $lessonTitle ? "In {$lessonTitle}, " : '';
+
+        return match ($request->taskType) {
+            'learner_mentor_hint' => $lessonHint
+                .'try one small change at a time and watch the stage. '
+                .($skillNames ? "Focus on skills like {$skillNames}. " : '')
+                .'What is the next block that moves you closer to the goal without giving away the full answer?'
+                .($userMessage !== '' ? " You asked about: \"{$this->extractQuestion($userMessage)}\"." : ''),
             default => 'The ACE mentor is in sandbox mode. Describe what you tried and what you expected to happen.'
                 .($userMessage !== '' ? " You asked: \"{$userMessage}\"." : ''),
         };
+    }
+
+    private function extractQuestion(string $renderedUserMessage): string
+    {
+        if (preg_match('/Learner question:\s*(.+)$/s', $renderedUserMessage, $matches) === 1) {
+            return trim($matches[1]);
+        }
+
+        return trim($renderedUserMessage);
     }
 
     private function latestUserMessage(AiRequest $request): string
