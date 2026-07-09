@@ -6,7 +6,7 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 
 - **Last updated:** 2026-07-10
 - **Engine phase:** Phase 2–3 (looks, sound, sensing) — **partial**
-- **Published to GitHub:** `87a7ea9` (sensing slice pending commit)
+- **Published to GitHub:** `c0a067e`
 - **Custom ACE blocks:** 24 done / ~35 Level 1 documented
 - **Tests:** 85 PHPUnit
 

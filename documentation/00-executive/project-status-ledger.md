@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `36f35d4` — Add Phase 2 sound blocks with Web Audio presets.
+- `c0a067e` — Add sensing blocks with mouse, edge, key, and timer reporters.
 
 Current local implementation status:
 
