@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `b058b04 Update status ledger after stage runtime slice.` (pending persistence push)
+- `6c33eb9 Add tenant-scoped block project persistence with PHPUnit coverage.`
 
 Current local implementation status:
 
@@ -283,17 +283,19 @@ Published:
 - audit logging foundation,
 - learner lesson detail pages,
 - Blockly workspace shell,
-- stage runtime and green-flag execution.
+- stage runtime and green-flag execution,
+- block project save/load persistence,
+- PHPUnit-required backend rule.
 
 Not published:
 
-- project save/load persistence (next slice).
+- PostgreSQL local setup (next slice).
 
 ## Immediate Next Build Sequence
 
-1. Add project save/load and Blockly workspace persistence for learner lessons.
-2. Configure database for PostgreSQL once local services are available.
-3. Add AI Gateway fake provider shell.
+1. Configure database for PostgreSQL once local services are available.
+2. Add AI Gateway fake provider shell.
+3. Add starter Blockly projects per Level 1 lesson.
 
 ## Ledger Update Rule
 
