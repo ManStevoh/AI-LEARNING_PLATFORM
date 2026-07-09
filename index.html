@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AI Learning Platform engineering, product, curriculum, AI, security, and implementation documentation.">
+  <title>AI Learning Platform Docs</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <style>
+    :root {
+      --theme-color: #2563eb;
+      --sidebar-width: 320px;
+    }
+
+    body {
+      color: #243447;
+      font-size: 15px;
+    }
+
+    .sidebar {
+      border-right: 1px solid #e5e7eb;
+    }
+
+    .sidebar > h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 1.5rem 1rem 1rem;
+      text-align: left;
+    }
+
+    .sidebar-nav strong {
+      color: #0f172a;
+      display: block;
+      font-size: 0.85rem;
+      letter-spacing: 0.02em;
+      margin-top: 1rem;
+      text-transform: uppercase;
+    }
+
+    .markdown-section {
+      max-width: 980px;
+    }
+
+    .markdown-section h1 {
+      color: #0f172a;
+      font-size: 2.4rem;
+      letter-spacing: -0.04em;
+    }
+
+    .markdown-section h2 {
+      border-bottom: 1px solid #e5e7eb;
+      color: #1e293b;
+      padding-bottom: 0.35rem;
+    }
+
+    .markdown-section table {
+      display: table;
+      width: 100%;
+    }
+
+    .app-name-link {
+      color: #0f172a;
+    }
+
+    .search input {
+      border-radius: 8px;
+      padding: 0.7rem 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">Loading documentation...</div>
+  <script>
+    window.$docsify = {
+      name: 'AI Learning Platform',
+      repo: 'ManStevoh/AI-LEARNING_PLATFORM',
+      homepage: 'README.md',
+      loadSidebar: true,
+      subMaxLevel: 2,
+      auto2top: true,
+      mergeNavbar: true,
+      search: {
+        maxAge: 86400000,
+        paths: 'auto',
+        placeholder: 'Search documentation...',
+        noData: 'No results found.',
+        depth: 6,
+      },
+      copyCode: {
+        buttonText: 'Copy',
+        errorText: 'Error',
+        successText: 'Copied',
+      },
+    };
+  </script>
+  <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code@2/dist/docsify-copy-code.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-php.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-javascript.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-jsx.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-typescript.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-yaml.min.js"></script>
+</body>
+</html>
