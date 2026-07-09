@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `b900247` — Add Phase 2 motion blocks: glide, point direction, edge bounce.
+- `65ddc0b` — Add teacher skill mastery view with support gap detection.
 
 Current local implementation status:
 
@@ -27,7 +27,7 @@ Current local implementation status:
 - Phase 2 identity/tenancy foundation implemented locally with typed institution roles, tenant context, and role-aware workspaces.
 - Learning Core curriculum foundation seeded and exposed in the learner workspace UI.
 - **Block coding Phase 1 complete + Phase 2 looks partial** published in `828be6b`.
-- **Teacher skill mastery view** implemented locally (not yet published).
+- **Teacher skill mastery view** published in `65ddc0b`.
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
@@ -160,7 +160,7 @@ Developed:
 - database-backed AI prompt registry with version publishing workflow and config fallback,
 - institution-admin AI prompt management UI with draft save, publish, and audit logging,
 - teacher class overview with institution-scoped learner progress summaries and live dashboard metrics,
-- teacher skill mastery view with skill evidence, prerequisite gaps, and inactive-learner support flags (local).
+- teacher skill mastery view with skill evidence, prerequisite gaps, and inactive-learner support flags.
 
 ### Block Coding (Published)
 
@@ -369,21 +369,21 @@ Published:
 - database-backed AI prompt registry with version publishing workflow,
 - institution-admin AI prompt management UI,
 - teacher class overview with learner progress summaries,
+- teacher skill mastery view with support gap detection,
 - Scratch block coding studio and ACE Stage Engine Phases 1–2,
 - block coding docs (registry, parity strategy, status procedure).
 
 Not published (local only):
 
-- PostgreSQL local setup (Docker unavailable),
-- teacher skill mastery view (`TeacherSkillMasteryService`, `/teacher/skills`, 5 PHPUnit tests).
+- PostgreSQL local setup (Docker unavailable).
 
 Not published (blocked):
 
 ## Immediate Next Build Sequence
 
-1. Commit and publish teacher skill mastery slice.
+1. Sound asset uploads and costume editor (Phase 2 remainder).
 2. Configure PostgreSQL once local services are available.
-3. Sound asset uploads and costume editor (Phase 2 remainder).
+3. Stage rendering ADR (PixiJS/Phaser evaluation).
 
 ## Ledger Update Rule
 
