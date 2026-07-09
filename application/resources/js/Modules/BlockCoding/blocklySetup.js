@@ -70,11 +70,13 @@ export async function runWorkspaceProgram(workspace, runtime) {
         code.includes('runtime.onGreenFlag') ||
         code.includes('runtime.onKeyPressed') ||
         code.includes('runtime.onBroadcastReceived') ||
-        code.includes('runtime.onSpriteClicked');
+        code.includes('runtime.onSpriteClicked') ||
+        code.includes('runtime.onBackdropSwitched') ||
+        code.includes('runtime.onGreaterThan');
 
     if (!hasEventHat) {
         runtime.setError(
-            'Add an event block (green flag, key pressed, sprite clicked, or broadcast received) before running.',
+            'Add an event block (green flag, key pressed, sprite clicked, backdrop, greater than, or broadcast received) before running.',
         );
         return { ok: false, reason: 'missing_hat' };
     }

@@ -38,6 +38,10 @@ export class SoundEngine {
         this.volume = Math.max(0, Math.min(1, (Number(percent) || 100) / 100));
     }
 
+    setPitch(percent = 100) {
+        this.pitch = Math.max(0, Number(percent) || 100) / 100;
+    }
+
     stopAll() {
         for (const node of this.activeNodes) {
             try {

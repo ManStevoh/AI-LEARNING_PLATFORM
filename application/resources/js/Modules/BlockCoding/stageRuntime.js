@@ -5,6 +5,13 @@ const DEFAULT_STAGE = {
     width: 480,
     height: 360,
     background: '#dbeafe',
+    backdrops: [
+        { id: 'backdrop-1', name: 'blue sky', color: '#dbeafe' },
+        { id: 'backdrop-2', name: 'grass', color: '#bbf7d0' },
+        { id: 'backdrop-3', name: 'sunset', color: '#fed7aa' },
+        { id: 'backdrop-4', name: 'night', color: '#1e293b' },
+    ],
+    backdropIndex: 0,
 };
 
 const DEFAULT_SPRITE = {
@@ -18,6 +25,17 @@ const DEFAULT_SPRITE = {
     emoji: '🐱',
     costumes: [{ type: 'emoji', emoji: '🐱', name: '🐱' }],
     costumeIndex: 0,
+    rotationStyle: 'all around',
+    layer: 0,
+    effects: {
+        color: 0,
+        fisheye: 0,
+        whirl: 0,
+        pixelate: 0,
+        mosaic: 0,
+        brightness: 0,
+        ghost: 0,
+    },
     say: null,
     think: null,
 };
@@ -27,16 +45,15 @@ export class StageRuntime {
         this.onUpdate = onUpdate;
         this.maxRunMs = config.runtime?.max_run_ms ?? 10000;
         this.maxLoopIterations = config.runtime?.max_loop_iterations ?? 10000;
-        this.initialStage = {
-            ...DEFAULT_STAGE,
-            ...config.stage,
-        };
+        this.initialStage = this.normalizeStage(config.stage);
         this.initialSprites = this.normalizeSprites(config.stage?.sprites);
         this.activeSpriteId = config.active_sprite_id ?? this.initialSprites[0]?.id ?? 'sprite-1';
         this.greenFlagHandlers = [];
         this.keyHandlers = new Map();
         this.broadcastHandlers = new Map();
         this.spriteClickHandlers = new Map();
+        this.backdropSwitchHandlers = new Map();
+        this.greaterThanHandlers = [];
         this.stopRequested = false;
         this.activeScriptContext = null;
         this.loopCount = 0;
@@ -48,10 +65,42 @@ export class StageRuntime {
         this.pointer = { x: 0, y: 0 };
         this.runStartedAt = null;
         this.inputListenersAttached = false;
+        this.greaterThanPollId = null;
         this.soundEngine = new SoundEngine();
         this.soundLibrary = config.sound_library ?? {};
+        this.soundEffects = { pitch: 100, pan: 0 };
         this.stage = structuredClone(this.initialStage);
         this.sprites = structuredClone(this.initialSprites);
+        this.ensureSpriteLayers();
+    }
+
+    normalizeStage(stage = {}) {
+        const normalized = {
+            ...structuredClone(DEFAULT_STAGE),
+            ...stage,
+        };
+
+        if (!Array.isArray(normalized.backdrops) || normalized.backdrops.length === 0) {
+            normalized.backdrops = structuredClone(DEFAULT_STAGE.backdrops);
+        }
+
+        normalized.backdropIndex = Math.min(
+            Math.max(0, normalized.backdropIndex ?? 0),
+            normalized.backdrops.length - 1,
+        );
+
+        const current = normalized.backdrops[normalized.backdropIndex];
+        normalized.background = current?.color ?? normalized.background ?? DEFAULT_STAGE.background;
+
+        return normalized;
+    }
+
+    ensureSpriteLayers() {
+        this.sprites.forEach((sprite, index) => {
+            if (typeof sprite.layer !== 'number') {
+                sprite.layer = index;
+            }
+        });
     }
 
     normalizeSprites(sprites) {
@@ -79,6 +128,12 @@ export class StageRuntime {
             );
             this.applyCostumeVisual(normalized);
             normalized.size = Number(normalized.size) || DEFAULT_SPRITE.size;
+            normalized.rotationStyle = normalized.rotationStyle ?? DEFAULT_SPRITE.rotationStyle;
+            normalized.layer = typeof normalized.layer === 'number' ? normalized.layer : index;
+            normalized.effects = {
+                ...structuredClone(DEFAULT_SPRITE.effects),
+                ...(normalized.effects ?? {}),
+            };
 
             return normalized;
         });
@@ -168,8 +223,9 @@ export class StageRuntime {
             state: this.state,
             error: this.error,
             stage: structuredClone(this.stage),
-            sprites: structuredClone(this.sprites),
+            sprites: structuredClone(this.sprites).sort((a, b) => (a.layer ?? 0) - (b.layer ?? 0)),
             activeSpriteId: this.activeSpriteId,
+            soundVolume: Math.round((this.soundEngine.volume ?? 1) * 100),
         };
     }
 
@@ -209,6 +265,8 @@ export class StageRuntime {
         this.keyHandlers = new Map();
         this.broadcastHandlers = new Map();
         this.spriteClickHandlers = new Map();
+        this.backdropSwitchHandlers = new Map();
+        this.greaterThanHandlers = [];
         this.stopRequested = false;
         this.activeScriptContext = null;
         this.stopResolve = null;
@@ -216,9 +274,11 @@ export class StageRuntime {
         this.error = null;
         this.stage = structuredClone(this.initialStage);
         this.sprites = structuredClone(this.initialSprites);
+        this.ensureSpriteLayers();
         this.keysHeld.clear();
         this.pointer = { x: 0, y: 0 };
         this.runStartedAt = null;
+        this.soundEffects = { pitch: 100, pan: 0 };
         this.soundEngine.stopAll();
         this.finishEventLoop();
         this.setState('idle');
@@ -258,6 +318,30 @@ export class StageRuntime {
         this.spriteClickHandlers.get(normalizedSpriteId).push(handler);
     }
 
+    onBackdropSwitched(backdropName, handler) {
+        if (typeof handler !== 'function') {
+            return;
+        }
+
+        const key = String(backdropName ?? '');
+        const handlers = this.backdropSwitchHandlers.get(key) ?? [];
+        handlers.push(handler);
+        this.backdropSwitchHandlers.set(key, handlers);
+    }
+
+    onGreaterThan(sensor, threshold, handler) {
+        if (typeof handler !== 'function') {
+            return;
+        }
+
+        this.greaterThanHandlers.push({
+            sensor: String(sensor ?? 'timer'),
+            threshold: Number(threshold) || 0,
+            handler,
+            fired: false,
+        });
+    }
+
     async handleSpriteClick(spriteId) {
         if (this.state !== 'running' || this.shouldStop()) {
             return;
@@ -287,7 +371,9 @@ export class StageRuntime {
         return (
             this.keyHandlers.size > 0 ||
             this.broadcastHandlers.size > 0 ||
-            this.spriteClickHandlers.size > 0
+            this.spriteClickHandlers.size > 0 ||
+            this.backdropSwitchHandlers.size > 0 ||
+            this.greaterThanHandlers.length > 0
         );
     }
 
@@ -407,6 +493,7 @@ export class StageRuntime {
     async start() {
         this.runStartedAt = Date.now();
         this.attachInputListeners();
+        this.startGreaterThanPolling();
         this.setState('running');
 
         if (this.greenFlagHandlers.length > 0) {
@@ -422,7 +509,42 @@ export class StageRuntime {
             this.setState('idle');
         }
 
+        this.stopGreaterThanPolling();
         this.detachInputListeners();
+    }
+
+    startGreaterThanPolling() {
+        this.stopGreaterThanPolling();
+
+        if (this.greaterThanHandlers.length === 0) {
+            return;
+        }
+
+        this.greaterThanPollId = window.setInterval(() => {
+            if (this.shouldStop()) {
+                return;
+            }
+
+            for (const entry of this.greaterThanHandlers) {
+                if (entry.fired) {
+                    continue;
+                }
+
+                const value = entry.sensor === 'loudness' ? this.getLoudness() : this.getTimer();
+
+                if (value > entry.threshold) {
+                    entry.fired = true;
+                    void this.runScript(entry.handler);
+                }
+            }
+        }, 100);
+    }
+
+    stopGreaterThanPolling() {
+        if (this.greaterThanPollId !== null) {
+            window.clearInterval(this.greaterThanPollId);
+            this.greaterThanPollId = null;
+        }
     }
 
     waitUntilStopped() {
@@ -432,6 +554,7 @@ export class StageRuntime {
     }
 
     finishEventLoop() {
+        this.stopGreaterThanPolling();
         this.detachInputListeners();
 
         if (this.stopResolve) {
@@ -454,6 +577,10 @@ export class StageRuntime {
         await Promise.all(handlers.map((handler) => this.runScript(handler)));
     }
 
+    async broadcastAndWait(message) {
+        await this.broadcast(message);
+    }
+
     async wait(milliseconds = 0) {
         if (this.shouldStop()) {
             return;
@@ -466,6 +593,21 @@ export class StageRuntime {
 
     async waitSeconds(seconds = 0) {
         await this.wait((Number(seconds) || 0) * 1000);
+    }
+
+    async waitUntil(conditionFn) {
+        while (!this.shouldStop()) {
+            try {
+                if (typeof conditionFn === 'function' ? Boolean(await conditionFn()) : Boolean(conditionFn)) {
+                    return;
+                }
+            } catch {
+                return;
+            }
+
+            await this.wait(50);
+            this.checkLoop();
+        }
     }
 
     checkLoop() {
@@ -507,6 +649,10 @@ export class StageRuntime {
         await this.wait(150);
     }
 
+    async turnLeftDegrees(degrees = 0) {
+        await this.turnDegrees(-(Number(degrees) || 0));
+    }
+
     async goToXY(x = 0, y = 0) {
         if (this.shouldStop()) {
             return;
@@ -518,6 +664,23 @@ export class StageRuntime {
         this.clampSprite(sprite);
         this.emitChange();
         await this.wait(250);
+    }
+
+    async goToTarget(target = 'random position') {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        if (target === 'mouse-pointer') {
+            await this.goToXY(this.pointer.x, this.pointer.y);
+            return;
+        }
+
+        const halfWidth = this.stage.width / 2;
+        const halfHeight = this.stage.height / 2;
+        const x = Math.round((Math.random() * 2 - 1) * halfWidth);
+        const y = Math.round((Math.random() * 2 - 1) * halfHeight);
+        await this.goToXY(x, y);
     }
 
     async glideToXY(x = 0, y = 0, seconds = 1) {
@@ -548,6 +711,21 @@ export class StageRuntime {
         }
     }
 
+    async glideToTarget(seconds = 1, target = 'random position') {
+        if (target === 'mouse-pointer') {
+            await this.glideToXY(this.pointer.x, this.pointer.y, seconds);
+            return;
+        }
+
+        const halfWidth = this.stage.width / 2;
+        const halfHeight = this.stage.height / 2;
+        await this.glideToXY(
+            Math.round((Math.random() * 2 - 1) * halfWidth),
+            Math.round((Math.random() * 2 - 1) * halfHeight),
+            seconds,
+        );
+    }
+
     async pointInDirection(degrees = 90) {
         if (this.shouldStop()) {
             return;
@@ -557,6 +735,101 @@ export class StageRuntime {
         sprite.direction = this.normalizeDirection(Number(degrees) || 0);
         this.emitChange();
         await this.wait(100);
+    }
+
+    async pointTowards(target = 'mouse-pointer') {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const sprite = this.getActiveSprite();
+        let targetX = this.pointer.x;
+        let targetY = this.pointer.y;
+
+        if (target !== 'mouse-pointer') {
+            const other = this.sprites.find((item) => item.id === target || item.name === target);
+            if (other) {
+                targetX = other.x;
+                targetY = other.y;
+            }
+        }
+
+        const dx = targetX - sprite.x;
+        const dy = targetY - sprite.y;
+        sprite.direction = this.normalizeDirection((Math.atan2(dx, dy) * 180) / Math.PI);
+        this.emitChange();
+        await this.wait(100);
+    }
+
+    async changeXBy(amount = 0) {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const sprite = this.getActiveSprite();
+        sprite.x += Number(amount) || 0;
+        this.clampSprite(sprite);
+        this.emitChange();
+        await this.wait(100);
+    }
+
+    async setXTo(value = 0) {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const sprite = this.getActiveSprite();
+        sprite.x = Number(value) || 0;
+        this.clampSprite(sprite);
+        this.emitChange();
+        await this.wait(100);
+    }
+
+    async changeYBy(amount = 0) {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const sprite = this.getActiveSprite();
+        sprite.y += Number(amount) || 0;
+        this.clampSprite(sprite);
+        this.emitChange();
+        await this.wait(100);
+    }
+
+    async setYTo(value = 0) {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const sprite = this.getActiveSprite();
+        sprite.y = Number(value) || 0;
+        this.clampSprite(sprite);
+        this.emitChange();
+        await this.wait(100);
+    }
+
+    setRotationStyle(style = 'all around') {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const sprite = this.getActiveSprite();
+        const allowed = ['left-right', "don't rotate", 'all around'];
+        sprite.rotationStyle = allowed.includes(style) ? style : 'all around';
+        this.emitChange();
+    }
+
+    getXPosition() {
+        return this.getActiveSprite().x;
+    }
+
+    getYPosition() {
+        return this.getActiveSprite().y;
+    }
+
+    getDirection() {
+        return this.getActiveSprite().direction;
     }
 
     bounceIfOnEdge() {
@@ -595,7 +868,7 @@ export class StageRuntime {
         }
     }
 
-    async say(message = '', seconds = 2) {
+    async say(message = '', seconds = null) {
         if (this.shouldStop()) {
             return;
         }
@@ -604,12 +877,17 @@ export class StageRuntime {
         sprite.think = null;
         sprite.say = String(message);
         this.emitChange();
+
+        if (seconds === null || seconds === undefined) {
+            return;
+        }
+
         await this.wait((Number(seconds) || 2) * 1000);
         sprite.say = null;
         this.emitChange();
     }
 
-    async think(message = '', seconds = 2) {
+    async think(message = '', seconds = null) {
         if (this.shouldStop()) {
             return;
         }
@@ -618,6 +896,11 @@ export class StageRuntime {
         sprite.say = null;
         sprite.think = String(message);
         this.emitChange();
+
+        if (seconds === null || seconds === undefined) {
+            return;
+        }
+
         await this.wait((Number(seconds) || 2) * 1000);
         sprite.think = null;
         this.emitChange();
@@ -641,6 +924,16 @@ export class StageRuntime {
         this.emitChange();
     }
 
+    changeSizeBy(amount = 0) {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const sprite = this.getActiveSprite();
+        sprite.size = Math.max(10, Math.min(400, (Number(sprite.size) || 100) + (Number(amount) || 0)));
+        this.emitChange();
+    }
+
     setSize(percent = 100) {
         if (this.shouldStop()) {
             return;
@@ -651,13 +944,85 @@ export class StageRuntime {
         this.emitChange();
     }
 
-    switchCostume(index = 1) {
+    getSize() {
+        return this.getActiveSprite().size ?? 100;
+    }
+
+    changeEffectBy(effect = 'color', amount = 0) {
         if (this.shouldStop()) {
             return;
         }
 
         const sprite = this.getActiveSprite();
-        const costumeIndex = Math.max(0, (Number(index) || 1) - 1);
+        const key = String(effect || 'color');
+        sprite.effects = sprite.effects ?? structuredClone(DEFAULT_SPRITE.effects);
+        sprite.effects[key] = (Number(sprite.effects[key]) || 0) + (Number(amount) || 0);
+        this.emitChange();
+    }
+
+    setEffectTo(effect = 'color', value = 0) {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const sprite = this.getActiveSprite();
+        const key = String(effect || 'color');
+        sprite.effects = sprite.effects ?? structuredClone(DEFAULT_SPRITE.effects);
+        sprite.effects[key] = Number(value) || 0;
+        this.emitChange();
+    }
+
+    clearGraphicEffects() {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const sprite = this.getActiveSprite();
+        sprite.effects = structuredClone(DEFAULT_SPRITE.effects);
+        this.emitChange();
+    }
+
+    goToLayer(edge = 'front') {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const sprite = this.getActiveSprite();
+        const layers = this.sprites.map((item) => item.layer ?? 0);
+        const min = Math.min(...layers);
+        const max = Math.max(...layers);
+        sprite.layer = edge === 'back' ? min - 1 : max + 1;
+        this.emitChange();
+    }
+
+    goLayers(direction = 'forward', count = 1) {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const sprite = this.getActiveSprite();
+        const delta = (Number(count) || 1) * (direction === 'backward' ? -1 : 1);
+        sprite.layer = (sprite.layer ?? 0) + delta;
+        this.emitChange();
+    }
+
+    switchCostume(indexOrName = 1) {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const sprite = this.getActiveSprite();
+        let costumeIndex = 0;
+
+        if (typeof indexOrName === 'string' && Number.isNaN(Number(indexOrName))) {
+            const found = sprite.costumes.findIndex((costume) => {
+                const entry = typeof costume === 'object' ? costume : { name: costume, emoji: costume };
+                return entry.name === indexOrName || entry.emoji === indexOrName;
+            });
+            costumeIndex = found >= 0 ? found : 0;
+        } else {
+            costumeIndex = Math.max(0, (Number(indexOrName) || 1) - 1);
+        }
 
         if (costumeIndex >= sprite.costumes.length) {
             return;
@@ -668,20 +1033,100 @@ export class StageRuntime {
         this.emitChange();
     }
 
-    setBackdrop(color = '#dbeafe') {
+    nextCostume() {
         if (this.shouldStop()) {
             return;
         }
 
-        this.stage.background = String(color);
+        const sprite = this.getActiveSprite();
+        if (sprite.costumes.length === 0) {
+            return;
+        }
+
+        sprite.costumeIndex = (sprite.costumeIndex + 1) % sprite.costumes.length;
+        this.applyCostumeVisual(sprite);
         this.emitChange();
+    }
+
+    getCostume(property = 'number') {
+        const sprite = this.getActiveSprite();
+        if (property === 'name') {
+            const costume = sprite.costumes[sprite.costumeIndex];
+            if (costume && typeof costume === 'object') {
+                return costume.name ?? costume.emoji ?? `costume ${sprite.costumeIndex + 1}`;
+            }
+            return String(costume ?? `costume ${sprite.costumeIndex + 1}`);
+        }
+
+        return (sprite.costumeIndex ?? 0) + 1;
+    }
+
+    setBackdrop(nameOrColor = '#dbeafe') {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const value = String(nameOrColor);
+        const byName = this.stage.backdrops?.findIndex((backdrop) => backdrop.name === value || backdrop.color === value);
+        const byIndex = Number(value);
+
+        if (byName >= 0) {
+            this.stage.backdropIndex = byName;
+        } else if (!Number.isNaN(byIndex) && byIndex >= 1 && byIndex <= (this.stage.backdrops?.length ?? 0)) {
+            this.stage.backdropIndex = byIndex - 1;
+        } else {
+            const existing = this.stage.backdrops?.findIndex((backdrop) => backdrop.color === value);
+            if (existing >= 0) {
+                this.stage.backdropIndex = existing;
+            } else {
+                this.stage.backdrops = this.stage.backdrops ?? [];
+                this.stage.backdrops.push({ id: `backdrop-${this.stage.backdrops.length + 1}`, name: value, color: value });
+                this.stage.backdropIndex = this.stage.backdrops.length - 1;
+            }
+        }
+
+        const current = this.stage.backdrops[this.stage.backdropIndex];
+        this.stage.background = current?.color ?? value;
+        this.emitChange();
+        this.fireBackdropSwitchHandlers(current?.name ?? value);
+    }
+
+    nextBackdrop() {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        if (!this.stage.backdrops?.length) {
+            return;
+        }
+
+        this.stage.backdropIndex = (this.stage.backdropIndex + 1) % this.stage.backdrops.length;
+        const current = this.stage.backdrops[this.stage.backdropIndex];
+        this.stage.background = current.color;
+        this.emitChange();
+        this.fireBackdropSwitchHandlers(current.name);
+    }
+
+    fireBackdropSwitchHandlers(name) {
+        const handlers = this.backdropSwitchHandlers.get(String(name ?? '')) ?? [];
+        for (const handler of handlers) {
+            void this.runScript(handler);
+        }
+    }
+
+    getBackdrop(property = 'number') {
+        if (property === 'name') {
+            return this.stage.backdrops?.[this.stage.backdropIndex]?.name ?? 'backdrop';
+        }
+
+        return (this.stage.backdropIndex ?? 0) + 1;
     }
 
     setSoundLibrary(library) {
         this.soundLibrary = library ?? {};
     }
 
-    async playSound(name = 'pop') {
+    async playSound(name = 'pop', untilDone = true) {
         if (this.shouldStop()) {
             return;
         }
@@ -693,21 +1138,62 @@ export class StageRuntime {
             const url = this.soundLibrary[assetUuid];
 
             if (url) {
-                await this.soundEngine.playUrl(url);
+                const play = this.soundEngine.playUrl(url);
+                if (untilDone) {
+                    await play;
+                }
             }
 
             return;
         }
 
-        await this.soundEngine.playPreset(soundKey);
+        const play = this.soundEngine.playPreset(soundKey);
+        if (untilDone) {
+            await play;
+        }
+    }
+
+    async startSound(name = 'pop') {
+        await this.playSound(name, false);
     }
 
     stopAllSounds() {
         this.soundEngine.stopAll();
     }
 
+    changeSoundEffectBy(effect = 'pitch', amount = 0) {
+        const key = effect === 'pan left/right' ? 'pan' : 'pitch';
+        this.soundEffects[key] = (Number(this.soundEffects[key]) || 0) + (Number(amount) || 0);
+        this.soundEngine.setPitch?.(this.soundEffects.pitch);
+    }
+
+    setSoundEffectTo(effect = 'pitch', value = 100) {
+        const key = effect === 'pan left/right' ? 'pan' : 'pitch';
+        this.soundEffects[key] = Number(value) || 0;
+        this.soundEngine.setPitch?.(this.soundEffects.pitch);
+    }
+
+    clearSoundEffects() {
+        this.soundEffects = { pitch: 100, pan: 0 };
+        this.soundEngine.setPitch?.(100);
+    }
+
+    changeVolumeBy(amount = 0) {
+        const next = Math.round((this.soundEngine.volume ?? 1) * 100) + (Number(amount) || 0);
+        this.setSoundVolume(next);
+    }
+
     setSoundVolume(percent = 100) {
         this.soundEngine.setVolume(percent);
+        this.emitChange();
+    }
+
+    getVolume() {
+        return Math.round((this.soundEngine.volume ?? 1) * 100);
+    }
+
+    getLoudness() {
+        return Math.round((this.soundEngine.volume ?? 1) * 100);
     }
 
     updatePointer(clientX, clientY, rect) {

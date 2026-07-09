@@ -4,11 +4,29 @@ import { costumeImageUrl } from './costumeAssets.js';
 function spritePositionStyle(sprite, stage) {
     const halfWidth = stage.width / 2;
     const halfHeight = stage.height / 2;
+    const rotationStyle = sprite.rotationStyle ?? 'all around';
+    let rotation = sprite.direction - 90;
+    let scaleX = 1;
+
+    if (rotationStyle === "don't rotate") {
+        rotation = 0;
+    } else if (rotationStyle === 'left-right') {
+        rotation = 0;
+        const normalized = ((sprite.direction % 360) + 360) % 360;
+        scaleX = normalized > 180 ? -1 : 1;
+    }
+
+    const ghost = Math.max(0, Math.min(100, sprite.effects?.ghost ?? 0));
+    const brightness = Math.max(-100, Math.min(100, sprite.effects?.brightness ?? 0));
+    const hue = ((sprite.effects?.color ?? 0) % 200) * 1.8;
 
     return {
         left: `${50 + (sprite.x / halfWidth) * 50}%`,
         top: `${50 - (sprite.y / halfHeight) * 50}%`,
-        transform: `translate(-50%, -50%) rotate(${sprite.direction - 90}deg)`,
+        transform: `translate(-50%, -50%) rotate(${rotation}deg) scaleX(${scaleX})`,
+        opacity: 1 - ghost / 100,
+        filter: `hue-rotate(${hue}deg) brightness(${1 + brightness / 100})`,
+        zIndex: sprite.layer ?? 0,
     };
 }
 

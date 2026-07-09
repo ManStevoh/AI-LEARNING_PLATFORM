@@ -31,6 +31,7 @@ Current local implementation status:
 - **Sound asset uploads** published in `4c1ca17`.
 - **Costume uploads** published in `7b0acd0`.
 - **Stage rendering ADR 0010** (PixiJS) published in `98a8a3e`.
+- **Scratch Motion/Looks/Sound/Events/Control palette parity** implemented locally (not yet published).
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
@@ -386,14 +387,15 @@ Published:
 
 Not published (local only):
 
-- PostgreSQL local setup (Docker unavailable).
+- PostgreSQL local setup (Docker unavailable),
+- Scratch Motion/Looks/Sound/Events/Control palette parity (~36 new ACE blocks + runtime).
 
 Not published (blocked):
 
 ## Immediate Next Build Sequence
 
-1. Backdrop asset uploads.
-2. PixiJS renderer adapter when a lesson needs effects/pen/performance (ADR 0010).
+1. Commit and publish Scratch palette parity slice.
+2. Backdrop asset uploads.
 3. Configure PostgreSQL once local services are available.
 
 ## Ledger Update Rule

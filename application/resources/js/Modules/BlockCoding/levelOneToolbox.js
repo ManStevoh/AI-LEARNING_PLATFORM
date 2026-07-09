@@ -10,9 +10,15 @@ export function getLevelOneToolbox(preset = 'level_1_default') {
                 categorystyle: 'event_category',
                 contents: [
                     { kind: 'block', type: 'ace_event_green_flag' },
+                    { kind: 'block', type: 'ace_event_key_pressed' },
+                    { kind: 'block', type: 'ace_event_sprite_clicked' },
+                    { kind: 'block', type: 'ace_event_backdrop_switches' },
                     {
                         kind: 'block',
-                        type: 'ace_event_key_pressed',
+                        type: 'ace_event_greater_than',
+                        inputs: {
+                            VALUE: { shadow: { type: 'math_number', fields: { NUM: 10 } } },
+                        },
                     },
                     {
                         kind: 'block',
@@ -21,8 +27,14 @@ export function getLevelOneToolbox(preset = 'level_1_default') {
                             MESSAGE: { shadow: { type: 'text', fields: { TEXT: 'message1' } } },
                         },
                     },
+                    {
+                        kind: 'block',
+                        type: 'ace_event_broadcast_and_wait',
+                        inputs: {
+                            MESSAGE: { shadow: { type: 'text', fields: { TEXT: 'message1' } } },
+                        },
+                    },
                     { kind: 'block', type: 'ace_event_broadcast_received' },
-                    { kind: 'block', type: 'ace_event_sprite_clicked' },
                 ],
             },
             {
@@ -42,10 +54,23 @@ export function getLevelOneToolbox(preset = 'level_1_default') {
                     },
                     {
                         kind: 'block',
+                        type: 'ace_motion_turn_left',
+                        inputs: { DEGREES: { shadow: { type: 'math_number', fields: { NUM: 15 } } } },
+                    },
+                    { kind: 'block', type: 'ace_motion_go_to_target' },
+                    {
+                        kind: 'block',
                         type: 'ace_motion_go_to_xy',
                         inputs: {
                             X: { shadow: { type: 'math_number', fields: { NUM: 0 } } },
                             Y: { shadow: { type: 'math_number', fields: { NUM: 0 } } },
+                        },
+                    },
+                    {
+                        kind: 'block',
+                        type: 'ace_motion_glide_to_target',
+                        inputs: {
+                            SECONDS: { shadow: { type: 'math_number', fields: { NUM: 1 } } },
                         },
                     },
                     {
@@ -62,7 +87,32 @@ export function getLevelOneToolbox(preset = 'level_1_default') {
                         type: 'ace_motion_point_direction',
                         inputs: { DIRECTION: { shadow: { type: 'math_number', fields: { NUM: 90 } } } },
                     },
+                    { kind: 'block', type: 'ace_motion_point_towards' },
+                    {
+                        kind: 'block',
+                        type: 'ace_motion_change_x',
+                        inputs: { VALUE: { shadow: { type: 'math_number', fields: { NUM: 10 } } } },
+                    },
+                    {
+                        kind: 'block',
+                        type: 'ace_motion_set_x',
+                        inputs: { VALUE: { shadow: { type: 'math_number', fields: { NUM: 0 } } } },
+                    },
+                    {
+                        kind: 'block',
+                        type: 'ace_motion_change_y',
+                        inputs: { VALUE: { shadow: { type: 'math_number', fields: { NUM: 10 } } } },
+                    },
+                    {
+                        kind: 'block',
+                        type: 'ace_motion_set_y',
+                        inputs: { VALUE: { shadow: { type: 'math_number', fields: { NUM: 0 } } } },
+                    },
                     { kind: 'block', type: 'ace_motion_bounce_edge' },
+                    { kind: 'block', type: 'ace_motion_set_rotation_style' },
+                    { kind: 'block', type: 'ace_motion_x_position' },
+                    { kind: 'block', type: 'ace_motion_y_position' },
+                    { kind: 'block', type: 'ace_motion_direction' },
                 ],
             },
             {
@@ -80,14 +130,39 @@ export function getLevelOneToolbox(preset = 'level_1_default') {
                     },
                     {
                         kind: 'block',
+                        type: 'ace_looks_say_until',
+                        inputs: {
+                            MESSAGE: { shadow: { type: 'text', fields: { TEXT: 'Hello!' } } },
+                        },
+                    },
+                    {
+                        kind: 'block',
                         type: 'ace_looks_think',
                         inputs: {
                             MESSAGE: { shadow: { type: 'text', fields: { TEXT: 'Hmm…' } } },
                             SECONDS: { shadow: { type: 'math_number', fields: { NUM: 2 } } },
                         },
                     },
-                    { kind: 'block', type: 'ace_looks_show' },
-                    { kind: 'block', type: 'ace_looks_hide' },
+                    {
+                        kind: 'block',
+                        type: 'ace_looks_think_until',
+                        inputs: {
+                            MESSAGE: { shadow: { type: 'text', fields: { TEXT: 'Hmm…' } } },
+                        },
+                    },
+                    {
+                        kind: 'block',
+                        type: 'ace_looks_switch_costume',
+                        inputs: { INDEX: { shadow: { type: 'math_number', fields: { NUM: 1 } } } },
+                    },
+                    { kind: 'block', type: 'ace_looks_next_costume' },
+                    { kind: 'block', type: 'ace_looks_set_backdrop' },
+                    { kind: 'block', type: 'ace_looks_next_backdrop' },
+                    {
+                        kind: 'block',
+                        type: 'ace_looks_change_size',
+                        inputs: { SIZE: { shadow: { type: 'math_number', fields: { NUM: 10 } } } },
+                    },
                     {
                         kind: 'block',
                         type: 'ace_looks_set_size',
@@ -95,10 +170,26 @@ export function getLevelOneToolbox(preset = 'level_1_default') {
                     },
                     {
                         kind: 'block',
-                        type: 'ace_looks_switch_costume',
-                        inputs: { INDEX: { shadow: { type: 'math_number', fields: { NUM: 1 } } } },
+                        type: 'ace_looks_change_effect',
+                        inputs: { VALUE: { shadow: { type: 'math_number', fields: { NUM: 25 } } } },
                     },
-                    { kind: 'block', type: 'ace_looks_set_backdrop' },
+                    {
+                        kind: 'block',
+                        type: 'ace_looks_set_effect',
+                        inputs: { VALUE: { shadow: { type: 'math_number', fields: { NUM: 0 } } } },
+                    },
+                    { kind: 'block', type: 'ace_looks_clear_effects' },
+                    { kind: 'block', type: 'ace_looks_show' },
+                    { kind: 'block', type: 'ace_looks_hide' },
+                    { kind: 'block', type: 'ace_looks_go_to_layer' },
+                    {
+                        kind: 'block',
+                        type: 'ace_looks_go_layers',
+                        inputs: { LAYERS: { shadow: { type: 'math_number', fields: { NUM: 1 } } } },
+                    },
+                    { kind: 'block', type: 'ace_looks_costume' },
+                    { kind: 'block', type: 'ace_looks_backdrop' },
+                    { kind: 'block', type: 'ace_looks_size' },
                 ],
             },
             {
@@ -107,12 +198,30 @@ export function getLevelOneToolbox(preset = 'level_1_default') {
                 categorystyle: 'sound_category',
                 contents: [
                     { kind: 'block', type: 'ace_sound_play' },
+                    { kind: 'block', type: 'ace_sound_play_until_done' },
                     { kind: 'block', type: 'ace_sound_stop_all' },
+                    {
+                        kind: 'block',
+                        type: 'ace_sound_change_effect',
+                        inputs: { VALUE: { shadow: { type: 'math_number', fields: { NUM: 10 } } } },
+                    },
+                    {
+                        kind: 'block',
+                        type: 'ace_sound_set_effect',
+                        inputs: { VALUE: { shadow: { type: 'math_number', fields: { NUM: 100 } } } },
+                    },
+                    { kind: 'block', type: 'ace_sound_clear_effects' },
+                    {
+                        kind: 'block',
+                        type: 'ace_sound_change_volume',
+                        inputs: { VOLUME: { shadow: { type: 'math_number', fields: { NUM: -10 } } } },
+                    },
                     {
                         kind: 'block',
                         type: 'ace_sound_set_volume',
                         inputs: { VOLUME: { shadow: { type: 'math_number', fields: { NUM: 100 } } } },
                     },
+                    { kind: 'block', type: 'ace_sound_volume' },
                 ],
             },
             {
@@ -137,12 +246,23 @@ export function getLevelOneToolbox(preset = 'level_1_default') {
                         type: 'ace_control_wait',
                         inputs: { SECONDS: { shadow: { type: 'math_number', fields: { NUM: 1 } } } },
                     },
-                    { kind: 'block', type: 'ace_control_stop' },
-                    { kind: 'block', type: 'controls_repeat_ext' },
-                    { kind: 'block', type: 'controls_whileUntil' },
+                    {
+                        kind: 'block',
+                        type: 'controls_repeat_ext',
+                        inputs: {
+                            TIMES: { shadow: { type: 'math_number', fields: { NUM: 10 } } },
+                        },
+                    },
+                    { kind: 'block', type: 'ace_control_forever' },
                     { kind: 'block', type: 'controls_if' },
                     { kind: 'block', type: 'controls_ifelse' },
-                    { kind: 'block', type: 'controls_flow_statements' },
+                    { kind: 'block', type: 'ace_control_wait_until' },
+                    {
+                        kind: 'block',
+                        type: 'controls_whileUntil',
+                        fields: { MODE: 'UNTIL' },
+                    },
+                    { kind: 'block', type: 'ace_control_stop' },
                 ],
             },
             {
