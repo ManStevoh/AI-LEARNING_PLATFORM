@@ -15,7 +15,7 @@ export default function Dashboard({ metrics, course }) {
                     course ? (
                         <Link
                             className="rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700"
-                            href="/learner/learn"
+                            href={nextLesson ? `/learner/learn/${nextLesson.slug}` : '/learner/learn'}
                         >
                             {nextLesson ? 'Continue lesson' : 'Open learning path'}
                         </Link>

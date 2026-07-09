@@ -23,4 +23,15 @@ class LearnController extends Controller
             'course' => $course,
         ]);
     }
+
+    public function show(string $lessonSlug): Response
+    {
+        $lesson = $this->catalog->getPublishedLessonDetail($lessonSlug);
+
+        abort_if($lesson === null, 404, 'Published lesson not found.');
+
+        return Inertia::render('Learner/Lesson', [
+            'lesson' => $lesson,
+        ]);
+    }
 }

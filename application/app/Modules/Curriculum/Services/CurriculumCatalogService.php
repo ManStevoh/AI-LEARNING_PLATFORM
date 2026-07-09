@@ -98,4 +98,40 @@ class CurriculumCatalogService
             ->with(['skills', 'module.course'])
             ->first();
     }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    public function getPublishedLessonDetail(string $lessonSlug): ?array
+    {
+        $lesson = $this->getLessonWithSkills($lessonSlug);
+
+        if ($lesson === null) {
+            return null;
+        }
+
+        $module = $lesson->module;
+        $course = $module->course;
+
+        return [
+            'slug' => $lesson->slug,
+            'title' => $lesson->title,
+            'summary' => $lesson->summary,
+            'estimated_minutes' => $lesson->estimated_minutes,
+            'module' => [
+                'slug' => $module->slug,
+                'title' => $module->title,
+                'sort_order' => $module->sort_order,
+            ],
+            'course' => [
+                'slug' => $course->slug,
+                'title' => $course->title,
+            ],
+            'skills' => $lesson->skills->map(fn (Skill $skill) => [
+                'slug' => $skill->slug,
+                'name' => $skill->name,
+                'role' => $skill->pivot->role,
+            ])->values()->all(),
+        ];
+    }
 }

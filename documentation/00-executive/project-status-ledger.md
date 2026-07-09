@@ -138,7 +138,8 @@ Developed:
 - learner learning-path page (`/learner/learn`) with unit list,
 - demo learner seed user (`learner@example.com`),
 - learner curriculum dashboard feature tests,
-- audit logging foundation (`audit_logs` table, `AuditLogger`, auth and tenant switch events).
+- audit logging foundation (`audit_logs` table, `AuditLogger`, auth and tenant switch events),
+- learner lesson detail page (`/learner/learn/{slug}`) with skills and unit context.
 
 ## Partially Developed Artifacts
 
@@ -179,7 +180,6 @@ Completed baseline:
 
 Next action:
 
-- add audit logging foundation,
 - extend learner workspace with lesson detail pages.
 
 ## Not Yet Developed
@@ -187,7 +187,6 @@ Next action:
 Application:
 
 - full role/permission implementation beyond institution membership roles,
-- audit logging foundation,
 - API implementation.
 
 ## Latest Verification
@@ -195,7 +194,7 @@ Application:
 Application verification:
 
 - `php artisan route:list` passes,
-- `php artisan test` passes with 31 tests and 131 assertions,
+- `php artisan test` passes with 35 tests and 146 assertions,
 - `npm run build` passes,
 - `application/.env` is ignored,
 - `application/vendor`, `application/node_modules`, and `application/public/build` are ignored.
@@ -204,6 +203,7 @@ Latest local verification:
 
 - tenant context middleware, institution switching, and cross-tenant policy tests pass,
 - learner dashboard and learning-path pages render published Level 1 curriculum,
+- auth login/logout and institution switch actions are audit logged,
 - frontend build passes with institution select/profile and learner workspace pages.
 
 Learning:
@@ -275,17 +275,18 @@ Published:
 - tenant context middleware and institution policies,
 - role-aware workspace app shell,
 - Learning Core curriculum foundation,
-- learner workspace curriculum catalog UI (local, pending commit).
+- learner workspace curriculum catalog UI,
+- audit logging foundation (local, pending commit).
 
 Not published:
 
-- audit logging foundation (next slice).
+- learner lesson detail pages (next slice).
 
 ## Immediate Next Build Sequence
 
-1. Add audit logging foundation.
-2. Wire learner lesson detail pages from the learning-path unit list.
-3. Configure database for PostgreSQL once local services are available.
+1. Wire learner lesson detail pages from the learning-path unit list.
+2. Configure database for PostgreSQL once local services are available.
+3. Add AI Gateway fake provider shell.
 
 ## Ledger Update Rule
 

@@ -55,6 +55,39 @@ class LearnerCurriculumDashboardTest extends TestCase
         );
     }
 
+    public function test_learner_can_view_published_lesson_detail(): void
+    {
+        $this->seed(CurriculumFoundationSeeder::class);
+
+        $user = User::factory()->create();
+        $institution = Institution::factory()->create();
+        $this->attachLearner($user, $institution);
+
+        $response = $this->withoutVite()->actingAs($user)->get('/learner/learn/unit-01-meet-the-coding-studio');
+
+        $response->assertOk();
+        $response->assertInertia(fn (Assert $page) => $page
+            ->component('Learner/Lesson')
+            ->has('lesson', fn (Assert $lesson) => $lesson
+                ->where('slug', 'unit-01-meet-the-coding-studio')
+                ->where('title', 'Meet The Coding Studio')
+                ->has('skills', 3)
+                ->etc()
+            )
+        );
+    }
+
+    public function test_learner_cannot_view_unknown_lesson(): void
+    {
+        $this->seed(CurriculumFoundationSeeder::class);
+
+        $user = User::factory()->create();
+        $institution = Institution::factory()->create();
+        $this->attachLearner($user, $institution);
+
+        $this->withoutVite()->actingAs($user)->get('/learner/learn/does-not-exist')->assertNotFound();
+    }
+
     private function attachLearner(User $user, Institution $institution): void
     {
         $institution->users()->attach($user, [

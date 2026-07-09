@@ -33,6 +33,14 @@ export default function Learn({ course }) {
                                 </span>
                             ) : null}
                         </div>
+                        {module.lesson ? (
+                            <Link
+                                className="mt-4 inline-block text-sm font-medium text-blue-600 hover:text-blue-700"
+                                href={`/learner/learn/${module.lesson.slug}`}
+                            >
+                                Open lesson
+                            </Link>
+                        ) : null}
                     </article>
                 ))}
             </div>

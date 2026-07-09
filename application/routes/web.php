@@ -33,6 +33,9 @@ Route::middleware(['auth', ResolveTenantContext::class])->group(function () {
     Route::get('learner/learn', [LearnerLearnController::class, 'index'])
         ->middleware('workspace.role:learner,parent')
         ->name('learner.learn');
+    Route::get('learner/learn/{lessonSlug}', [LearnerLearnController::class, 'show'])
+        ->middleware('workspace.role:learner,parent')
+        ->name('learner.lesson');
     Route::get('teacher', TeacherDashboardController::class)
         ->middleware('workspace.role:teacher')
         ->name('teacher.dashboard');
