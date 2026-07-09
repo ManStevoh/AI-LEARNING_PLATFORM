@@ -23,7 +23,7 @@ class WorkspaceNavigation
             ],
             InstitutionRole::Teacher => [
                 ['label' => 'Dashboard', 'href' => '/teacher'],
-                ['label' => 'Classes', 'href' => '#'],
+                ['label' => 'Classes', 'href' => '/teacher/classes'],
                 ['label' => 'Assignments', 'href' => '#'],
                 ['label' => 'Submissions', 'href' => '/teacher/block-projects'],
                 ['label' => 'Analytics', 'href' => '#'],

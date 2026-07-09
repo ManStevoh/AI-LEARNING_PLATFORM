@@ -19,6 +19,9 @@ export default function Dashboard({ metrics }) {
                         <MetricCard hint={metric.hint} key={metric.label} label={metric.label} value={metric.value} />
                     ))}
                 </div>
+                <a className="mt-4 inline-block text-sm font-medium text-blue-600 hover:text-blue-700" href="/teacher/classes">
+                    View learner progress details
+                </a>
             </DashboardSection>
 
             <DashboardSection title="Submission queue">

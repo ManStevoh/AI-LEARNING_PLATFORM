@@ -12,6 +12,7 @@ use App\Modules\AI\Providers\FakeAiProvider;
 use App\Modules\AI\Services\AiPromptManagementService;
 use App\Modules\AI\Services\AiPromptRegistryService;
 use App\Modules\AI\Services\AiUsageLogger;
+use App\Modules\Curriculum\Services\TeacherClassOverviewService;
 use App\Modules\AI\Services\MentorContextBuilder;
 use Illuminate\Support\ServiceProvider;
 
@@ -33,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(PromptRegistry::class);
         $this->app->singleton(PromptRenderer::class);
         $this->app->singleton(MentorContextBuilder::class);
+        $this->app->singleton(TeacherClassOverviewService::class);
     }
 
     /**
