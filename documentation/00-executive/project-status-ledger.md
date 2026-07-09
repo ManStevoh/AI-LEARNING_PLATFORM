@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `426351b Add institution-admin AI prompt management UI.`
+- `414f18c Add teacher class overview with learner progress summaries.`
 
 Current local implementation status:
 
@@ -150,7 +150,8 @@ Developed:
 - teacher block project review list and detail views with tenant-scoped access,
 - teacher feedback notes on reviewed block projects with upsert, audit logging, and tenant isolation,
 - database-backed AI prompt registry with version publishing workflow and config fallback,
-- institution-admin AI prompt management UI with draft save, publish, and audit logging.
+- institution-admin AI prompt management UI with draft save, publish, and audit logging,
+- teacher class overview with institution-scoped learner progress summaries and live dashboard metrics.
 
 ## Partially Developed Artifacts
 
@@ -205,7 +206,7 @@ Application:
 Application verification:
 
 - `php artisan route:list` passes,
-- `php artisan test` passes with 78 tests and 429 assertions,
+- `php artisan test` passes with 84 tests and 484 assertions,
 - `npm run build` passes,
 - `application/.env` is ignored,
 - `application/vendor`, `application/node_modules`, and `application/public/build` are ignored.
@@ -222,7 +223,8 @@ Latest local verification:
 - teacher block project review routes and UI,
 - teacher block project feedback save with audit logging and tenant isolation tests,
 - AI prompt registry database persistence, publish workflow, and seeder tests,
-- institution-admin prompt management routes, UI, and authorization tests.
+- institution-admin prompt management routes, UI, and authorization tests,
+- teacher class overview routes, progress service, and tenant-scoped learner summary tests.
 
 Learning:
 
@@ -307,7 +309,8 @@ Published:
 - teacher block project review views,
 - teacher feedback notes on reviewed block projects,
 - database-backed AI prompt registry with version publishing workflow,
-- institution-admin AI prompt management UI.
+- institution-admin AI prompt management UI,
+- teacher class overview with learner progress summaries.
 
 Not published:
 
@@ -316,7 +319,7 @@ Not published:
 ## Immediate Next Build Sequence
 
 1. Configure database for PostgreSQL once local services are available.
-2. Add teacher class overview with learner progress summaries.
+2. Add teacher skill mastery view with learners needing support.
 
 ## Ledger Update Rule
 
