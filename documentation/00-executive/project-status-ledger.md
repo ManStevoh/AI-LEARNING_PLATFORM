@@ -30,7 +30,7 @@ Current local implementation status:
 - **Teacher skill mastery view** published in `65ddc0b`.
 - **Sound asset uploads** published in `4c1ca17`.
 - **Costume uploads** published in `7b0acd0`.
-- **Stage rendering ADR 0010** (PixiJS) accepted locally (not yet published).
+- **Stage rendering ADR 0010** (PixiJS) published in `98a8a3e`.
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
@@ -380,20 +380,20 @@ Published:
 - teacher skill mastery view with support gap detection,
 - block project sound uploads with Sounds tab and envelope v1.3,
 - block project costume uploads with Costumes tab and envelope v1.4,
+- ADR 0010 PixiJS stage rendering decision,
 - Scratch block coding studio and ACE Stage Engine Phases 1–2,
 - block coding docs (registry, parity strategy, status procedure).
 
 Not published (local only):
 
-- PostgreSQL local setup (Docker unavailable),
-- ADR 0010 PixiJS stage rendering decision (docs).
+- PostgreSQL local setup (Docker unavailable).
 
 Not published (blocked):
 
 ## Immediate Next Build Sequence
 
-1. Commit and publish stage rendering ADR 0010.
-2. Backdrop asset uploads.
+1. Backdrop asset uploads.
+2. PixiJS renderer adapter when a lesson needs effects/pen/performance (ADR 0010).
 3. Configure PostgreSQL once local services are available.
 
 ## Ledger Update Rule
