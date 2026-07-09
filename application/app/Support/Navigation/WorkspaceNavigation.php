@@ -24,7 +24,7 @@ class WorkspaceNavigation
                 ['label' => 'Dashboard', 'href' => '/teacher'],
                 ['label' => 'Classes', 'href' => '#'],
                 ['label' => 'Assignments', 'href' => '#'],
-                ['label' => 'Submissions', 'href' => '#'],
+                ['label' => 'Submissions', 'href' => '/teacher/block-projects'],
                 ['label' => 'Analytics', 'href' => '#'],
             ],
             InstitutionRole::Learner, InstitutionRole::Parent => [

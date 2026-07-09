@@ -9,6 +9,7 @@ use App\Http\Controllers\Learner\BlockProjectController;
 use App\Http\Controllers\Learner\DashboardController as LearnerDashboardController;
 use App\Http\Controllers\Learner\LearnController as LearnerLearnController;
 use App\Http\Controllers\Learner\MentorController as LearnerMentorController;
+use App\Http\Controllers\Teacher\BlockProjectReviewController;
 use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
 use App\Http\Middleware\ResolveTenantContext;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +48,12 @@ Route::middleware(['auth', ResolveTenantContext::class])->group(function () {
     Route::get('teacher', TeacherDashboardController::class)
         ->middleware('workspace.role:teacher')
         ->name('teacher.dashboard');
+    Route::get('teacher/block-projects', [BlockProjectReviewController::class, 'index'])
+        ->middleware('workspace.role:teacher')
+        ->name('teacher.block-projects.index');
+    Route::get('teacher/block-projects/{blockProject}', [BlockProjectReviewController::class, 'show'])
+        ->middleware('workspace.role:teacher')
+        ->name('teacher.block-projects.show');
     Route::get('institution/workspace', InstitutionDashboardController::class)
         ->middleware('workspace.role:institution_admin')
         ->name('institution.dashboard');

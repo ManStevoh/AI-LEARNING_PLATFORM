@@ -146,7 +146,8 @@ Developed:
 - AI Gateway shell with fake provider, usage logging, and learner mentor endpoint,
 - Level 1 starter Blockly projects for all ten lessons with lesson-page load fallback,
 - learner lesson AI mentor panel wired to the gateway endpoint,
-- AI prompt registry, renderer, and mentor context builder for lesson-aware responses.
+- AI prompt registry, renderer, and mentor context builder for lesson-aware responses,
+- teacher block project review list and detail views with tenant-scoped access.
 
 ## Partially Developed Artifacts
 

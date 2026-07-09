@@ -24,8 +24,11 @@ export default function Dashboard({ metrics }) {
             <DashboardSection title="Submission queue">
                 <div className="rounded-2xl border border-[var(--color-border-subtle)] bg-white p-5">
                     <p className="text-sm text-[var(--color-text-secondary)]">
-                        Submission review and class assignment flows will connect here in the next sprint.
+                        Review saved Blockly projects from learners in your classes.
                     </p>
+                    <a className="mt-4 inline-block text-sm font-medium text-blue-600 hover:text-blue-700" href="/teacher/block-projects">
+                        Open block project reviews
+                    </a>
                 </div>
             </DashboardSection>
         </AppShell>
