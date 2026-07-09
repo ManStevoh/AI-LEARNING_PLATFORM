@@ -162,17 +162,19 @@ Completed baseline:
 - Institution model,
 - Institution factory,
 - demo institution seed data,
-- institution membership test.
+- institution membership test,
+- typed institution role enum,
+- tenant context service,
+- tenant-scoped institution membership helper tests.
 
 ### P3: Laravel Project Scaffold
 
 Type: Implementation.
 
-Status: Started. Baseline scaffold created locally.
+Status: Started. Baseline scaffold published.
 
 Needed:
 
-- publish reviewed application foundation,
 - PostgreSQL,
 - Redis,
 - auth foundation.
@@ -186,7 +188,8 @@ Completed baseline:
 - module skeleton,
 - safe `.env.example`,
 - passing backend tests,
-- passing frontend build.
+- passing frontend build,
+- GitHub Pages documentation portal.
 
 ### P4: Level 1 Content Authoring
 

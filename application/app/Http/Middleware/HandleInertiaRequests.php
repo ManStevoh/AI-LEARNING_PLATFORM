@@ -25,6 +25,9 @@ class HandleInertiaRequests extends Middleware
                 'name' => config('app.name', 'ACE Platform'),
                 'environment' => app()->environment(),
             ],
+            'auth' => [
+                'user' => $request->user()?->only(['id', 'name', 'email']),
+            ],
         ];
     }
 }

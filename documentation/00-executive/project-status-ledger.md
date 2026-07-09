@@ -18,13 +18,13 @@ Repository:
 
 Published commit:
 
-- `614800d Add AI learning platform engineering playbook`
+- `0cac615 Fix GitHub Pages docs sidebar`
 
 Current local implementation status:
 
-- Laravel application scaffold started in `application/`.
-- React/Inertia foundation added.
-- Not yet published to GitHub in this ledger snapshot.
+- Laravel application foundation published in `application/`.
+- GitHub Pages documentation portal published from repository root.
+- Phase 2 identity/tenancy foundation started locally with typed institution roles and tenant context support.
 
 ## Completed Documentation
 
@@ -90,7 +90,7 @@ Completed areas:
 
 ## Developed Artifacts
 
-Status: Documentation repository developed and published. Application foundation started locally.
+Status: Documentation repository, GitHub Pages docs portal, and application foundation published. Identity/tenancy foundation started locally.
 
 Developed:
 
@@ -113,7 +113,16 @@ Developed:
 - institution factory,
 - demo institution seed data,
 - basic Laravel feature test update,
-- institution membership test.
+- institution membership test,
+- Docsify-style GitHub Pages documentation portal,
+- searchable documentation sidebar,
+- typed institution role enum,
+- tenant context service,
+- tenant-scoped institution membership helper methods,
+- expanded institution role tests,
+- session authentication (login, register, logout),
+- protected dashboard route,
+- auth feature tests.
 
 ## Partially Developed Artifacts
 
@@ -121,31 +130,48 @@ Developed:
 
 Status:
 
-- scaffold completed to first foundation baseline in `application/`.
+- scaffold completed to first foundation baseline in `application/` and published to GitHub.
 
 Important:
 
 - local `.env` exists and must not be committed,
-- scaffold has not yet been published in the latest GitHub commit,
 - Docker/PostgreSQL local services are not configured because Docker is not available on the machine.
 
 Next action:
 
-- review scaffold files,
-- commit application foundation when ready,
 - add authentication/tenancy policies and middleware next,
 - configure real PostgreSQL once local services are available.
+
+### Identity And Tenancy Foundation
+
+Status:
+
+- started with typed institution role primitives and request-scoped tenant context support.
+
+Completed baseline:
+
+- `InstitutionRole` enum,
+- tenant context service,
+- institution membership helper methods on `User`,
+- role-scoped membership helper on `Institution`,
+- seeder role value now uses the enum,
+- tests for tenant-scoped role checks and tenant context lifecycle.
+
+Next action:
+
+- add authentication UI/API,
+- add tenant context middleware,
+- add policies for institution-scoped resources,
+- add audit logging foundation.
 
 ## Not Yet Developed
 
 Application:
 
-- authentication,
-- tenant context middleware,
-- role/permission implementation,
-- database migrations,
+- full role/permission implementation beyond institution membership roles,
+- additional database migrations,
 - additional seeders,
-- broader tests,
+- broader authorization and tenant isolation tests,
 - API implementation.
 
 ## Latest Verification
@@ -153,10 +179,15 @@ Application:
 Application verification:
 
 - `php artisan route:list` passes,
-- `php artisan test` passes with 3 tests and 4 assertions,
+- `php artisan test` passes with 14 tests and 49 assertions,
 - `npm run build` passes,
 - `application/.env` is ignored,
 - `application/vendor`, `application/node_modules`, and `application/public/build` are ignored.
+
+Latest local verification:
+
+- linter check reports no errors for the new tenancy files,
+- expanded test run is in progress/backgrounded in the local terminal after adding Phase 2 tenancy helpers.
 
 Learning:
 
@@ -220,21 +251,22 @@ Still requires field evidence:
 
 Published:
 
-- documentation foundation to GitHub.
+- documentation foundation to GitHub,
+- GitHub Pages documentation portal,
+- Laravel application foundation.
 
 Not published:
 
-- partial `application/` scaffold.
+- latest local Phase 2 tenancy helpers and session auth foundation.
 
 ## Immediate Next Build Sequence
 
-1. Complete/clean Laravel scaffold.
-2. Install React/Inertia starter stack.
-3. Add project `.gitignore` coverage for local secrets.
-4. Configure database for PostgreSQL.
-5. Add module folder skeleton.
-6. Add initial tests.
-7. Update ledger with developed application foundation.
+1. Finish identity/tenancy primitives.
+2. Add tenant context middleware.
+3. Add institution-scoped policies.
+4. Add audit logging foundation.
+6. Configure database for PostgreSQL once local services are available.
+7. Continue Learning Core baseline after tenant isolation is protected.
 
 ## Ledger Update Rule
 

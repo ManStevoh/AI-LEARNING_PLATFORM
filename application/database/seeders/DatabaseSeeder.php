@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\InstitutionRole;
 use App\Models\Institution;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -29,7 +30,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $institution->users()->attach($admin, [
-            'role' => 'institution_admin',
+            'role' => InstitutionRole::InstitutionAdmin->value,
             'joined_at' => now(),
         ]);
     }

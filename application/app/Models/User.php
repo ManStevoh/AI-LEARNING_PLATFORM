@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\InstitutionRole;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -26,6 +27,24 @@ class User extends Authenticatable
         return $this->belongsToMany(Institution::class)
             ->withPivot(['role', 'joined_at'])
             ->withTimestamps();
+    }
+
+    public function belongsToInstitution(Institution|int $institution): bool
+    {
+        $institutionId = $institution instanceof Institution ? $institution->getKey() : $institution;
+
+        return $this->institutions()->whereKey($institutionId)->exists();
+    }
+
+    public function hasInstitutionRole(Institution|int $institution, InstitutionRole|string $role): bool
+    {
+        $institutionId = $institution instanceof Institution ? $institution->getKey() : $institution;
+        $roleValue = $role instanceof InstitutionRole ? $role->value : $role;
+
+        return $this->institutions()
+            ->whereKey($institutionId)
+            ->wherePivot('role', $roleValue)
+            ->exists();
     }
 
     /**

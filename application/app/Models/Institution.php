@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\InstitutionRole;
 use Database\Factories\InstitutionFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -24,6 +25,16 @@ class Institution extends Model
         return $this->belongsToMany(User::class)
             ->withPivot(['role', 'joined_at'])
             ->withTimestamps();
+    }
+
+    /**
+     * @return BelongsToMany<User>
+     */
+    public function usersWithRole(InstitutionRole|string $role): BelongsToMany
+    {
+        $roleValue = $role instanceof InstitutionRole ? $role->value : $role;
+
+        return $this->users()->wherePivot('role', $roleValue);
     }
 
     /**

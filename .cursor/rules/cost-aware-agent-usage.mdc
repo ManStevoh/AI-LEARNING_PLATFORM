@@ -1,0 +1,13 @@
+---
+description: Prefer cost-aware model and agent usage
+alwaysApply: true
+---
+
+# Cost-Aware Agent Usage
+
+- Prefer lower-cost models and agent types for exploration, planning, routine implementation, docs updates, and verification.
+- Use expensive or high-reasoning models only when the task is genuinely complex, high-risk, security-sensitive, architecture-heavy, or blocked after cheaper attempts.
+- Dispatch the fewest agents needed for the task. Use many agents only when parallel workstreams are clearly independent and valuable.
+- Prefer readonly `explore` agents for codebase research before using heavier general-purpose agents.
+- Keep each agent prompt tightly scoped so it returns actionable output without unnecessary token usage.
+- Avoid repeating agent work that has already been completed in the current conversation.
