@@ -8,6 +8,7 @@ use App\Http\Controllers\Institution\DashboardController as InstitutionDashboard
 use App\Http\Controllers\Learner\BlockProjectController;
 use App\Http\Controllers\Learner\DashboardController as LearnerDashboardController;
 use App\Http\Controllers\Learner\LearnController as LearnerLearnController;
+use App\Http\Controllers\Learner\MentorController as LearnerMentorController;
 use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
 use App\Http\Middleware\ResolveTenantContext;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +41,9 @@ Route::middleware(['auth', ResolveTenantContext::class])->group(function () {
     Route::post('learner/learn/{lessonSlug}/project', [BlockProjectController::class, 'store'])
         ->middleware('workspace.role:learner,parent')
         ->name('learner.project.store');
+    Route::post('learner/mentor/ask', [LearnerMentorController::class, 'ask'])
+        ->middleware('workspace.role:learner,parent')
+        ->name('learner.mentor.ask');
     Route::get('teacher', TeacherDashboardController::class)
         ->middleware('workspace.role:teacher')
         ->name('teacher.dashboard');

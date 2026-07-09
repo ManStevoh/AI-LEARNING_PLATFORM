@@ -142,7 +142,8 @@ Developed:
 - learner lesson detail page (`/learner/learn/{slug}`) with skills and unit context,
 - Blockly workspace shell with Level 1 toolbox, stage preview placeholder, and generated JavaScript panel,
 - stage runtime with green-flag execution, sprite motion/looks blocks, and run/stop controls,
-- tenant-scoped block project persistence with auto-save and reload on lesson pages.
+- tenant-scoped block project persistence with auto-save and reload on lesson pages,
+- AI Gateway shell with fake provider, usage logging, and learner mentor endpoint.
 
 ## Partially Developed Artifacts
 
