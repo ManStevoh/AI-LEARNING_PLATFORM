@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `4c1ca17` — Add tenant-scoped sound uploads with envelope v1.3 and Sounds tab.
+- `7b0acd0` — Add tenant-scoped costume uploads with envelope v1.4 and Costumes tab.
 
 Current local implementation status:
 
@@ -285,6 +285,7 @@ Latest local verification:
 - teacher class overview routes, progress service, and tenant-scoped learner summary tests,
 - teacher skill mastery routes, service, prerequisite/stale support flags, and tenant isolation tests,
 - block project sound upload/list/stream/delete routes with tenant and ownership tests,
+- block project costume upload/list/stream/delete routes with tenant and ownership tests,
 - block project envelope v1.1 save/load with sprite state (PHPUnit),
 - block coding Phase 1 runtime and UI (local manual smoke; not yet published).
 
@@ -381,13 +382,14 @@ Published:
 
 Not published (local only):
 
-- PostgreSQL local setup (Docker unavailable).
+- PostgreSQL local setup (Docker unavailable),
+- block project costume uploads (`BlockProjectCostumeService`, Costumes tab, envelope v1.4).
 
 Not published (blocked):
 
 ## Immediate Next Build Sequence
 
-1. Costume editor / uploads (Phase 2 remainder).
+1. Commit and publish costume upload slice.
 2. Stage rendering ADR (PixiJS/Phaser evaluation).
 3. Configure PostgreSQL once local services are available.
 
