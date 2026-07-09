@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `3a34295 Persist AI prompt registry to database with publish workflow.`
+- `426351b Add institution-admin AI prompt management UI.`
 
 Current local implementation status:
 
@@ -149,7 +149,8 @@ Developed:
 - AI prompt registry, renderer, and mentor context builder for lesson-aware responses,
 - teacher block project review list and detail views with tenant-scoped access,
 - teacher feedback notes on reviewed block projects with upsert, audit logging, and tenant isolation,
-- database-backed AI prompt registry with version publishing workflow and config fallback.
+- database-backed AI prompt registry with version publishing workflow and config fallback,
+- institution-admin AI prompt management UI with draft save, publish, and audit logging.
 
 ## Partially Developed Artifacts
 
@@ -204,7 +205,7 @@ Application:
 Application verification:
 
 - `php artisan route:list` passes,
-- `php artisan test` passes with 72 tests and 386 assertions,
+- `php artisan test` passes with 78 tests and 429 assertions,
 - `npm run build` passes,
 - `application/.env` is ignored,
 - `application/vendor`, `application/node_modules`, and `application/public/build` are ignored.
@@ -220,7 +221,8 @@ Latest local verification:
 - prompt registry and mentor context builder with PHPUnit coverage,
 - teacher block project review routes and UI,
 - teacher block project feedback save with audit logging and tenant isolation tests,
-- AI prompt registry database persistence, publish workflow, and seeder tests.
+- AI prompt registry database persistence, publish workflow, and seeder tests,
+- institution-admin prompt management routes, UI, and authorization tests.
 
 Learning:
 
@@ -304,7 +306,8 @@ Published:
 - AI prompt registry and mentor context builder,
 - teacher block project review views,
 - teacher feedback notes on reviewed block projects,
-- database-backed AI prompt registry with version publishing workflow.
+- database-backed AI prompt registry with version publishing workflow,
+- institution-admin AI prompt management UI.
 
 Not published:
 
@@ -313,7 +316,7 @@ Not published:
 ## Immediate Next Build Sequence
 
 1. Configure database for PostgreSQL once local services are available.
-2. Add institution-admin prompt management UI for draft and publish workflows.
+2. Add teacher class overview with learner progress summaries.
 
 ## Ledger Update Rule
 
