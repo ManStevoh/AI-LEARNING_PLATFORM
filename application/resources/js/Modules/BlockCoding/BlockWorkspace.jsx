@@ -1,14 +1,46 @@
 import { useEffect, useRef, useState } from 'react';
 import {
     createBlockWorkspace,
+    loadWorkspaceState,
     resizeBlockWorkspace,
+    serializeWorkspace,
     workspaceToJavaScript,
 } from './blocklySetup';
+import { saveLessonProject } from './projectPersistence.js';
+import { saveLessonProject } from './projectPersistence.js';
 
-export default function BlockWorkspace({ preset, lessonSlug, onReady }) {
+function saveStatusLabel(status) {
+    switch (status) {
+        case 'saving':
+            return 'Saving…';
+        case 'saved':
+            return 'Saved';
+        case 'error':
+            return 'Save failed';
+        default:
+            return 'Unsaved changes';
+    }
+}
+
+export default function BlockWorkspace({
+    preset,
+    lessonSlug,
+    onReady,
+    savedProject,
+    onSaveStatusChange,
+}) {
     const containerRef = useRef(null);
     const workspaceRef = useRef(null);
+    const saveTimeoutRef = useRef(null);
+    const hasLoadedProjectRef = useRef(false);
+    const allowAutoSaveRef = useRef(false);
     const [generatedCode, setGeneratedCode] = useState('// Drag blocks into the workspace to generate code.');
+    const [saveStatus, setSaveStatus] = useState(savedProject ? 'saved' : 'idle');
+
+    const updateSaveStatus = (status) => {
+        setSaveStatus(status);
+        onSaveStatusChange?.(status);
+    };
 
     useEffect(() => {
         const container = containerRef.current;
@@ -19,37 +51,91 @@ export default function BlockWorkspace({ preset, lessonSlug, onReady }) {
 
         const workspace = createBlockWorkspace(container, preset);
         workspaceRef.current = workspace;
+
+        if (savedProject?.workspace && !hasLoadedProjectRef.current) {
+            loadWorkspaceState(workspace, savedProject.workspace);
+            hasLoadedProjectRef.current = true;
+        }
+
         onReady?.(workspace);
+
+        const queueSave = () => {
+            if (saveTimeoutRef.current) {
+                clearTimeout(saveTimeoutRef.current);
+            }
+
+            updateSaveStatus('pending');
+
+            saveTimeoutRef.current = setTimeout(async () => {
+                updateSaveStatus('saving');
+
+                try {
+                    await saveLessonProject(lessonSlug, {
+                        workspace: serializeWorkspace(workspace),
+                        generated_code: workspaceToJavaScript(workspace),
+                    });
+                    updateSaveStatus('saved');
+                } catch {
+                    updateSaveStatus('error');
+                }
+            }, 1500);
+        };
 
         const updateCode = () => {
             const code = workspaceToJavaScript(workspace).trim();
             setGeneratedCode(code === '' ? '// Drag blocks into the workspace to generate code.' : code);
+
+            if (allowAutoSaveRef.current) {
+                queueSave();
+            }
         };
 
         const onResize = () => resizeBlockWorkspace(workspace);
 
         workspace.addChangeListener(updateCode);
         updateCode();
+        window.setTimeout(() => {
+            allowAutoSaveRef.current = true;
+        }, 0);
         window.addEventListener('resize', onResize);
 
         const resizeObserver = new ResizeObserver(onResize);
         resizeObserver.observe(container);
 
         return () => {
+            if (saveTimeoutRef.current) {
+                clearTimeout(saveTimeoutRef.current);
+            }
+
             workspace.removeChangeListener(updateCode);
             window.removeEventListener('resize', onResize);
             resizeObserver.disconnect();
             workspace.dispose();
             workspaceRef.current = null;
+            hasLoadedProjectRef.current = false;
+            allowAutoSaveRef.current = false;
         };
-    }, [preset, lessonSlug, onReady]);
+    }, [preset, lessonSlug, onReady, savedProject, onSaveStatusChange]);
 
     return (
         <div className="space-y-4">
             <div className="overflow-hidden rounded-2xl border border-[var(--color-border-subtle)] bg-white shadow-sm">
-                <div className="border-b border-[var(--color-border-subtle)] px-4 py-3">
-                    <p className="text-sm font-semibold text-[var(--color-text-primary)]">Block workspace</p>
-                    <p className="text-xs text-[var(--color-text-muted)]">Level 1 toolbox · Blockly foundation</p>
+                <div className="flex items-center justify-between border-b border-[var(--color-border-subtle)] px-4 py-3">
+                    <div>
+                        <p className="text-sm font-semibold text-[var(--color-text-primary)]">Block workspace</p>
+                        <p className="text-xs text-[var(--color-text-muted)]">Level 1 toolbox · auto-saves your project</p>
+                    </div>
+                    <span
+                        className={`rounded-full px-3 py-1 text-xs font-medium ${
+                            saveStatus === 'error'
+                                ? 'bg-rose-100 text-rose-700'
+                                : saveStatus === 'saved'
+                                  ? 'bg-emerald-100 text-emerald-700'
+                                  : 'bg-slate-100 text-slate-700'
+                        }`}
+                    >
+                        {saveStatusLabel(saveStatus)}
+                    </span>
                 </div>
                 <div className="min-h-[420px] bg-slate-50" ref={containerRef} />
             </div>

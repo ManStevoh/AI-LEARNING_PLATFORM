@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\Institution\DashboardController as InstitutionDashboardController;
+use App\Http\Controllers\Learner\BlockProjectController;
 use App\Http\Controllers\Learner\DashboardController as LearnerDashboardController;
 use App\Http\Controllers\Learner\LearnController as LearnerLearnController;
 use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
@@ -36,6 +37,9 @@ Route::middleware(['auth', ResolveTenantContext::class])->group(function () {
     Route::get('learner/learn/{lessonSlug}', [LearnerLearnController::class, 'show'])
         ->middleware('workspace.role:learner,parent')
         ->name('learner.lesson');
+    Route::post('learner/learn/{lessonSlug}/project', [BlockProjectController::class, 'store'])
+        ->middleware('workspace.role:learner,parent')
+        ->name('learner.project.store');
     Route::get('teacher', TeacherDashboardController::class)
         ->middleware('workspace.role:teacher')
         ->name('teacher.dashboard');

@@ -1,0 +1,41 @@
+---
+description: Require PHPUnit feature tests for every backend implementation slice
+alwaysApply: true
+---
+
+# PHPUnit Required For Backend Work
+
+Every application implementation slice must include PHPUnit coverage before it is considered complete.
+
+## Required For
+
+- New or changed Laravel routes, controllers, actions, services, policies, middleware, migrations, models, seeders, and module boundaries under `application/`.
+- Authorization, tenant isolation, validation, persistence, and workflow changes.
+- Bug fixes that change backend behavior.
+
+## Minimum Expectations
+
+- Add or update Feature tests in `application/tests/Feature/` (or appropriate test namespace) for the new behavior.
+- Cover the happy path and at least one failure or guard path when relevant (403, 404, validation failure, tenant isolation).
+- Run `php artisan test` before commit and ensure the full suite passes.
+- Do not leave backend slices "done" with only frontend changes or manual verification.
+
+## Test Style
+
+- Prefer Feature tests over Unit tests for HTTP workflows, auth, tenancy, and persistence.
+- Use `RefreshDatabase` for database-backed behavior.
+- Use factories/seeders already established in the project.
+- Assert HTTP status, JSON/Inertia props, and database state where applicable.
+
+## Example
+
+For a new learner save endpoint:
+
+- test authenticated learner can save and reload data,
+- test missing institution context returns 403,
+- test tenant isolation prevents cross-institution access,
+- test invalid payload returns validation errors.
+
+## Stop-The-Line
+
+If tests fail, fix the implementation or tests before moving to the next slice, updating docs, or pushing.

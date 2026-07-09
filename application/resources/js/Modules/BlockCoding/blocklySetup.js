@@ -71,3 +71,5 @@ export function resizeBlockWorkspace(workspace) {
         Blockly.svgResize(workspace);
     }
 }
+
+export { serializeWorkspace, loadWorkspaceState } from './projectPersistence.js';

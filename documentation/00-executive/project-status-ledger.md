@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `a71e458 Add stage runtime with green-flag execution for Level 1 lessons.`
+- `b058b04 Update status ledger after stage runtime slice.` (pending persistence push)
 
 Current local implementation status:
 
@@ -141,7 +141,8 @@ Developed:
 - audit logging foundation (`audit_logs` table, `AuditLogger`, auth and tenant switch events),
 - learner lesson detail page (`/learner/learn/{slug}`) with skills and unit context,
 - Blockly workspace shell with Level 1 toolbox, stage preview placeholder, and generated JavaScript panel,
-- stage runtime with green-flag execution, sprite motion/looks blocks, and run/stop controls.
+- stage runtime with green-flag execution, sprite motion/looks blocks, and run/stop controls,
+- tenant-scoped block project persistence with auto-save and reload on lesson pages.
 
 ## Partially Developed Artifacts
 
@@ -182,7 +183,7 @@ Completed baseline:
 
 Next action:
 
-- add project save/load and Blockly workspace persistence.
+- configure PostgreSQL once local services are available.
 
 ## Not Yet Developed
 
@@ -196,7 +197,7 @@ Application:
 Application verification:
 
 - `php artisan route:list` passes,
-- `php artisan test` passes with 38 tests and 184 assertions,
+- `php artisan test` passes with 42 tests and 216 assertions,
 - `npm run build` passes,
 - `application/.env` is ignored,
 - `application/vendor`, `application/node_modules`, and `application/public/build` are ignored.
@@ -206,7 +207,8 @@ Latest local verification:
 - tenant context middleware, institution switching, and cross-tenant policy tests pass,
 - learner dashboard and learning-path pages render published Level 1 curriculum,
 - auth login/logout and institution switch actions are audit logged,
-- frontend build passes with institution select/profile and learner workspace pages.
+- block project save/load with tenant-scoped persistence and auto-save on lesson pages,
+- Cursor rule requiring PHPUnit for all backend implementation slices.
 
 Learning:
 
@@ -281,7 +283,7 @@ Published:
 - audit logging foundation,
 - learner lesson detail pages,
 - Blockly workspace shell,
-- stage runtime and green-flag execution (local, pending commit).
+- stage runtime and green-flag execution.
 
 Not published:
 
