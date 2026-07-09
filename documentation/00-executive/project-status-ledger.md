@@ -253,11 +253,12 @@ Published:
 
 - documentation foundation to GitHub,
 - GitHub Pages documentation portal,
-- Laravel application foundation.
+- Laravel application foundation,
+- Phase 2 tenancy helpers and session authentication foundation.
 
 Not published:
 
-- latest local Phase 2 tenancy helpers and session auth foundation.
+- tenant context middleware and institution policies (next slice).
 
 ## Immediate Next Build Sequence
 
@@ -265,8 +266,8 @@ Not published:
 2. Add tenant context middleware.
 3. Add institution-scoped policies.
 4. Add audit logging foundation.
-6. Configure database for PostgreSQL once local services are available.
-7. Continue Learning Core baseline after tenant isolation is protected.
+5. Configure database for PostgreSQL once local services are available.
+6. Continue Learning Core baseline after tenant isolation is protected.
 
 ## Ledger Update Rule
 
