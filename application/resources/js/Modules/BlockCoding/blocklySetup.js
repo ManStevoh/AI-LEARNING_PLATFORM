@@ -3,6 +3,7 @@ import { blocks, loops, logic, math, texts, variables, variablesDynamic } from '
 import { javascriptGenerator } from 'blockly/javascript';
 import * as En from 'blockly/msg/en';
 import './aceBlocks.js';
+import { aceTheme } from './aceTheme.js';
 import { getLevelOneToolbox } from './levelOneToolbox';
 
 void blocks;
@@ -15,11 +16,19 @@ void variablesDynamic;
 
 Blockly.setLocale(En);
 
+if (typeof document !== 'undefined' && !Blockly.common.getParentContainer()) {
+    Blockly.common.setParentContainer(document.body);
+}
+
+const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
+
 const BLOCKLY_MEDIA_URL = 'https://unpkg.com/blockly@13.1.1/media/';
 
 export function createBlockWorkspace(container, preset = 'level_1_default') {
     return Blockly.inject(container, {
         toolbox: getLevelOneToolbox(preset),
+        theme: aceTheme,
+        renderer: 'zelos',
         media: BLOCKLY_MEDIA_URL,
         trashcan: true,
         sounds: false,
@@ -27,7 +36,18 @@ export function createBlockWorkspace(container, preset = 'level_1_default') {
         zoom: {
             controls: true,
             wheel: true,
-            startScale: 1,
+            startScale: 0.9,
+        },
+        grid: {
+            spacing: 20,
+            length: 1,
+            colour: '#d9d9d9',
+            snap: false,
+        },
+        move: {
+            scrollbars: true,
+            drag: true,
+            wheel: true,
         },
     });
 }
@@ -46,8 +66,16 @@ export async function runWorkspaceProgram(workspace, runtime) {
         return { ok: false, reason: 'empty' };
     }
 
-    if (!code.includes('runtime.onGreenFlag')) {
-        runtime.setError('Add a "when green flag clicked" block to run your program.');
+    const hasEventHat =
+        code.includes('runtime.onGreenFlag') ||
+        code.includes('runtime.onKeyPressed') ||
+        code.includes('runtime.onBroadcastReceived') ||
+        code.includes('runtime.onSpriteClicked');
+
+    if (!hasEventHat) {
+        runtime.setError(
+            'Add an event block (green flag, key pressed, sprite clicked, or broadcast received) before running.',
+        );
         return { ok: false, reason: 'missing_hat' };
     }
 

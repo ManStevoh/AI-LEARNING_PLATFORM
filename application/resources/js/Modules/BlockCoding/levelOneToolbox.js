@@ -8,12 +8,27 @@ export function getLevelOneToolbox(preset = 'level_1_default') {
                 kind: 'category',
                 name: 'Events',
                 categorystyle: 'event_category',
-                contents: [{ kind: 'block', type: 'ace_event_green_flag' }],
+                contents: [
+                    { kind: 'block', type: 'ace_event_green_flag' },
+                    {
+                        kind: 'block',
+                        type: 'ace_event_key_pressed',
+                    },
+                    {
+                        kind: 'block',
+                        type: 'ace_event_broadcast',
+                        inputs: {
+                            MESSAGE: { shadow: { type: 'text', fields: { TEXT: 'message1' } } },
+                        },
+                    },
+                    { kind: 'block', type: 'ace_event_broadcast_received' },
+                    { kind: 'block', type: 'ace_event_sprite_clicked' },
+                ],
             },
             {
                 kind: 'category',
                 name: 'Motion',
-                categorystyle: 'math_category',
+                categorystyle: 'motion_category',
                 contents: [
                     {
                         kind: 'block',
@@ -38,7 +53,7 @@ export function getLevelOneToolbox(preset = 'level_1_default') {
             {
                 kind: 'category',
                 name: 'Looks',
-                categorystyle: 'text_category',
+                categorystyle: 'looks_category',
                 contents: [
                     {
                         kind: 'block',
@@ -48,13 +63,40 @@ export function getLevelOneToolbox(preset = 'level_1_default') {
                             SECONDS: { shadow: { type: 'math_number', fields: { NUM: 2 } } },
                         },
                     },
+                    {
+                        kind: 'block',
+                        type: 'ace_looks_think',
+                        inputs: {
+                            MESSAGE: { shadow: { type: 'text', fields: { TEXT: 'Hmm…' } } },
+                            SECONDS: { shadow: { type: 'math_number', fields: { NUM: 2 } } },
+                        },
+                    },
+                    { kind: 'block', type: 'ace_looks_show' },
+                    { kind: 'block', type: 'ace_looks_hide' },
+                    {
+                        kind: 'block',
+                        type: 'ace_looks_set_size',
+                        inputs: { SIZE: { shadow: { type: 'math_number', fields: { NUM: 100 } } } },
+                    },
+                    {
+                        kind: 'block',
+                        type: 'ace_looks_switch_costume',
+                        inputs: { INDEX: { shadow: { type: 'math_number', fields: { NUM: 1 } } } },
+                    },
+                    { kind: 'block', type: 'ace_looks_set_backdrop' },
                 ],
             },
             {
                 kind: 'category',
                 name: 'Control',
-                categorystyle: 'loop_category',
+                categorystyle: 'control_category',
                 contents: [
+                    {
+                        kind: 'block',
+                        type: 'ace_control_wait',
+                        inputs: { SECONDS: { shadow: { type: 'math_number', fields: { NUM: 1 } } } },
+                    },
+                    { kind: 'block', type: 'ace_control_stop' },
                     { kind: 'block', type: 'controls_repeat_ext' },
                     { kind: 'block', type: 'controls_whileUntil' },
                     { kind: 'block', type: 'controls_if' },
@@ -65,7 +107,7 @@ export function getLevelOneToolbox(preset = 'level_1_default') {
             {
                 kind: 'category',
                 name: 'Logic',
-                categorystyle: 'logic_category',
+                categorystyle: 'operators_category',
                 contents: [
                     { kind: 'block', type: 'logic_compare' },
                     { kind: 'block', type: 'logic_operation' },

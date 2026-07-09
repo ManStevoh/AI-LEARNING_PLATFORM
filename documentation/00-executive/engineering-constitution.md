@@ -400,6 +400,7 @@ A feature is not complete until:
 - accessibility is checked,
 - security/privacy impact is reviewed,
 - documentation is updated,
+- module implementation status and project status ledger are updated per `documentation/00-executive/status-tracking-procedure.md`,
 - monitoring/logging exists where relevant.
 
 ## 22. Data And Privacy Rules

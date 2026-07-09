@@ -92,7 +92,9 @@ Captured:
 - vision,
 - missing pieces analysis,
 - assumptions and validation plan,
-- pending work register.
+- pending work register,
+- status tracking procedure,
+- project status ledger (updated per slice).
 
 Still incomplete:
 
@@ -282,30 +284,29 @@ Needed next:
 Captured:
 
 - Blockly-based system strategy,
-- stage/sprites/runtime/generation direction,
-- AI integration concept.
+- block taxonomy and custom blocks,
+- stage runtime specification,
+- block project data model (v1.0 legacy + v1.1 envelope),
+- scratch parity and custom engine strategy,
+- block registry (living),
+- block coding implementation status (living),
+- status tracking procedure.
 
 Still incomplete:
 
-- block taxonomy,
-- custom block definitions,
-- Blockly JSON schema,
-- project save format,
-- stage runtime API,
-- sprite/costume/sound model,
-- collision/event model,
-- generated JavaScript/Python rules,
-- block-to-code pedagogy rules,
-- accessibility for Blockly,
+- generated JavaScript/Python mapping rules (formal spec),
+- collision/event model detail beyond Phase 1,
+- costume/sound asset pipeline spec,
+- accessibility for Blockly (formal checklist),
 - mobile/tablet interaction strategy,
-- project sharing/moderation rules.
+- project sharing/moderation rules,
+- stage rendering engine ADR (PixiJS vs Phaser).
 
 Needed next:
 
-- `block-taxonomy-and-custom-blocks.md`,
-- `block-project-data-model.md`,
-- `stage-runtime-specification.md`,
-- `generated-code-mapping-specification.md`.
+- `generated-code-mapping-specification.md`,
+- stage rendering engine ADR,
+- expand registry rows for Phase 2 blocks before implementation.
 
 ## IDE And Code Execution Documents
 

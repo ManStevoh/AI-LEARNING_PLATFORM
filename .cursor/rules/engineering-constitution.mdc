@@ -21,3 +21,4 @@ Core rules:
 - Use feature flags, staged migrations, and rollback/forward-fix plans for risky changes.
 - Treat child safety, tenant isolation, payment integrity, AI safety, and code execution security as stop-the-line concerns.
 - Every feature must leave the platform more maintainable, observable, secure, and understandable than before.
+- After each implementation slice, update status docs per `documentation/00-executive/status-tracking-procedure.md` (module living status + project status ledger).

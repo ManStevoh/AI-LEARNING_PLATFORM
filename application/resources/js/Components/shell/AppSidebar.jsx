@@ -1,14 +1,20 @@
 import { Link, usePage } from '@inertiajs/react';
+import { useShellLayout } from '../../Layouts/ShellLayoutContext';
 
 export default function AppSidebar() {
     const { navigation, tenant } = usePage().props;
     const currentUrl = usePage().url;
+    const { sidebarCollapsed } = useShellLayout();
+
+    if (sidebarCollapsed) {
+        return null;
+    }
 
     return (
         <aside className="hidden w-64 shrink-0 border-r border-[var(--color-border-subtle)] bg-[var(--color-background-subtle)] lg:block">
             <div className="px-4 py-6">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-text-muted)]">Workspace</p>
-                <p className="mt-2 text-sm font-medium text-[var(--color-text-primary)] capitalize">{tenant?.role ?? 'member'}</p>
+                <p className="mt-2 text-sm font-medium capitalize text-[var(--color-text-primary)]">{tenant?.role ?? 'member'}</p>
             </div>
 
             <nav aria-label="Primary" className="px-3 pb-6">

@@ -32,12 +32,24 @@ class BlockProjectPersistenceService
                 'lesson_slug' => $lessonSlug,
             ],
             [
-                'schema_version' => '1.0',
+                'schema_version' => $this->resolveSchemaVersion($workspace),
                 'workspace' => $workspace,
                 'generated_code' => $generatedCode,
                 'last_saved_at' => now(),
             ],
         );
+    }
+
+    /**
+     * @param  array<string, mixed>  $workspace
+     */
+    private function resolveSchemaVersion(array $workspace): string
+    {
+        if (($workspace['format'] ?? null) === 'ace_project') {
+            return (string) ($workspace['version'] ?? '1.1');
+        }
+
+        return '1.0';
     }
 
     /**

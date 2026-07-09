@@ -1,0 +1,90 @@
+# Block Project Data Model
+
+## Purpose
+
+Define the JSON saved in `block_projects.workspace` so Blockly scripts, sprite state, and future assets stay versioned and backward compatible.
+
+## Storage
+
+| Column | Type | Notes |
+|--------|------|-------|
+| `schema_version` | string | Top-level mirror of envelope `version` when present |
+| `workspace` | JSON | Blockly-only (legacy) or ACE project envelope |
+| `generated_code` | text | JavaScript snapshot for teacher review and Level 2 transition |
+
+## Legacy format (schema `1.0`)
+
+Raw Blockly serialization only:
+
+```json
+{
+  "blocks": {
+    "languageVersion": 0,
+    "blocks": []
+  }
+}
+```
+
+Loaders detect legacy format when `format` is absent.
+
+## ACE project envelope (schema `1.1`)
+
+```json
+{
+  "format": "ace_project",
+  "version": "1.1",
+  "blockly": {
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": []
+    }
+  },
+  "sprites": [
+    {
+      "id": "sprite-1",
+      "name": "Sprite1",
+      "x": 0,
+      "y": 0,
+      "direction": 90,
+      "visible": true,
+      "emoji": "🐱"
+    }
+  ],
+  "active_sprite_id": "sprite-1"
+}
+```
+
+### Field rules
+
+- `format` must be `ace_project` for envelope parsing.
+- `blockly` is required and matches Blockly's workspace save output.
+- `sprites` is optional but recommended once the learner moves a sprite.
+- Persisted sprite fields exclude runtime-only state (`say`, speech bubbles).
+- `active_sprite_id` must reference a sprite in `sprites` when both are present.
+
+## Client helpers
+
+- `projectEnvelope.js` — build, parse, migrate detection
+- `projectPersistence.js` — Blockly load/save through envelope extractors
+
+## Future versions
+
+| Version | Planned additions |
+|---------|-------------------|
+| `1.2` | Stage backdrop, costume refs |
+| `1.3` | Sound asset refs |
+| `2.0` | Full stage-runtime spec alignment (collisions, clones) |
+
+Migrations must accept all prior versions on read and write the latest supported version on save.
+
+## Backend validation
+
+`SaveBlockProjectRequest` accepts any array for `workspace`. Structure validation stays permissive until asset URLs require institution scoping checks.
+
+`BlockProjectPersistenceService` sets `schema_version` from envelope metadata when present.
+
+## Related docs
+
+- [stage-runtime-specification.md](./stage-runtime-specification.md)
+- [scratch-parity-and-custom-engine-strategy.md](./scratch-parity-and-custom-engine-strategy.md)
+- [block-registry.md](./block-registry.md)

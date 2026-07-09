@@ -10,7 +10,7 @@ It should be updated after every meaningful implementation or documentation mile
 
 Date:
 
-- 2026-07-09.
+- 2026-07-10.
 
 Repository:
 
@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `414f18c Add teacher class overview with learner progress summaries.`
+- `a398180` — Update status ledger after teacher class overview slice.
 
 Current local implementation status:
 
@@ -26,6 +26,8 @@ Current local implementation status:
 - GitHub Pages documentation portal published from repository root.
 - Phase 2 identity/tenancy foundation implemented locally with typed institution roles, tenant context, and role-aware workspaces.
 - Learning Core curriculum foundation seeded and exposed in the learner workspace UI.
+- **Block coding Phase 1 complete + Phase 2 looks partial** implemented locally (commit pending).
+- **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
 
@@ -63,6 +65,11 @@ Completed areas:
 - AI-native education platform strategy,
 - block coding system,
 - block taxonomy,
+- scratch parity and custom engine strategy,
+- block registry (living),
+- block project data model,
+- block coding implementation status (living),
+- status tracking procedure,
 - stage runtime spec,
 - browser IDE spec,
 - code execution sandbox spec,
@@ -153,6 +160,27 @@ Developed:
 - institution-admin AI prompt management UI with draft save, publish, and audit logging,
 - teacher class overview with institution-scoped learner progress summaries and live dashboard metrics.
 
+### Block Coding (Local — Not Yet Published)
+
+Status: Phase 1 complete; Phase 2 looks partial. See `documentation/06-block-coding/implementation-status.md`.
+
+Developed locally:
+
+- Scratch-style coding studio UI (tabs, stage, sprite pane, green flag/stop),
+- Blockly Zelos theme and Scratch palette,
+- collapsible app sidebar for coding focus,
+- Blockly layout fixes (flyout, variable dialog),
+- ACE Stage Engine Phase 1 complete + Phase 2 looks (think, show, hide, size, costume/backdrop presets),
+- active sprite selection and multi-sprite stage render,
+- project envelope v1.1 (Blockly + sprite state in save),
+- block registry and scratch parity strategy docs,
+- PHPUnit envelope save test (85 tests total).
+
+Next action:
+
+- commit and push block-coding Phase 1 slice,
+- begin Phase 2 (looks/sound/sensing) per registry.
+
 ## Partially Developed Artifacts
 
 ### Laravel Application Scaffold
@@ -194,6 +222,30 @@ Next action:
 
 - configure PostgreSQL once local services are available.
 
+### Block Coding / ACE Stage Engine
+
+Status:
+
+- Phase 0 complete (motion, looks say, green flag).
+- Phase 1 complete (events, control, envelope v1.1, active sprite, sprite clicked).
+
+Completed in Phase 1:
+
+- 11 custom ACE blocks with runtime wiring,
+- keyboard and broadcast event bus,
+- project save format v1.1,
+- living implementation status doc.
+
+Next action:
+
+- commit and push Phase 1 slice,
+- begin Phase 2 looks/sound blocks and rendering engine ADR.
+
+See:
+
+- `documentation/06-block-coding/implementation-status.md`,
+- `documentation/06-block-coding/block-registry.md`.
+
 ## Not Yet Developed
 
 Application:
@@ -206,7 +258,7 @@ Application:
 Application verification:
 
 - `php artisan route:list` passes,
-- `php artisan test` passes with 84 tests and 484 assertions,
+- `php artisan test` passes with 85 tests and 503 assertions,
 - `npm run build` passes,
 - `application/.env` is ignored,
 - `application/vendor`, `application/node_modules`, and `application/public/build` are ignored.
@@ -224,7 +276,9 @@ Latest local verification:
 - teacher block project feedback save with audit logging and tenant isolation tests,
 - AI prompt registry database persistence, publish workflow, and seeder tests,
 - institution-admin prompt management routes, UI, and authorization tests,
-- teacher class overview routes, progress service, and tenant-scoped learner summary tests.
+- teacher class overview routes, progress service, and tenant-scoped learner summary tests,
+- block project envelope v1.1 save/load with sprite state (PHPUnit),
+- block coding Phase 1 runtime and UI (local manual smoke; not yet published).
 
 Learning:
 
@@ -247,11 +301,12 @@ AI:
 
 Coding:
 
-- Blockly runtime code,
-- stage/sprite engine,
+- full stage/sprite engine Phase 2+ (costumes, sound, sensing, collision),
 - browser IDE,
 - sandbox integration,
 - assignment grading implementation.
+
+Note: Blockly editor and Phase 0–1 ACE Stage Engine are **partially implemented locally** — see `06-block-coding/implementation-status.md`. Do not list "Blockly runtime code" as wholly absent.
 
 Business/operations:
 
@@ -312,19 +367,29 @@ Published:
 - institution-admin AI prompt management UI,
 - teacher class overview with learner progress summaries.
 
-Not published:
+Not published (local only):
 
-- PostgreSQL local setup (next slice).
+- block coding Scratch studio UI and layout fixes,
+- ACE Stage Engine Phase 1 (events, control, envelope v1.1),
+- block coding strategy/registry/data-model docs,
+- status tracking procedure.
+
+Not published (blocked):
+
+- PostgreSQL local setup (Docker unavailable).
 
 ## Immediate Next Build Sequence
 
-1. Configure database for PostgreSQL once local services are available.
-2. Add teacher skill mastery view with learners needing support.
+1. Commit and push block-coding Phase 1 slice + status docs.
+2. Begin Block Coding Phase 2 (looks/sound) per `block-registry.md`.
+3. Configure PostgreSQL once local services are available.
+4. Add teacher skill mastery view with learners needing support.
 
 ## Ledger Update Rule
 
-After each milestone, update:
+After each milestone, follow [status-tracking-procedure.md](./status-tracking-procedure.md) and update:
 
+- module living status (e.g. `06-block-coding/implementation-status.md`),
 - completed documentation,
 - developed artifacts,
 - partially developed artifacts,

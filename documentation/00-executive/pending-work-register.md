@@ -4,6 +4,8 @@
 
 This document tracks what remains pending after the current documentation foundation.
 
+**Standard procedure:** When work is completed or started, also update [status-tracking-procedure.md](./status-tracking-procedure.md), [project-status-ledger.md](./project-status-ledger.md), and any module living status doc (e.g. [06-block-coding/implementation-status.md](../06-block-coding/implementation-status.md)).
+
 Items are grouped as:
 
 - Foundation: required before serious implementation.
@@ -94,7 +96,7 @@ These cannot be completed by documentation alone:
 - write database migrations, factories, seeders, and tests,
 - implement modules and APIs,
 - expand and validate `api/openapi.yaml` from real endpoint decisions,
-- build Blockly projects and runtime code,
+- build Blockly projects and runtime code → **partial** (Phase 0–1 local; see implementation-status),
 - build browser IDE and sandbox integration,
 - author real Level 1 lesson scripts, worksheets, assets, quizzes, and Blockly starter projects,
 - select and test AI providers,
@@ -109,7 +111,7 @@ These cannot be completed by documentation alone:
 
 ## Highest Priority Pending Items
 
-### P0: Commit And Push Documentation
+### P0: Commit And Push Local Implementation Slices
 
 Type: Implementation.
 
@@ -117,13 +119,21 @@ Status: Pending.
 
 Why it matters:
 
-- work is currently uncommitted and unpushed.
+- block coding Phase 1, Scratch UI, and status docs are implemented locally but not on GitHub.
 
 Next action:
 
 - review files,
-- commit,
+- commit block-coding + status procedure slice,
 - push to GitHub.
+
+### P0A: Commit And Push Documentation (Historical)
+
+Type: Implementation.
+
+Status: Mostly complete (docs portal and foundation published).
+
+Note: Ongoing doc updates continue via status-tracking-procedure.
 
 ### P1: Figma Design System And Prototypes
 
@@ -445,16 +455,27 @@ Pending:
 
 ### Block Coding
 
-Pending:
+Status: **Partially implemented** (Phase 0–1 local). Detail: [implementation-status.md](../06-block-coding/implementation-status.md).
 
-- block taxonomy,
-- custom block definitions,
-- Blockly JSON/project schema,
-- stage runtime API,
-- sprite/costume/sound model,
-- generated code mapping,
-- block-to-code pedagogy rules,
+Done locally:
+
+- Blockly workspace, toolbox, 10 ACE blocks, Scratch studio UI,
+- events (green flag, key, broadcast), control (wait, stop),
+- project envelope v1.1, tenant-scoped persistence.
+
+Still pending:
+
+- sprite-clicked event (Phase 1 remainder),
+- looks/sound/sensing blocks (Phase 2+),
+- generated code mapping specification,
+- PixiJS/Phaser rendering ADR,
+- full Level 1 block inventory (~35 blocks),
+- curriculum starter assets for Units 5–10,
 - Blockly accessibility and mobile strategy.
+
+Completed docs:
+
+- block taxonomy, stage runtime spec, block registry, project data model, parity strategy.
 
 ### IDE And Code Execution
 

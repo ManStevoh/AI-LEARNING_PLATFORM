@@ -13,6 +13,7 @@ Initial documents:
 - `00-executive/product-vision.md`
 - `00-executive/engineering-constitution.md`
 - `00-executive/project-status-ledger.md`
+- `00-executive/status-tracking-procedure.md`
 - `00-executive/missing-pieces-gap-analysis.md`
 - `00-executive/assumptions-open-questions-and-validation-plan.md`
 - `00-executive/pending-work-register.md`

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { askMentor } from './mentorAsk.js';
 
-export default function MentorPanel({ lessonSlug, lessonTitle }) {
+export default function MentorPanel({ lessonSlug, lessonTitle, embedded = false }) {
     const [message, setMessage] = useState('');
     const [reply, setReply] = useState(null);
     const [error, setError] = useState(null);
@@ -33,9 +33,11 @@ export default function MentorPanel({ lessonSlug, lessonTitle }) {
     };
 
     return (
-        <section className="rounded-2xl border border-violet-200 bg-violet-50 p-5 shadow-sm">
-            <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-violet-700">AI mentor</h2>
-            <p className="mt-2 text-sm text-violet-900">
+        <section className={embedded ? '' : 'rounded-2xl border border-violet-200 bg-violet-50 p-5 shadow-sm'}>
+            {!embedded ? (
+                <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-violet-700">AI mentor</h2>
+            ) : null}
+            <p className={`text-sm text-violet-900 ${embedded ? '' : 'mt-2'}`}>
                 Ask for a hint about {lessonTitle}. The mentor guides you without giving the full answer.
             </p>
 

@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
+import * as Blockly from 'blockly/core';
+import { useShellLayout } from '../../Layouts/ShellLayoutContext';
 import {
     createBlockWorkspace,
     loadWorkspaceState,
@@ -7,6 +9,7 @@ import {
     workspaceToJavaScript,
 } from './blocklySetup';
 import { saveLessonProject } from './projectPersistence.js';
+import { buildProjectEnvelope } from './projectEnvelope.js';
 
 function saveStatusLabel(status) {
     switch (status) {
@@ -30,6 +33,8 @@ export default function BlockWorkspace({
     savedProject,
     starterProject,
     onSaveStatusChange,
+    getProjectExtras,
+    variant = 'default',
 }) {
     const containerRef = useRef(null);
     const workspaceRef = useRef(null);
@@ -40,6 +45,16 @@ export default function BlockWorkspace({
     const [saveStatus, setSaveStatus] = useState(
         savedProject ? 'saved' : starterProject ? 'starter' : 'idle',
     );
+    const embedded = variant === 'embedded';
+    const scratch = variant === 'scratch';
+    const studio = embedded || scratch;
+    const { sidebarCollapsed, codingFocus } = useShellLayout();
+
+    useEffect(() => {
+        if (workspaceRef.current) {
+            window.setTimeout(() => resizeBlockWorkspace(workspaceRef.current), 200);
+        }
+    }, [sidebarCollapsed, codingFocus]);
 
     const updateSaveStatus = (status) => {
         setSaveStatus(status);
@@ -79,8 +94,9 @@ export default function BlockWorkspace({
                 updateSaveStatus('saving');
 
                 try {
+                    const extras = getProjectExtras?.() ?? {};
                     await saveLessonProject(lessonSlug, {
-                        workspace: serializeWorkspace(workspace),
+                        workspace: buildProjectEnvelope(serializeWorkspace(workspace), extras),
                         generated_code: workspaceToJavaScript(workspace),
                     });
                     updateSaveStatus('saved');
@@ -101,10 +117,18 @@ export default function BlockWorkspace({
 
         const onResize = () => resizeBlockWorkspace(workspace);
 
+        const onBlocklyEvent = (event) => {
+            if (event.type === Blockly.Events.TOOLBOX_ITEM_SELECT) {
+                window.setTimeout(() => resizeBlockWorkspace(workspace), 50);
+            }
+        };
+
         workspace.addChangeListener(updateCode);
+        workspace.addChangeListener(onBlocklyEvent);
         updateCode();
         window.setTimeout(() => {
             allowAutoSaveRef.current = true;
+            resizeBlockWorkspace(workspace);
         }, 0);
         window.addEventListener('resize', onResize);
 
@@ -117,6 +141,7 @@ export default function BlockWorkspace({
             }
 
             workspace.removeChangeListener(updateCode);
+            workspace.removeChangeListener(onBlocklyEvent);
             window.removeEventListener('resize', onResize);
             resizeObserver.disconnect();
             workspace.dispose();
@@ -124,18 +149,18 @@ export default function BlockWorkspace({
             hasLoadedProjectRef.current = false;
             allowAutoSaveRef.current = false;
         };
-    }, [preset, lessonSlug, onReady, savedProject, starterProject, onSaveStatusChange]);
+    }, [preset, lessonSlug, onReady, savedProject, starterProject, onSaveStatusChange, getProjectExtras]);
 
-    return (
-        <div className="space-y-4">
-            <div className="overflow-hidden rounded-2xl border border-[var(--color-border-subtle)] bg-white shadow-sm">
-                <div className="flex items-center justify-between border-b border-[var(--color-border-subtle)] px-4 py-3">
+    const workspacePanel = (
+        <>
+            {!studio ? (
+                <div className="flex items-center justify-between border-b border-[var(--color-border-subtle)] bg-white px-4 py-3">
                     <div>
                         <p className="text-sm font-semibold text-[var(--color-text-primary)]">Block workspace</p>
                         <p className="text-xs text-[var(--color-text-muted)]">
                             {starterProject && !savedProject
                                 ? `Starter: ${starterProject.title}`
-                                : 'Level 1 toolbox · auto-saves your project'}
+                                : 'Drag blocks from the toolbox · auto-saves'}
                         </p>
                     </div>
                     <span
@@ -152,15 +177,52 @@ export default function BlockWorkspace({
                         {saveStatusLabel(saveStatus)}
                     </span>
                 </div>
-                <div className="min-h-[420px] bg-slate-50" ref={containerRef} />
-            </div>
+            ) : null}
+            <div
+                className={`blockly-root ${
+                    scratch ? 'scratch-blockly-root' : 'bg-[#f9fafb]'
+                } ${
+                    scratch
+                        ? sidebarCollapsed
+                            ? 'h-[min(820px,calc(100vh-11rem))] min-h-[560px]'
+                            : 'h-[min(720px,calc(100vh-13rem))] min-h-[520px]'
+                        : embedded
+                          ? sidebarCollapsed
+                              ? 'h-[min(820px,calc(100vh-9rem))] min-h-[560px]'
+                              : 'h-[min(720px,calc(100vh-14rem))] min-h-[520px]'
+                          : 'h-[480px] min-h-[420px]'
+                }`}
+                ref={containerRef}
+            />
+        </>
+    );
 
-            <div className="rounded-2xl border border-[var(--color-border-subtle)] bg-slate-950 p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Generated JavaScript</p>
-                <pre className="mt-3 overflow-x-auto text-sm leading-6 text-slate-100">
-                    <code>{generatedCode}</code>
-                </pre>
+    const codePanel = scratch ? null : (
+        <details className={embedded ? 'border-t border-[var(--color-border-subtle)] bg-slate-950' : 'rounded-2xl border border-[var(--color-border-subtle)] bg-slate-950 p-4'}>
+            <summary className={`cursor-pointer list-none text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 ${embedded ? 'px-4 py-3' : ''}`}>
+                Generated JavaScript
+            </summary>
+            <pre className={`overflow-x-auto text-sm leading-6 text-slate-100 ${embedded ? 'max-h-48 px-4 pb-4' : 'mt-3'}`}>
+                <code>{generatedCode}</code>
+            </pre>
+        </details>
+    );
+
+    if (studio) {
+        return (
+            <div className="flex h-full flex-col">
+                {workspacePanel}
+                {codePanel}
             </div>
+        );
+    }
+
+    return (
+        <div className="space-y-4">
+            <div className="overflow-hidden rounded-2xl border border-[var(--color-border-subtle)] bg-white shadow-sm">
+                {workspacePanel}
+            </div>
+            {codePanel}
         </div>
     );
 }

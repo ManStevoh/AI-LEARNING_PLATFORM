@@ -1,15 +1,20 @@
 import * as Blockly from 'blockly/core';
+import { extractBlocklyState } from './projectEnvelope.js';
+
+export { buildProjectEnvelope, extractBlocklyState, isProjectEnvelope } from './projectEnvelope.js';
 
 export function serializeWorkspace(workspace) {
     return Blockly.serialization.workspaces.save(workspace);
 }
 
 export function loadWorkspaceState(workspace, state) {
-    if (!state || typeof state !== 'object') {
+    const blocklyState = extractBlocklyState(state);
+
+    if (!blocklyState || typeof blocklyState !== 'object') {
         return;
     }
 
-    Blockly.serialization.workspaces.load(state, workspace, { recordUndo: false });
+    Blockly.serialization.workspaces.load(blocklyState, workspace, { recordUndo: false });
 }
 
 function readCsrfToken() {
