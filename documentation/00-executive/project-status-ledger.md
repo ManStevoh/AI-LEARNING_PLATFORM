@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `e022183` — Finalize ledger publish state for Scratch Phase 3 palette parity.
+- `e39ec5d` — Add tenant-scoped backdrop uploads with envelope v1.5.
 
 Current local implementation status:
 
@@ -33,7 +33,7 @@ Current local implementation status:
 - **Stage rendering ADR 0010** (PixiJS) published in `98a8a3e`.
 - **Scratch Motion/Looks/Sound/Events/Control palette parity** published in `f7c2d3c`.
 - **Scratch Control clones + Sensing/Operators/Lists/My Blocks parity** published in `a79c32b`.
-- **Backdrop asset uploads (envelope v1.5)** implemented locally (ready to publish).
+- **Backdrop asset uploads (envelope v1.5)** published in `e39ec5d`.
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
