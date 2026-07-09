@@ -1,0 +1,119 @@
+{
+  "color": {
+    "background": {
+      "default": "#ffffff",
+      "subtle": "#f8fafc"
+    },
+    "surface": {
+      "default": "#ffffff",
+      "raised": "#f8fafc",
+      "sunken": "#f1f5f9"
+    },
+    "text": {
+      "primary": "#0f172a",
+      "secondary": "#475569",
+      "muted": "#64748b",
+      "inverse": "#ffffff"
+    },
+    "border": {
+      "subtle": "#e2e8f0",
+      "default": "#cbd5e1",
+      "strong": "#94a3b8"
+    },
+    "action": {
+      "primary": "#2563eb",
+      "primaryHover": "#1d4ed8",
+      "secondary": "#0f172a"
+    },
+    "status": {
+      "success": "#16a34a",
+      "warning": "#d97706",
+      "danger": "#dc2626",
+      "info": "#2563eb"
+    },
+    "ai": {
+      "default": "#7c3aed"
+    },
+    "code": {
+      "background": "#0f172a",
+      "text": "#e2e8f0"
+    },
+    "block": {
+      "motion": "#3b82f6",
+      "looks": "#8b5cf6",
+      "sound": "#ec4899",
+      "events": "#f59e0b",
+      "control": "#f97316",
+      "sensing": "#06b6d4",
+      "operators": "#22c55e",
+      "variables": "#ef4444",
+      "functions": "#64748b",
+      "ai": "#7c3aed",
+      "robotics": "#0d9488"
+    }
+  },
+  "font": {
+    "family": {
+      "sans": "Inter, ui-sans-serif, system-ui, sans-serif",
+      "mono": "JetBrains Mono, ui-monospace, SFMono-Regular, monospace"
+    },
+    "size": {
+      "display": "48px",
+      "h1": "36px",
+      "h2": "30px",
+      "h3": "24px",
+      "body": "16px",
+      "small": "14px",
+      "caption": "12px",
+      "code": "14px"
+    },
+    "weight": {
+      "regular": "400",
+      "medium": "500",
+      "semibold": "600",
+      "bold": "700"
+    }
+  },
+  "space": {
+    "0": "0px",
+    "1": "4px",
+    "2": "8px",
+    "3": "12px",
+    "4": "16px",
+    "5": "20px",
+    "6": "24px",
+    "8": "32px",
+    "10": "40px",
+    "12": "48px",
+    "16": "64px"
+  },
+  "radius": {
+    "none": "0px",
+    "sm": "6px",
+    "md": "10px",
+    "lg": "14px",
+    "xl": "20px",
+    "full": "9999px"
+  },
+  "motion": {
+    "duration": {
+      "fast": "120ms",
+      "normal": "180ms",
+      "slow": "260ms"
+    },
+    "easing": {
+      "standard": "cubic-bezier(0.2, 0, 0, 1)",
+      "enter": "cubic-bezier(0, 0, 0.2, 1)",
+      "exit": "cubic-bezier(0.4, 0, 1, 1)"
+    }
+  },
+  "zIndex": {
+    "base": 0,
+    "dropdown": 1000,
+    "sticky": 1100,
+    "overlay": 1200,
+    "modal": 1300,
+    "toast": 1400,
+    "tooltip": 1500
+  }
+}

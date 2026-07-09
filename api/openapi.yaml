@@ -1,0 +1,313 @@
+openapi: 3.1.0
+info:
+  title: AI Learning Platform API
+  version: 0.1.0
+  description: Starter OpenAPI contract for web, mobile, desktop, WhatsApp, sandbox, and partner integrations.
+servers:
+  - url: https://api.example.com/api/v1
+    description: Production placeholder
+  - url: http://localhost:8000/api/v1
+    description: Local development
+security:
+  - bearerAuth: []
+paths:
+  /me:
+    get:
+      summary: Get current authenticated user
+      tags: [Identity]
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+  /institutions:
+    get:
+      summary: List institutions available to current user
+      tags: [Institutions]
+      responses:
+        "200":
+          description: Institution list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InstitutionCollection"
+  /institutions/{institutionId}/classes:
+    get:
+      summary: List classes in an institution
+      tags: [Institutions]
+      parameters:
+        - $ref: "#/components/parameters/InstitutionId"
+      responses:
+        "200":
+          description: Class list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClassCollection"
+  /skills:
+    get:
+      summary: List skills from the computing knowledge graph
+      tags: [Skills]
+      parameters:
+        - name: filter[domain]
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Skill list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkillCollection"
+  /learners/{learnerId}/skill-states:
+    get:
+      summary: Get learner skill states
+      tags: [Learners]
+      parameters:
+        - $ref: "#/components/parameters/LearnerId"
+      responses:
+        "200":
+          description: Learner skill states
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LearnerSkillStateCollection"
+  /ai/mentor/messages:
+    post:
+      summary: Send a message to the AI mentor
+      tags: [AI]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AIMentorMessageRequest"
+      responses:
+        "202":
+          description: AI mentor request accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AIMentorMessageResponse"
+  /code-executions:
+    post:
+      summary: Create a code execution request
+      tags: [CodeExecution]
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CodeExecutionRequest"
+      responses:
+        "202":
+          description: Execution accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CodeExecutionResponse"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  parameters:
+    InstitutionId:
+      name: institutionId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    LearnerId:
+      name: learnerId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+  schemas:
+    UserResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          $ref: "#/components/schemas/User"
+    User:
+      type: object
+      required: [id, name, email]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+    InstitutionCollection:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Institution"
+    Institution:
+      type: object
+      required: [id, name]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        country:
+          type: string
+    ClassCollection:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Classroom"
+    Classroom:
+      type: object
+      required: [id, name]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+    SkillCollection:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Skill"
+    Skill:
+      type: object
+      required: [id, name, level]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        level:
+          type: string
+        description:
+          type: string
+    LearnerSkillStateCollection:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/LearnerSkillState"
+    LearnerSkillState:
+      type: object
+      required: [skill_id, state]
+      properties:
+        skill_id:
+          type: string
+          format: uuid
+        state:
+          type: string
+          enum: [not_started, introduced, practicing, near_mastery, mastered, needs_review, blocked]
+        mastery_score:
+          type: number
+    AIMentorMessageRequest:
+      type: object
+      required: [message, context]
+      properties:
+        message:
+          type: string
+        context:
+          type: object
+          properties:
+            lesson_id:
+              type: string
+              format: uuid
+            skill_id:
+              type: string
+              format: uuid
+            mode:
+              type: string
+              enum: [hint, explain, debug, review, practice]
+    AIMentorMessageResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: object
+          required: [request_id, status]
+          properties:
+            request_id:
+              type: string
+              format: uuid
+            status:
+              type: string
+              enum: [queued, processing, completed, failed]
+    CodeExecutionRequest:
+      type: object
+      required: [language, files]
+      properties:
+        language:
+          type: string
+          enum: [javascript, python, php]
+        files:
+          type: array
+          items:
+            type: object
+            required: [path, content]
+            properties:
+              path:
+                type: string
+              content:
+                type: string
+    CodeExecutionResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: object
+          required: [execution_id, status]
+          properties:
+            execution_id:
+              type: string
+              format: uuid
+            status:
+              type: string
+              enum: [queued, running, completed, failed, timed_out]
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message, request_id]
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            request_id:
+              type: string

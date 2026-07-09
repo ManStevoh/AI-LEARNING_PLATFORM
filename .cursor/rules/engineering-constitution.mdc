@@ -1,0 +1,23 @@
+---
+description: Enforce the ACE Platform Engineering Constitution
+alwaysApply: true
+---
+
+# ACE Engineering Constitution
+
+Before implementing, editing, or generating code, follow `documentation/00-executive/engineering-constitution.md`.
+
+Core rules:
+
+- Reuse documented architecture, module boundaries, ADRs, and existing services before creating new patterns.
+- Keep Laravel controllers thin; put business workflows in actions/services and protect them with policies.
+- Never bypass authorization, tenant scoping, entitlement checks, validation, audit logging, or AI Gateway rules.
+- Do not call AI, payment, sandbox, storage, or external providers directly outside approved adapters/gateways.
+- Use the design system, tokens, accessible components, loading states, error states, and responsive layouts.
+- Add or update tests for new behavior, especially authorization, tenant isolation, AI tool calls, payments, and code execution.
+- Update docs/OpenAPI/ADRs when behavior, API contracts, architecture, or security assumptions change.
+- No hardcoded business-configurable values, secrets, unresolved TODOs in production paths, or silent exception swallowing.
+- Do not add dependencies without checking maintenance, license, security, overlap, and architectural fit.
+- Use feature flags, staged migrations, and rollback/forward-fix plans for risky changes.
+- Treat child safety, tenant isolation, payment integrity, AI safety, and code execution security as stop-the-line concerns.
+- Every feature must leave the platform more maintainable, observable, secure, and understandable than before.
