@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `0cac615 Fix GitHub Pages docs sidebar`
+- `2f7318f Add learner lesson detail pages with skills and unit context.`
 
 Current local implementation status:
 
@@ -180,7 +180,7 @@ Completed baseline:
 
 Next action:
 
-- extend learner workspace with lesson detail pages.
+- add Blockly workspace shell for lesson activities.
 
 ## Not Yet Developed
 
@@ -194,7 +194,7 @@ Application:
 Application verification:
 
 - `php artisan route:list` passes,
-- `php artisan test` passes with 35 tests and 146 assertions,
+- `php artisan test` passes with 37 tests and 164 assertions,
 - `npm run build` passes,
 - `application/.env` is ignored,
 - `application/vendor`, `application/node_modules`, and `application/public/build` are ignored.
@@ -276,15 +276,16 @@ Published:
 - role-aware workspace app shell,
 - Learning Core curriculum foundation,
 - learner workspace curriculum catalog UI,
-- audit logging foundation (local, pending commit).
+- audit logging foundation,
+- learner lesson detail pages (local, pending commit).
 
 Not published:
 
-- learner lesson detail pages (next slice).
+- Blockly workspace shell (next slice).
 
 ## Immediate Next Build Sequence
 
-1. Wire learner lesson detail pages from the learning-path unit list.
+1. Add Blockly workspace shell for Level 1 lessons.
 2. Configure database for PostgreSQL once local services are available.
 3. Add AI Gateway fake provider shell.
 
