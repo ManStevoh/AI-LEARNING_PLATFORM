@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `ce19a08` — Add pen layer with Pixi advanced looks effects and envelope v2.1.
+- `afdb00f` — Add pen stamp block (envelope v2.2) and Scratch 3.0 studio UI polish.
 
 Current local implementation status:
 
@@ -42,8 +42,8 @@ Current local implementation status:
 - **AI-generated backdrops (envelope v2.0)** published in `0ece71b`.
 - **PixiJS stage renderer adapter (ADR 0010)** published in `0d42a45`.
 - **Pen layer + Pixi advanced looks (envelope v2.1)** published in `ce19a08`.
-- **Pen stamp block + envelope v2.2 stamps** implemented locally (not yet published).
-- **Scratch 3.0 studio UI sizing/styling polish** implemented locally (Blockly Zelos 75%, toolbox/flyout/stage/sprite pane CSS).
+- **Pen stamp block + envelope v2.2 stamps** published in `afdb00f`.
+- **Scratch 3.0 studio UI sizing/styling polish** published in `afdb00f`.
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
@@ -195,7 +195,7 @@ Developed:
 
 ### Block Coding (Published)
 
-Status: Phase 1–3 Scratch parity + libraries + monitors + AI backdrops + Pixi adapter + pen layer published. Pen stamp (v2.2) and Scratch UI polish local only. See `documentation/06-block-coding/implementation-status.md`.
+Status: Phase 1–3 Scratch parity + libraries + monitors + AI backdrops + Pixi adapter + pen layer + pen stamp (v2.2) + Scratch UI polish published. See `documentation/06-block-coding/implementation-status.md`.
 
 Developed:
 
@@ -326,8 +326,8 @@ Latest local verification:
 - pixel color touching sensing via DOM canvas sampler (smoke 39/39; published `7718d34`).
 - ACE sprite library + Choose sprite/costume modals with envelope v1.8 (PHPUnit persistence; smoke 41/41; published `34728d0`).
 - variable/list stage monitors with envelope v1.9 (PHPUnit persistence; smoke 44/44; published `0fe6297`).
-- pen stamp block with envelope v2.2 stamps (PHPUnit persistence; smoke 53/53; local only).
-- Scratch 3.0 studio UI sizing/styling polish (local only).
+- pen stamp block with envelope v2.2 stamps (PHPUnit persistence; smoke 53/53; published `afdb00f`).
+- Scratch 3.0 studio UI sizing/styling polish (published `afdb00f`).
 
 Learning:
 
@@ -430,21 +430,21 @@ Published:
 - AI-generated backdrops via AI Gateway with theme picker (envelope v2.0),
 - PixiJS stage renderer adapter (ADR 0010, feature-flagged),
 - pen layer with Blockly blocks and envelope v2.1 pen trails,
+- pen stamp block with envelope v2.2 stamps (published `afdb00f`),
+- Scratch 3.0 studio UI sizing/styling polish (published `afdb00f`),
 - Scratch block coding studio and ACE Stage Engine Phases 1–3,
 - block coding docs (registry, parity strategy, status procedure).
 
 Not published (local only):
 
 - PostgreSQL local setup (Docker unavailable).
-- Pen stamp block + envelope v2.2 stamps.
-- Scratch 3.0 studio UI sizing/styling polish.
 
 Not published (blocked):
 
 ## Immediate Next Build Sequence
 
 1. Configure PostgreSQL once local services are available.
-2. Publish pen stamp (v2.2) and Scratch UI polish slice.
+2. ~~Publish pen stamp (v2.2) and Scratch UI polish slice.~~ Done (`afdb00f`).
 3. Video sensing extension.
 
 ## Ledger Update Rule

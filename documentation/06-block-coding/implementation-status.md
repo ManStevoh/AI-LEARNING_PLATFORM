@@ -6,9 +6,9 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 
 - **Last updated:** 2026-07-11
 - **Engine phase:** Phase 3 — assets + libraries + monitors + pen
-- **Published to GitHub:** `ce19a08` (pen stamp + Scratch UI polish local only)
+- **Published to GitHub:** `afdb00f`
 - **Custom ACE blocks:** ~85 done (plus Blockly control/math/text/variables/lists/procedures)
-- **Tests:** 121 PHPUnit + StageRuntime smoke 53/53 + stage renderer smoke 11/11
+- **Tests:** 121 PHPUnit + StageRuntime smoke 53/53 + stage renderer smoke 13/13
 
 ## Done
 
@@ -29,6 +29,8 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 | Architecture | Stage rendering ADR | ADR 0010 |
 | Architecture | PixiJS stage renderer adapter (feature-flagged) | `stageRenderers/` |
 | Runtime | Pen layer with Blockly blocks + Pixi/DOM rendering | envelope v2.1, `penLayer.js` |
+| Runtime | Pen stamp block + envelope v2.2 stamps | `ace_pen_stamp`, `penLayer.js`, `PenTrailOverlay.jsx` |
+| UI | Scratch 3.0 studio sizing/styling polish | `scratchBlocklyOptions.js`, `app.css`, sprite pane |
 | Teacher | Skill mastery | `/teacher/skills` |
 
 ## In Progress / Partial
@@ -48,7 +50,7 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 ```text
 php artisan test                 → 121 passed
 node stageRuntime.smoke.mjs      → 53/53 passed
-node stageRenderer.smoke.mjs     → 11/11 passed
+node stageRenderer.smoke.mjs     → 13/13 passed
 npm run build                    → pass (not re-run this slice)
 ```
 
