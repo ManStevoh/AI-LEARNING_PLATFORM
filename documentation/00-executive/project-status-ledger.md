@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `8e929eb` — Add ACE backdrop library with Choose modal and procedural backdrops.
+- `7718d34` — Add DOM canvas pixel color sensing for touching-color blocks.
 
 Current local implementation status:
 
