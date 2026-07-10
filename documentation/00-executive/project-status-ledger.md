@@ -331,6 +331,7 @@ Latest local verification:
 - variable/list stage monitors with envelope v1.9 (PHPUnit persistence; smoke 44/44; published `0fe6297`).
 - pen stamp block with envelope v2.2 stamps (PHPUnit persistence; smoke 53/53; published `afdb00f`).
 - Scratch 3.0 studio UI sizing/styling polish (published `afdb00f`).
+- video sensing extension with envelope v2.3 (PHPUnit persistence; smoke 59/59 + 13/13; published `53bbd6c`).
 
 Learning:
 
@@ -435,6 +436,7 @@ Published:
 - pen layer with Blockly blocks and envelope v2.1 pen trails,
 - pen stamp block with envelope v2.2 stamps (published `afdb00f`),
 - Scratch 3.0 studio UI sizing/styling polish (published `afdb00f`),
+- video sensing extension with envelope v2.3 (published `53bbd6c`),
 - Scratch block coding studio and ACE Stage Engine Phases 1–3,
 - block coding docs (registry, parity strategy, status procedure).
 
