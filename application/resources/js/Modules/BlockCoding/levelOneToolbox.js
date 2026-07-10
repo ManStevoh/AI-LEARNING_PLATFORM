@@ -1,4 +1,71 @@
-export function getLevelOneToolbox(preset = 'level_1_default') {
+export const BLOCK_PACK_AI = 'ace_ai';
+export const BLOCK_PACK_CURRICULUM = 'ace_curriculum';
+export const BLOCK_PACK_ROBOTICS = 'ace_robotics';
+
+/**
+ * Optional Phase 4 block packs that institutions can enable or disable.
+ * Every other core/Scratch category is always present regardless of packs.
+ */
+export const OPTIONAL_BLOCK_PACK_IDS = [BLOCK_PACK_AI, BLOCK_PACK_CURRICULUM, BLOCK_PACK_ROBOTICS];
+
+/**
+ * Maps an optional toolbox category name to the block pack id that gates it.
+ * Categories not listed here are core categories and are never filtered out.
+ */
+export const BLOCK_PACK_CATEGORY_MAP = {
+    AI: BLOCK_PACK_AI,
+    Curriculum: BLOCK_PACK_CURRICULUM,
+    Robotics: BLOCK_PACK_ROBOTICS,
+};
+
+/**
+ * Resolve the effective set of enabled optional pack ids.
+ *
+ * Backward-compatible: when `enabledBlockPacks` is undefined (or null) every
+ * optional pack is enabled. An explicit empty array hides all optional packs.
+ * Unknown ids are ignored so the toolbox never surfaces categories it lacks.
+ *
+ * @param {string[]|undefined|null} enabledBlockPacks
+ * @returns {string[]}
+ */
+export function getEnabledBlockPackIds(enabledBlockPacks) {
+    if (enabledBlockPacks === undefined || enabledBlockPacks === null) {
+        return [...OPTIONAL_BLOCK_PACK_IDS];
+    }
+
+    if (!Array.isArray(enabledBlockPacks)) {
+        return [];
+    }
+
+    return OPTIONAL_BLOCK_PACK_IDS.filter((packId) => enabledBlockPacks.includes(packId));
+}
+
+/**
+ * Pure helper that returns a new toolbox with optional pack categories removed
+ * unless their gating pack is enabled. Core categories always remain.
+ *
+ * @param {object} toolbox categoryToolbox definition
+ * @param {string[]|undefined|null} enabledBlockPacks
+ * @returns {object}
+ */
+export function filterToolboxByEnabledPacks(toolbox, enabledBlockPacks) {
+    const enabledIds = getEnabledBlockPackIds(enabledBlockPacks);
+
+    return {
+        ...toolbox,
+        contents: (toolbox.contents ?? []).filter((entry) => {
+            const requiredPack = BLOCK_PACK_CATEGORY_MAP[entry.name];
+
+            if (!requiredPack) {
+                return true;
+            }
+
+            return enabledIds.includes(requiredPack);
+        }),
+    };
+}
+
+function buildLevelOneToolbox(preset) {
     void preset;
 
     return {
@@ -526,4 +593,16 @@ export function getLevelOneToolbox(preset = 'level_1_default') {
             },
         ],
     };
+}
+
+/**
+ * Build the Level 1 toolbox, filtering optional Phase 4 packs by institution
+ * configuration.
+ *
+ * @param {string} preset
+ * @param {{ enabledBlockPacks?: string[] }} [options]
+ * @returns {object}
+ */
+export function getLevelOneToolbox(preset = 'level_1_default', options = {}) {
+    return filterToolboxByEnabledPacks(buildLevelOneToolbox(preset), options.enabledBlockPacks);
 }

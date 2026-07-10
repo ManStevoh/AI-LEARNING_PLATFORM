@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SetActiveInstitutionRequest;
 use App\Models\Institution;
 use App\Models\User;
+use App\Modules\BlockCoding\Services\InstitutionBlockPackService;
 use App\Support\Audit\AuditAction;
 use App\Support\Audit\AuditLogger;
 use App\Support\Tenancy\TenantContext;
@@ -18,6 +19,7 @@ class InstitutionController extends Controller
     public function __construct(
         private TenantContext $tenantContext,
         private AuditLogger $auditLogger,
+        private InstitutionBlockPackService $blockPacks,
     ) {}
 
     public function select(Request $request): Response|RedirectResponse
@@ -41,7 +43,7 @@ class InstitutionController extends Controller
         ]);
     }
 
-    public function show(Institution $institution): Response
+    public function show(Request $request, Institution $institution): Response
     {
         $this->authorize('view', $institution);
 
@@ -52,6 +54,10 @@ class InstitutionController extends Controller
                 'slug' => $institution->slug,
                 'country_code' => $institution->country_code,
                 'status' => $institution->status,
+            ],
+            'blockPacks' => [
+                ...$this->blockPacks->toFrontendPayload($institution),
+                'can_update' => $request->user()?->can('update', $institution) ?? false,
             ],
         ]);
     }

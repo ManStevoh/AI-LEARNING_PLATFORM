@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\Institution\AiPromptController;
+use App\Http\Controllers\Institution\InstitutionBlockPackController;
 use App\Http\Controllers\Institution\DashboardController as InstitutionDashboardController;
 use App\Http\Controllers\Learner\BlockProjectController;
 use App\Http\Controllers\Learner\BlockProjectBackdropController;
@@ -139,4 +140,6 @@ Route::middleware(['auth', ResolveTenantContext::class])->group(function () {
     Route::get('institution/select', [InstitutionController::class, 'select'])->name('institution.select');
     Route::post('institution/switch', [InstitutionController::class, 'switchInstitution'])->name('institution.switch');
     Route::get('institutions/{institution}', [InstitutionController::class, 'show'])->name('institutions.show');
+    Route::patch('institutions/{institution}/block-packs', [InstitutionBlockPackController::class, 'update'])
+        ->name('institutions.block-packs.update');
 });

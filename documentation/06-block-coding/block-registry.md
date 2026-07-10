@@ -200,6 +200,16 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 | `ace_curriculum_checkpoint` | checkpoint | Mark lesson step complete | yes | yes | 4 | done |
 | `ace_robot_read_sensor` | robot sensor | Simulated distance/light/touch read | yes | yes | 4 | done |
 
+## Institution block packs
+
+| Pack ID | Label | Gated categories | Admin config | Learner toolbox | Status |
+|---------|-------|------------------|--------------|-----------------|--------|
+| `ace_ai` | AI mentor blocks | AI | `Institution.settings.block_coding.enabled_packs` | filtered via `enabled_block_packs` | done |
+| `ace_curriculum` | Curriculum checkpoints | Curriculum | same | same | done |
+| `ace_robotics` | Robotics sensors | Robotics | same | same | done |
+
+Default when unset: all three packs enabled. Explicit empty array disables all optional packs.
+
 ## Studio UI (Scratch parity)
 
 | Area | Description | Status |
@@ -226,6 +236,7 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 - Pen layer + stamps: `application/resources/js/Modules/BlockCoding/penLayer.js`, `PenTrailOverlay.jsx`
 - Video sensing: `application/resources/js/Modules/BlockCoding/videoLayer.js`, `mediaSensingEngine.js`, `VideoOverlay.jsx`
 - ACE extensions: `aceExtensionApi.js`, `robotSimulator.js`, `BlockScriptExplainService.php`, `LearnerLessonCheckpointService.php`
+- Institution block packs: `InstitutionBlockPackService.php`, `blockPackToolbox.smoke.mjs`
 - Scratch Blockly options: `application/resources/js/Modules/BlockCoding/scratchBlocklyOptions.js`
 - Studio CSS: `application/resources/css/app.css` (`.scratch-studio-*`, `.scratch-blockly-root`)
 - Smoke: `application/resources/js/Modules/BlockCoding/stageRuntime.smoke.mjs`, `mediaSensingEngine.smoke.mjs`

@@ -36,6 +36,7 @@ export default function BlockWorkspace({
     getProjectExtras,
     externalSaveTrigger = 0,
     variant = 'default',
+    enabledBlockPacks,
 }) {
     const containerRef = useRef(null);
     const workspaceRef = useRef(null);
@@ -70,7 +71,7 @@ export default function BlockWorkspace({
             return undefined;
         }
 
-        const workspace = createBlockWorkspace(container, preset, { scratch });
+        const workspace = createBlockWorkspace(container, preset, { scratch, enabledBlockPacks });
         workspaceRef.current = workspace;
 
         if (!hasLoadedProjectRef.current) {
@@ -153,7 +154,7 @@ export default function BlockWorkspace({
             hasLoadedProjectRef.current = false;
             allowAutoSaveRef.current = false;
         };
-    }, [preset, lessonSlug, onReady, savedProject, starterProject, onSaveStatusChange, getProjectExtras, scratch]);
+    }, [preset, lessonSlug, onReady, savedProject, starterProject, onSaveStatusChange, getProjectExtras, scratch, enabledBlockPacks]);
 
     useEffect(() => {
         if (!allowAutoSaveRef.current || !queueSaveRef.current) {

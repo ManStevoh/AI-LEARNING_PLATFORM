@@ -50,7 +50,7 @@ export function createBlockWorkspace(container, preset = 'level_1_default', opti
     const scratch = options.scratch ?? false;
 
     return Blockly.inject(container, {
-        toolbox: getLevelOneToolbox(preset),
+        toolbox: getLevelOneToolbox(preset, { enabledBlockPacks: options.enabledBlockPacks }),
         theme: aceTheme,
         renderer: 'zelos',
         media: BLOCKLY_MEDIA_URL,

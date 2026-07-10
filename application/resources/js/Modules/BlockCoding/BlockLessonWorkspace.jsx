@@ -342,6 +342,7 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
                 <div className="grid min-h-[min(640px,calc(100vh-12rem))] lg:grid-cols-[minmax(0,1fr)_520px]">
                     <div className="min-h-[480px] min-w-0 border-b border-[#d9d9d9] lg:min-h-0 lg:border-b-0 lg:border-r">
                         <BlockWorkspace
+                            enabledBlockPacks={workspaceConfig.enabled_block_packs}
                             externalSaveTrigger={assetSaveRevision}
                             getProjectExtras={getProjectExtras}
                             lessonSlug={lessonSlug}

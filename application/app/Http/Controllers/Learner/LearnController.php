@@ -53,7 +53,7 @@ class LearnController extends Controller
 
         return Inertia::render('Learner/Lesson', [
             'lesson' => $lesson,
-            'workspace' => $this->workspaceShell->configForLesson($lesson),
+            'workspace' => $this->workspaceShell->configForLesson($lesson, $this->tenantContext->current()),
             'savedProject' => $savedProject,
             'starterProject' => $savedProject === null
                 ? $this->starterProjects->forLesson($lessonSlug)

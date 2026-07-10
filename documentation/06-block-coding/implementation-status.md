@@ -5,7 +5,7 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 ## Snapshot
 
 - **Last updated:** 2026-07-11
-- **Engine phase:** Phase 4 — ACE-only extensions (AI, curriculum, robotics)
+- **Engine phase:** Phase 4+ — institution-specific block packs
 - **Published to GitHub:** `ec59a85`
 - **Custom ACE blocks:** ~93 done (plus Blockly control/math/text/variables/lists/procedures)
 - **Tests:** 129 PHPUnit + StageRuntime smoke 70/70 + media sensing smoke 13/13 + stage renderer smoke 13/13
@@ -31,6 +31,7 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 | ACE | AI explain script block (AI Gateway) | `ace_ai_explain`, `BlockScriptExplainService` |
 | ACE | Curriculum checkpoint block | `ace_curriculum_checkpoint`, `LearnerLessonCheckpoint` |
 | ACE | Simulated robot sensor read | `ace_robot_read_sensor`, `robotSimulator.js` |
+| ACE | Institution-specific block packs | `InstitutionBlockPackService`, `levelOneToolbox.js` |
 | Architecture | Stage rendering ADR | ADR 0010 |
 | Architecture | PixiJS stage renderer adapter (feature-flagged) | `stageRenderers/` |
 | Runtime | Pen layer with Blockly blocks + Pixi/DOM rendering | envelope v2.1, `penLayer.js` |
@@ -48,13 +49,14 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 
 | Priority | Item | Phase | Ref |
 |----------|------|-------|-----|
-| P1 | Institution-specific block packs | 4+ | scratch parity strategy |
-| P2 | Level 2 generated-code / hybrid editing | 4+ | generated-code-mapping spec |
+| P1 | Level 2 read-only generated-code panel | 4+ | generated-code-mapping spec |
+| P2 | Block-to-code highlight sync | 4+ | stage runtime spec |
 
 ## Verification (Latest)
 
 ```text
-php artisan test --filter=BlockProjectPersistenceTest|LearnerLessonCheckpointTest|BlockScriptExplainTest → 20 passed
+php artisan test --filter=InstitutionBlockPackTest|BlockWorkspaceShellServiceTest → 15 passed
+node blockPackToolbox.smoke.mjs                          → 19/19 passed
 node stageRuntime.smoke.mjs                          → 70/70 passed
 node mediaSensingEngine.smoke.mjs                    → 13/13 passed
 node stageRenderer.smoke.mjs                         → 13/13 passed

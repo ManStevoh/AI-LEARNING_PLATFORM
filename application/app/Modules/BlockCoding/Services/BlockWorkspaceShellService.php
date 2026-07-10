@@ -2,16 +2,23 @@
 
 namespace App\Modules\BlockCoding\Services;
 
+use App\Models\Institution;
+
 class BlockWorkspaceShellService
 {
+    public function __construct(
+        private InstitutionBlockPackService $blockPackService,
+    ) {}
+
     /**
      * @param  array<string, mixed>  $lesson
      * @return array<string, mixed>
      */
-    public function configForLesson(array $lesson): array
+    public function configForLesson(array $lesson, ?Institution $institution = null): array
     {
         return [
             'preset' => 'level_1_default',
+            'enabled_block_packs' => $this->blockPackService->enabledPackIds($institution),
             'lesson_slug' => $lesson['slug'],
             'stage' => [
                 'title' => 'Stage',

@@ -76,6 +76,11 @@ class LearnerCurriculumDashboardTest extends TestCase
             )
             ->has('workspace', fn (Assert $workspace) => $workspace
                 ->where('preset', 'level_1_default')
+                ->where('enabled_block_packs', [
+                    'ace_ai',
+                    'ace_curriculum',
+                    'ace_robotics',
+                ])
                 ->where('lesson_slug', 'unit-01-meet-the-coding-studio')
                 ->where('stage.status', 'active')
                 ->where('stage.renderer', 'dom')

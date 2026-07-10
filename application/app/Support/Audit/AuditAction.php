@@ -15,4 +15,6 @@ final class AuditAction
     public const AI_PROMPT_DRAFT_SAVED = 'ai_prompt.draft_saved';
 
     public const AI_PROMPT_VERSION_PUBLISHED = 'ai_prompt.version_published';
+
+    public const INSTITUTION_BLOCK_PACKS_UPDATED = 'institution.block_packs_updated';
 }
