@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Learner;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Learner\GenerateBlockProjectBackdropRequest;
 use App\Http\Requests\Learner\UploadBlockProjectBackdropRequest;
+use App\Modules\AI\Exceptions\AiGatewayException;
 use App\Modules\BlockCoding\Models\BlockProjectBackdrop;
+use App\Modules\BlockCoding\Services\AiBackdropGeneratorService;
 use App\Modules\BlockCoding\Services\BlockProjectBackdropService;
 use App\Modules\Curriculum\Services\CurriculumCatalogService;
 use App\Support\Tenancy\TenantContext;
@@ -15,6 +18,7 @@ class BlockProjectBackdropController extends Controller
 {
     public function __construct(
         private BlockProjectBackdropService $backdrops,
+        private AiBackdropGeneratorService $aiBackdrops,
         private CurriculumCatalogService $catalog,
         private TenantContext $tenantContext,
     ) {}
@@ -57,6 +61,30 @@ class BlockProjectBackdropController extends Controller
         abort_unless($backdrop->lesson_slug === $lessonSlug, 404, 'Backdrop not found for this lesson.');
 
         return $this->backdrops->streamImage($backdrop);
+    }
+
+    public function generate(GenerateBlockProjectBackdropRequest $request, string $lessonSlug): JsonResponse
+    {
+        $this->assertLessonContext($lessonSlug);
+
+        try {
+            $result = $this->aiBackdrops->generateForLearner(
+                $request->user()->id,
+                $this->tenantContext->id(),
+                $lessonSlug,
+                $request->validated('theme'),
+            );
+        } catch (AiGatewayException $exception) {
+            return response()->json([
+                'message' => 'Unable to generate a backdrop right now. Try again or choose a library backdrop.',
+            ], 503);
+        } catch (\InvalidArgumentException $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ], 422);
+        }
+
+        return response()->json($result, 201);
     }
 
     public function destroy(string $lessonSlug, BlockProjectBackdrop $backdrop): JsonResponse

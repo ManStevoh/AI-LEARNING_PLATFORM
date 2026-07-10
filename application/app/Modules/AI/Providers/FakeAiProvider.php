@@ -23,7 +23,7 @@ class FakeAiProvider implements AiProvider
     {
         $startedAt = hrtime(true);
         $userMessage = $this->latestUserMessage($request);
-        $content = $this->buildMentorReply($request, $userMessage);
+        $content = $this->buildContent($request, $userMessage);
 
         return new AiResponse(
             requestId: $requestId,
@@ -42,8 +42,12 @@ class FakeAiProvider implements AiProvider
         );
     }
 
-    private function buildMentorReply(AiRequest $request, string $userMessage): string
+    private function buildContent(AiRequest $request, string $userMessage): string
     {
+        if ($request->taskType === 'block_coding_backdrop_generate') {
+            return $this->buildBackdropSvg($request);
+        }
+
         /** @var array<string, string> $context */
         $context = is_array($request->metadata['context'] ?? null)
             ? $request->metadata['context']
@@ -62,6 +66,29 @@ class FakeAiProvider implements AiProvider
             default => 'The ACE mentor is in sandbox mode. Describe what you tried and what you expected to happen.'
                 .($userMessage !== '' ? " You asked: \"{$userMessage}\"." : ''),
         };
+    }
+
+    private function buildBackdropSvg(AiRequest $request): string
+    {
+        /** @var string $theme */
+        $theme = (string) ($request->metadata['theme'] ?? 'ocean');
+
+        $palette = match ($theme) {
+            'space' => ['#1a1033', '#7e57c2', '#ffd54f'],
+            'forest' => ['#87ceeb', '#7ccd5b', '#2e7d32'],
+            'desert' => ['#f6c56b', '#e2a84b', '#ff7043'],
+            'candy' => ['#fce7f3', '#f8bbd0', '#ff80ab'],
+            'city' => ['#cfd8dc', '#90a4ae', '#455a64'],
+            'sports' => ['#66bb6a', '#ffffff', '#ff8f00'],
+            'fantasy' => ['#311b92', '#b39ddb', '#fff59d'],
+            default => ['#4fc3f7', '#4dd0e1', '#ffe082'],
+        };
+
+        [$sky, $ground, $accent] = $palette;
+
+        return <<<SVG
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360"><rect width="480" height="360" fill="{$sky}"/><rect y="220" width="480" height="140" fill="{$ground}"/><circle cx="360" cy="70" r="34" fill="{$accent}"/><circle cx="120" cy="250" r="48" fill="{$accent}" opacity="0.75"/></svg>
+SVG;
     }
 
     private function extractQuestion(string $renderedUserMessage): string

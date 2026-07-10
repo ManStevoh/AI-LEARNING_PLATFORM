@@ -5,6 +5,8 @@
 import { StageRuntime } from './stageRuntime.js';
 import { createProceduralBackdropEntry } from './proceduralBackdrop.js';
 import { colorsMatch, normalizeHexColor } from './stageColorSampler.js';
+import { normalizeBackdropEntry, serializeBackdropEntry } from './backdropAssets.js';
+import { createAiBackdropEntry } from './aiBackdrop.js';
 
 globalThis.window = globalThis;
 globalThis.window.setInterval = () => 1;
@@ -96,6 +98,19 @@ assert('addBackdrop library', runtime.stage.backdropLibraryId === 'desert-dunes'
 
 runtime.addBackdrop(createProceduralBackdropEntry(424242));
 assert('addBackdrop procedural', runtime.sprites && runtime.stage.backdrops.some((b) => b.type === 'procedural'));
+
+const aiEntry = createAiBackdropEntry({
+    theme: 'ocean',
+    request_id: 'req-smoke-1',
+    color: '#4fc3f7',
+    backdrop: { uuid: 'ai-uuid-smoke', name: 'AI Ocean' },
+});
+const normalizedAi = normalizeBackdropEntry(aiEntry);
+assert('ai backdrop normalize', normalizedAi.type === 'ai' && normalizedAi.asset_uuid === 'ai-uuid-smoke');
+const serializedAi = serializeBackdropEntry(normalizedAi);
+assert('ai backdrop serialize', serializedAi.type === 'ai' && serializedAi.theme === 'ocean');
+runtime.addBackdrop(aiEntry);
+assert('addBackdrop ai asset uuid', runtime.stage.backdropAssetUuid === 'ai-uuid-smoke');
 
 const addedSprite = runtime.addSpriteFromLibrary('ace-owl');
 assert('addSpriteFromLibrary', addedSprite?.name === 'Owl' && runtime.sprites.length >= 2);

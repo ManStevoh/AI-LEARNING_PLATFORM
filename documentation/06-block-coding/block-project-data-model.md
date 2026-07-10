@@ -27,9 +27,34 @@ Raw Blockly serialization only:
 
 Loaders detect legacy format when `format` is absent.
 
+## ACE project envelope (schema `2.0`)
+
+Current version. Adds AI-generated backdrop refs (tenant-scoped SVG assets + theme metadata) on top of v1.9.
+
+```json
+{
+  "format": "ace_project",
+  "version": "2.0",
+  "stage": {
+    "backdrops": [
+      {
+        "type": "ai",
+        "id": "backdrop-ai-1",
+        "asset_uuid": "…",
+        "theme": "ocean",
+        "request_id": "…",
+        "name": "AI Ocean",
+        "color": "#4fc3f7"
+      }
+    ],
+    "backdropIndex": 0
+  }
+}
+```
+
 ## ACE project envelope (schema `1.9`)
 
-Current version. Adds Blockly variable/list stage monitor refs on top of v1.8.
+Adds Blockly variable/list stage monitor refs on top of v1.8.
 
 ```json
 {
@@ -246,8 +271,8 @@ Same as above without the `sounds` array.
 | `1.6` | Stage reporter monitors | legacy |
 | `1.7` | Platform backdrop library + procedural backdrops | legacy |
 | `1.8` | Platform sprite/costume library refs | legacy |
-| `1.9` | Blockly variable/list stage monitors | **current** |
-| `2.0` | Full stage-runtime spec alignment | planned |
+| `1.9` | Blockly variable/list stage monitors | legacy |
+| `2.0` | AI-generated backdrop refs | **current** |
 
 Migrations must accept all prior versions on read and write the latest supported version on save.
 

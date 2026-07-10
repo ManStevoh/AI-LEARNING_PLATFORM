@@ -6,9 +6,9 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 
 - **Last updated:** 2026-07-10
 - **Engine phase:** Phase 3 — assets + libraries + monitors
-- **Published to GitHub:** `0fe6297`
+- **Published to GitHub:** pending (AI backdrops slice)
 - **Custom ACE blocks:** ~78 done (plus Blockly control/math/text/variables/lists/procedures)
-- **Tests:** 112 PHPUnit + StageRuntime smoke 44/44
+- **Tests:** 117 PHPUnit + StageRuntime smoke 47/47
 
 ## Done
 
@@ -22,6 +22,7 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 | Assets | ACE sprite library (48 SVGs) + Choose sprite/costume modals | `spriteLibrary.js`, `ChooseSpriteModal.jsx` |
 | Assets | Shared Scratch-style asset library UI | `AssetLibraryModal.jsx` |
 | Assets | Procedural surprise backdrops | `proceduralBackdrop.js` |
+| Assets | AI-generated backdrops (child-safe, AI Gateway) | envelope v2.0, `AiBackdropGeneratorService` |
 | UI | Stage monitor checkboxes + overlay | envelope v1.6 |
 | UI | Variable/list stage monitors (Blockly chrome) | envelope v1.9, `dynamicMonitors.js` |
 | Sensing | Pixel color touching (canvas sampler) | `stageColorSampler.js` |
@@ -33,21 +34,19 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 | Item | Blocker or remaining work |
 |------|---------------------------|
 | Loudness | Stub until microphone path |
-| AI-generated backdrops | Future slice via AI Gateway |
 | PixiJS renderer adapter | When pen/effects need WebGL path |
 
 ## Pending (Next Slices)
 
 | Priority | Item | Phase | Ref |
 |----------|------|-------|-----|
-| P1 | AI backdrop generation (child-safe) | 4 | AI Gateway |
-| P2 | PixiJS renderer adapter when needed | 2 | ADR 0010 |
+| P1 | PixiJS renderer adapter when needed | 2 | ADR 0010 |
 
 ## Verification (Latest)
 
 ```text
-php artisan test              → 110 passed
-node stageRuntime.smoke.mjs   → 44/44 passed
+php artisan test              → 117 passed
+node stageRuntime.smoke.mjs   → 47/47 passed
 npm run build                 → pass
 ```
 

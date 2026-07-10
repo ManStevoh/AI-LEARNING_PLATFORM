@@ -411,6 +411,7 @@ Published:
 - pixel color touching sensing via DOM canvas sampler,
 - ACE sprite library with Choose sprite/costume modals (envelope v1.8),
 - variable/list stage monitors with Blockly checkboxes (envelope v1.9),
+- AI-generated backdrops via AI Gateway with theme picker (envelope v2.0),
 - Scratch block coding studio and ACE Stage Engine Phases 1–3,
 - block coding docs (registry, parity strategy, status procedure).
 
@@ -423,7 +424,7 @@ Not published (blocked):
 ## Immediate Next Build Sequence
 
 1. Configure PostgreSQL once local services are available.
-2. AI-generated backdrops via AI Gateway (child-safe).
+2. PixiJS renderer adapter when pen/effects need WebGL path (ADR 0010).
 
 ## Ledger Update Rule
 

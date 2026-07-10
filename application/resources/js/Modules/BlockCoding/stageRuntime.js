@@ -142,7 +142,8 @@ export class StageRuntime {
         }
 
         stage.background = current.color ?? DEFAULT_STAGE.background;
-        stage.backdropAssetUuid = current.type === 'asset' ? current.asset_uuid : null;
+        stage.backdropAssetUuid =
+            current.type === 'asset' || current.type === 'ai' ? current.asset_uuid : null;
         stage.backdropLibraryId = current.type === 'library' ? current.library_id : null;
         stage.backdropProceduralSeed = current.type === 'procedural' ? current.seed : null;
     }

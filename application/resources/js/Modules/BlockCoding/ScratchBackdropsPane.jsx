@@ -1,10 +1,13 @@
 import { useRef, useState } from 'react';
 import BackdropThumb from './BackdropThumb.jsx';
 import ChooseBackdropModal from './ChooseBackdropModal.jsx';
+import GenerateAiBackdropModal from './GenerateAiBackdropModal.jsx';
+import { createAiBackdropEntry } from './aiBackdrop.js';
 import {
     createLibraryBackdropEntry,
     createProceduralBackdropEntry,
     deleteLessonBackdrop,
+    generateAiBackdrop,
     normalizeBackdropEntry,
     uploadLessonBackdrop,
 } from './backdropAssets.js';
@@ -38,6 +41,8 @@ function backdropTypeLabel(entry) {
             return 'ACE library';
         case 'procedural':
             return 'Surprise backdrop';
+        case 'ai':
+            return `AI · ${entry.theme ?? 'theme'}`;
         default:
             return entry.color;
     }
@@ -55,6 +60,8 @@ export default function ScratchBackdropsPane({
     const [status, setStatus] = useState('idle');
     const [error, setError] = useState('');
     const [libraryOpen, setLibraryOpen] = useState(false);
+    const [aiOpen, setAiOpen] = useState(false);
+    const [generatingTheme, setGeneratingTheme] = useState(null);
 
     const backdrops = Array.isArray(stage?.backdrops) ? stage.backdrops : [];
     const backdropIndex = stage?.backdropIndex ?? 0;
@@ -116,6 +123,24 @@ export default function ScratchBackdropsPane({
         onSaveRequest?.();
     };
 
+    const handleGenerateAiBackdrop = async (theme) => {
+        setGeneratingTheme(theme);
+        setError('');
+
+        try {
+            const payload = await generateAiBackdrop(lessonSlug, theme);
+            onAddBackdrop?.(createAiBackdropEntry(payload));
+            onSaveRequest?.();
+            setAiOpen(false);
+            setStatus('idle');
+        } catch {
+            setStatus('error');
+            setError('AI backdrop generation failed. Try again or choose a library backdrop.');
+        } finally {
+            setGeneratingTheme(null);
+        }
+    };
+
     const handleDelete = async (index) => {
         const backdrop = backdrops[index];
         const entry = normalizeBackdropEntry(backdrop);
@@ -129,7 +154,7 @@ export default function ScratchBackdropsPane({
         setError('');
 
         try {
-            if (entry.type === 'asset') {
+            if (entry.type === 'asset' || entry.type === 'ai') {
                 await deleteLessonBackdrop(lessonSlug, entry.asset_uuid);
             }
 
@@ -148,7 +173,7 @@ export default function ScratchBackdropsPane({
                 <div>
                     <p className="text-sm font-semibold text-[#575e75]">Backdrops · Stage</p>
                     <p className="text-xs text-[#999]">
-                        Choose from the ACE library, upload your own, or generate a surprise backdrop.
+                        Choose from the ACE library, upload your own, generate with AI, or try a surprise backdrop.
                     </p>
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -159,6 +184,14 @@ export default function ScratchBackdropsPane({
                         type="button"
                     >
                         Choose backdrop
+                    </button>
+                    <button
+                        className="rounded-md border border-[#855cd6] bg-[#f6f0ff] px-3 py-1.5 text-xs font-semibold text-[#855cd6] hover:bg-[#ede3ff] disabled:opacity-60"
+                        disabled={status === 'uploading' || status === 'deleting' || generatingTheme !== null}
+                        onClick={() => setAiOpen(true)}
+                        type="button"
+                    >
+                        Generate with AI
                     </button>
                     <button
                         className="rounded-md border border-[#d9d9d9] bg-white px-3 py-1.5 text-xs font-semibold text-[#575e75] hover:border-[#855cd6] disabled:opacity-60"
@@ -251,6 +284,16 @@ export default function ScratchBackdropsPane({
                 })}
             </ul>
 
+            <GenerateAiBackdropModal
+                generatingTheme={generatingTheme}
+                onClose={() => {
+                    if (generatingTheme === null) {
+                        setAiOpen(false);
+                    }
+                }}
+                onSelect={handleGenerateAiBackdrop}
+                open={aiOpen}
+            />
             <ChooseBackdropModal
                 onClose={() => setLibraryOpen(false)}
                 onSelect={handleChooseLibrary}

@@ -168,7 +168,7 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 | ACE library | 25 platform SVG backdrops, categorized + searchable | done |
 | Uploads | Tenant-scoped learner images | done |
 | Procedural | Seed-based unique SVG surprise backdrops | done |
-| AI-generated | Child-safe prompts via AI Gateway | planned |
+| AI-generated | Child-safe prompts via AI Gateway | done |
 
 ## Not in this slice (later)
 

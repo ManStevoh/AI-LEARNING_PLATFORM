@@ -19,14 +19,18 @@ class AiPromptRegistryPersistenceTest extends TestCase
     {
         $this->seed(AiPromptFoundationSeeder::class);
 
-        $this->assertSame(1, AiPrompt::query()->count());
-        $this->assertSame(1, AiPromptVersion::query()->whereNotNull('published_at')->count());
+        $this->assertSame(2, AiPrompt::query()->count());
+        $this->assertSame(2, AiPromptVersion::query()->whereNotNull('published_at')->count());
 
         $prompt = app(PromptRegistry::class)->resolve('learner.mentor.hint', 'v1');
 
         $this->assertSame('learner.mentor.hint', $prompt->key);
         $this->assertSame('v1', $prompt->version);
         $this->assertContains('no_full_solution', $prompt->safetyRules);
+
+        $backdropPrompt = app(PromptRegistry::class)->resolve('block_coding.backdrop.generate', 'v1');
+        $this->assertSame('block_coding.backdrop.generate', $backdropPrompt->key);
+        $this->assertContains('child_safe', $backdropPrompt->safetyRules);
     }
 
     public function test_registry_prefers_database_over_config(): void

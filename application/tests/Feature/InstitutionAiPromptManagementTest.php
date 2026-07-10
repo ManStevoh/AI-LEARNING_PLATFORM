@@ -31,8 +31,11 @@ class InstitutionAiPromptManagementTest extends TestCase
             ->assertOk()
             ->assertInertia(fn (Assert $page) => $page
                 ->component('Institution/Prompts/Index')
-                ->has('prompts', 1)
-                ->where('prompts.0.prompt_key', 'learner.mentor.hint')
+                ->has('prompts', 2)
+                ->where('prompts', fn ($prompts) => collect($prompts)->pluck('prompt_key')->sort()->values()->all() === [
+                    'block_coding.backdrop.generate',
+                    'learner.mentor.hint',
+                ])
             );
     }
 

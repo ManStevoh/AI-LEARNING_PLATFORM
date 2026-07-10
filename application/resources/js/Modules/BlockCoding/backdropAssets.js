@@ -70,6 +70,25 @@ export async function deleteLessonBackdrop(lessonSlug, assetUuid) {
     }
 }
 
+export async function generateAiBackdrop(lessonSlug, theme) {
+    const response = await fetch(`/learner/learn/${lessonSlug}/backdrops/generate`, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'X-XSRF-TOKEN': readCsrfToken(),
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({ theme }),
+    });
+
+    if (!response.ok) {
+        throw new Error('Unable to generate backdrop.');
+    }
+
+    return response.json();
+}
+
 export function backdropImageUrl(lessonSlug, assetUuid) {
     return `/learner/learn/${lessonSlug}/backdrops/${assetUuid}/image`;
 }
@@ -93,6 +112,18 @@ export function normalizeBackdropEntry(value, index = 0) {
             id: value.id ?? `backdrop-proc-${value.seed}`,
             seed: value.seed,
             name: value.name ?? `Surprise ${value.seed % 997}`,
+            color: value.color ?? '#dbeafe',
+        };
+    }
+
+    if (value !== null && typeof value === 'object' && value.type === 'ai') {
+        return {
+            type: 'ai',
+            id: value.id ?? `backdrop-ai-${value.asset_uuid}`,
+            asset_uuid: value.asset_uuid,
+            theme: value.theme ?? 'ocean',
+            request_id: value.request_id ?? null,
+            name: value.name ?? 'AI Backdrop',
             color: value.color ?? '#dbeafe',
         };
     }
@@ -156,6 +187,18 @@ export function serializeBackdropEntry(backdrop) {
         };
     }
 
+    if (entry.type === 'ai') {
+        return {
+            type: 'ai',
+            id: entry.id,
+            asset_uuid: entry.asset_uuid,
+            theme: entry.theme,
+            request_id: entry.request_id,
+            name: entry.name,
+            color: entry.color,
+        };
+    }
+
     if (entry.type === 'asset') {
         return {
             type: 'asset',
@@ -176,7 +219,7 @@ export function serializeBackdropEntry(backdrop) {
 export function resolveBackdropImageUrl(entry, lessonSlug = null) {
     const normalized = normalizeBackdropEntry(entry);
 
-    if (normalized.type === 'asset' && lessonSlug) {
+    if ((normalized.type === 'asset' || normalized.type === 'ai') && lessonSlug) {
         return backdropImageUrl(lessonSlug, normalized.asset_uuid);
     }
 

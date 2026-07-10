@@ -72,6 +72,9 @@ Route::middleware(['auth', ResolveTenantContext::class])->group(function () {
     Route::delete('learner/learn/{lessonSlug}/costumes/{costume}', [BlockProjectCostumeController::class, 'destroy'])
         ->middleware('workspace.role:learner,parent')
         ->name('learner.costumes.destroy');
+    Route::post('learner/learn/{lessonSlug}/backdrops/generate', [BlockProjectBackdropController::class, 'generate'])
+        ->middleware('workspace.role:learner,parent')
+        ->name('learner.backdrops.generate');
     Route::get('learner/learn/{lessonSlug}/backdrops', [BlockProjectBackdropController::class, 'index'])
         ->middleware('workspace.role:learner,parent')
         ->name('learner.backdrops.index');

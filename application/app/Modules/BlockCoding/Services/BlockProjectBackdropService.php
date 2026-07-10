@@ -59,6 +59,33 @@ class BlockProjectBackdropService
         ]);
     }
 
+    public function storeSvgForLearner(
+        int $userId,
+        int $institutionId,
+        string $lessonSlug,
+        string $svg,
+        ?string $displayName = null,
+    ): BlockProjectBackdrop {
+        $uuid = (string) Str::uuid();
+        $filename = "{$uuid}.svg";
+        $path = "block-project-backdrops/{$institutionId}/{$userId}/{$lessonSlug}/{$filename}";
+
+        Storage::disk(self::DISK)->put($path, $svg);
+
+        return BlockProjectBackdrop::query()->create([
+            'uuid' => $uuid,
+            'institution_id' => $institutionId,
+            'user_id' => $userId,
+            'lesson_slug' => $lessonSlug,
+            'name' => Str::limit(trim($displayName ?? '') !== '' ? trim($displayName) : 'AI Backdrop', 120, ''),
+            'disk' => self::DISK,
+            'path' => $path,
+            'mime_type' => 'image/svg+xml',
+            'size_bytes' => strlen($svg),
+            'original_filename' => $filename,
+        ]);
+    }
+
     public function deleteForLearner(BlockProjectBackdrop $backdrop): void
     {
         Storage::disk($backdrop->disk)->delete($backdrop->path);
