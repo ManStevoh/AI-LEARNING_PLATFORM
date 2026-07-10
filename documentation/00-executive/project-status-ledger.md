@@ -183,9 +183,9 @@ Developed:
 - ACE sprite library (48 SVGs) with Scratch-style Choose sprite/costume modals (envelope v1.8).
 - variable/list stage monitors with Blockly checkboxes (envelope v1.9).
 
-### Block Coding (Published + local variable monitors)
+### Block Coding (Published)
 
-Status: Phase 1–3 Scratch parity + libraries published; variable/list monitors local. See `documentation/06-block-coding/implementation-status.md`.
+Status: Phase 1–3 Scratch parity + libraries + variable/list monitors published. See `documentation/06-block-coding/implementation-status.md`.
 
 Developed:
 
@@ -193,7 +193,7 @@ Developed:
 - Blockly Zelos theme and Scratch palette order,
 - ACE Stage Engine Phases 1–3,
 - Operators/Lists/My Blocks,
-- project envelope through v1.8,
+- project envelope through v1.9,
 - ACE backdrop library + procedural generator,
 - DOM canvas color sampler for touching-color blocks,
 - shared Scratch-style asset library modal + ACE sprite library (48 SVGs),
@@ -203,7 +203,6 @@ Developed:
 
 Next action:
 
-- publish variable/list monitor slice,
 - configure PostgreSQL once local services are available.
 
 ## Partially Developed Artifacts
@@ -312,7 +311,7 @@ Latest local verification:
 - ACE backdrop library + procedural backdrops with envelope v1.7 (PHPUnit persistence; smoke 32/32; published `8e929eb`).
 - pixel color touching sensing via DOM canvas sampler (smoke 39/39; published `7718d34`).
 - ACE sprite library + Choose sprite/costume modals with envelope v1.8 (PHPUnit persistence; smoke 41/41; published `34728d0`).
-- variable/list stage monitors with envelope v1.9 (PHPUnit persistence; smoke 44/44; local pending publish).
+- variable/list stage monitors with envelope v1.9 (PHPUnit persistence; smoke 44/44; published `0fe6297`).
 
 Learning:
 
@@ -411,6 +410,7 @@ Published:
 - ACE backdrop library with Choose modal + procedural surprise backdrops (envelope v1.7),
 - pixel color touching sensing via DOM canvas sampler,
 - ACE sprite library with Choose sprite/costume modals (envelope v1.8),
+- variable/list stage monitors with Blockly checkboxes (envelope v1.9),
 - Scratch block coding studio and ACE Stage Engine Phases 1–3,
 - block coding docs (registry, parity strategy, status procedure).
 
@@ -422,9 +422,8 @@ Not published (blocked):
 
 ## Immediate Next Build Sequence
 
-1. Publish variable/list stage monitor slice (envelope v1.9).
-2. Configure PostgreSQL once local services are available.
-3. AI-generated backdrops via AI Gateway (child-safe).
+1. Configure PostgreSQL once local services are available.
+2. AI-generated backdrops via AI Gateway (child-safe).
 
 ## Ledger Update Rule
 
