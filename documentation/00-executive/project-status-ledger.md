@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `34728d0` — Add ACE sprite library with Scratch-style Choose modals.
+- `0fe6297` — Add Blockly variable and list stage monitors with envelope v1.9.
 
 Current local implementation status:
 
@@ -38,7 +38,7 @@ Current local implementation status:
 - **ACE backdrop library + procedural backdrops (envelope v1.7)** published in `8e929eb`.
 - **Pixel color touching sensing (DOM canvas sampler)** published in `7718d34`.
 - **ACE sprite library + Choose sprite/costume modals (envelope v1.8)** published in `34728d0`.
-- **Variable/list stage monitors (envelope v1.9)** implemented locally (ready to publish).
+- **Variable/list stage monitors (envelope v1.9)** published in `0fe6297`.
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
@@ -181,10 +181,11 @@ Developed:
 - ACE backdrop library (25 SVGs) with Choose modal + procedural surprise backdrops (envelope v1.7).
 - pixel color touching sensing via DOM canvas sampler (`stageColorSampler.js`).
 - ACE sprite library (48 SVGs) with Scratch-style Choose sprite/costume modals (envelope v1.8).
+- variable/list stage monitors with Blockly checkboxes (envelope v1.9).
 
-### Block Coding (Published)
+### Block Coding (Published + local variable monitors)
 
-Status: Phase 1–3 Scratch parity + uploads + libraries + pixel color sensing published. See `documentation/06-block-coding/implementation-status.md`.
+Status: Phase 1–3 Scratch parity + libraries published; variable/list monitors local. See `documentation/06-block-coding/implementation-status.md`.
 
 Developed:
 
@@ -196,11 +197,13 @@ Developed:
 - ACE backdrop library + procedural generator,
 - DOM canvas color sampler for touching-color blocks,
 - shared Scratch-style asset library modal + ACE sprite library (48 SVGs),
+- Blockly variable/list stage monitors with runtime variable store,
 - block registry and scratch parity strategy docs,
-- StageRuntime smoke 41/41; PHPUnit 111.
+- StageRuntime smoke 44/44; PHPUnit 112.
 
 Next action:
 
+- publish variable/list monitor slice,
 - configure PostgreSQL once local services are available.
 
 ## Partially Developed Artifacts
@@ -309,6 +312,7 @@ Latest local verification:
 - ACE backdrop library + procedural backdrops with envelope v1.7 (PHPUnit persistence; smoke 32/32; published `8e929eb`).
 - pixel color touching sensing via DOM canvas sampler (smoke 39/39; published `7718d34`).
 - ACE sprite library + Choose sprite/costume modals with envelope v1.8 (PHPUnit persistence; smoke 41/41; published `34728d0`).
+- variable/list stage monitors with envelope v1.9 (PHPUnit persistence; smoke 44/44; local pending publish).
 
 Learning:
 
@@ -418,9 +422,9 @@ Not published (blocked):
 
 ## Immediate Next Build Sequence
 
-1. Configure PostgreSQL once local services are available.
-2. AI-generated backdrops via AI Gateway (child-safe).
-3. Variable/list stage monitors (Blockly chrome).
+1. Publish variable/list stage monitor slice (envelope v1.9).
+2. Configure PostgreSQL once local services are available.
+3. AI-generated backdrops via AI Gateway (child-safe).
 
 ## Ledger Update Rule
 

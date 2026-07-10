@@ -6,7 +6,7 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 
 - **Last updated:** 2026-07-10
 - **Engine phase:** Phase 3 — assets + libraries + monitors
-- **Published to GitHub:** pending (local slice ready)
+- **Published to GitHub:** `0fe6297`
 - **Custom ACE blocks:** ~78 done (plus Blockly control/math/text/variables/lists/procedures)
 - **Tests:** 112 PHPUnit + StageRuntime smoke 44/44
 
@@ -47,7 +47,7 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 
 ```text
 php artisan test              → 110 passed
-node stageRuntime.smoke.mjs   → 45/45 passed
+node stageRuntime.smoke.mjs   → 44/44 passed
 npm run build                 → pass
 ```
 
