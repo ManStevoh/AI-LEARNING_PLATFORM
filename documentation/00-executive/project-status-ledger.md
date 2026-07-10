@@ -401,16 +401,15 @@ Published:
 
 Not published (local only):
 
-- ACE backdrop library + procedural backdrops (envelope v1.7),
 - PostgreSQL local setup (Docker unavailable).
 
 Not published (blocked):
 
 ## Immediate Next Build Sequence
 
-1. Publish ACE backdrop library slice (envelope v1.7).
-2. Configure PostgreSQL once local services are available.
-3. Pixel color sensing (canvas/Pixi) when needed.
+1. Configure PostgreSQL once local services are available.
+2. Pixel color sensing (canvas/Pixi) when needed.
+3. AI-generated backdrops via AI Gateway (child-safe).
 
 ## Ledger Update Rule
 
