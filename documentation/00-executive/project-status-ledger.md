@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `7718d34` — Add DOM canvas pixel color sensing for touching-color blocks.
+- `34728d0` — Add ACE sprite library with Scratch-style Choose modals.
 
 Current local implementation status:
 

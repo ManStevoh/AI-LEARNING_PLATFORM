@@ -6,7 +6,7 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 
 - **Last updated:** 2026-07-10
 - **Engine phase:** Phase 3 — assets + libraries + pixel color sensing
-- **Published to GitHub:** pending (local slice ready)
+- **Published to GitHub:** `34728d0`
 - **Custom ACE blocks:** ~78 done (plus Blockly control/math/text/variables/lists/procedures)
 - **Tests:** 111 PHPUnit + StageRuntime smoke 41/41
 
