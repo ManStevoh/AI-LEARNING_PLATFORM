@@ -36,6 +36,7 @@ Current local implementation status:
 - **Backdrop asset uploads (envelope v1.5)** published in `e39ec5d`.
 - **Stage reporter monitors (envelope v1.6)** published in `ae12511`.
 - **ACE backdrop library + procedural backdrops (envelope v1.7)** published in `8e929eb`.
+- **Pixel color touching sensing (DOM canvas sampler)** published in `7718d34`.
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
@@ -178,9 +179,9 @@ Developed:
 - ACE backdrop library (25 SVGs) with Choose modal + procedural surprise backdrops (envelope v1.7).
 - pixel color touching sensing via DOM canvas sampler (`stageColorSampler.js`).
 
-### Block Coding (Published + local color sensing)
+### Block Coding (Published)
 
-Status: Phase 1–3 Scratch parity + uploads + monitors + backdrop library published; pixel color sensing local. See `documentation/06-block-coding/implementation-status.md`.
+Status: Phase 1–3 Scratch parity + uploads + monitors + backdrop library + pixel color sensing published. See `documentation/06-block-coding/implementation-status.md`.
 
 Developed:
 
@@ -196,7 +197,6 @@ Developed:
 
 Next action:
 
-- publish pixel color sensing slice,
 - configure PostgreSQL once local services are available.
 
 ## Partially Developed Artifacts
@@ -303,7 +303,7 @@ Latest local verification:
 - block project backdrop upload/list/stream/delete with envelope v1.5 (PHPUnit 6; smoke 27/27; published `e39ec5d`).
 - stage reporter monitors with envelope v1.6 (PHPUnit persistence; smoke 31/31; published `ae12511`).
 - ACE backdrop library + procedural backdrops with envelope v1.7 (PHPUnit persistence; smoke 32/32; published `8e929eb`).
-- pixel color touching sensing via DOM canvas sampler (smoke 39/39; local pending publish).
+- pixel color touching sensing via DOM canvas sampler (smoke 39/39; published `7718d34`).
 
 Learning:
 
@@ -400,21 +400,21 @@ Published:
 - block project backdrop uploads with Backdrops tab and envelope v1.5,
 - stage reporter monitors with toolbox checkboxes and overlay (envelope v1.6),
 - ACE backdrop library with Choose modal + procedural surprise backdrops (envelope v1.7),
+- pixel color touching sensing via DOM canvas sampler,
 - Scratch block coding studio and ACE Stage Engine Phases 1–3,
 - block coding docs (registry, parity strategy, status procedure).
 
 Not published (local only):
 
-- pixel color touching sensing (DOM canvas sampler),
 - PostgreSQL local setup (Docker unavailable).
 
 Not published (blocked):
 
 ## Immediate Next Build Sequence
 
-1. Publish pixel color sensing slice.
-2. Configure PostgreSQL once local services are available.
-3. AI-generated backdrops via AI Gateway (child-safe).
+1. Configure PostgreSQL once local services are available.
+2. AI-generated backdrops via AI Gateway (child-safe).
+3. Variable/list stage monitors (Blockly chrome).
 
 ## Ledger Update Rule
 
