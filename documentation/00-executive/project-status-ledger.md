@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `ae12511` — Add Scratch-style stage reporter monitors with envelope v1.6.
+- `8e929eb` — Add ACE backdrop library with Choose modal and procedural backdrops.
 
 Current local implementation status:
 
@@ -35,7 +35,7 @@ Current local implementation status:
 - **Scratch Control clones + Sensing/Operators/Lists/My Blocks parity** published in `a79c32b`.
 - **Backdrop asset uploads (envelope v1.5)** published in `e39ec5d`.
 - **Stage reporter monitors (envelope v1.6)** published in `ae12511`.
-- **ACE backdrop library + procedural backdrops (envelope v1.7)** implemented locally (ready to publish).
+- **ACE backdrop library + procedural backdrops (envelope v1.7)** published in `8e929eb`.
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
@@ -175,11 +175,11 @@ Developed:
 - Scratch Control clones + Sensing/Operators/Lists/My Blocks palette parity.
 - tenant-scoped block project backdrop uploads with envelope v1.5 stage refs.
 - stage reporter monitors with toolbox checkboxes and overlay (envelope v1.6).
-- ACE backdrop library (25 SVGs) with Choose modal + procedural surprise backdrops (envelope v1.7; local pending publish).
+- ACE backdrop library (25 SVGs) with Choose modal + procedural surprise backdrops (envelope v1.7).
 
-### Block Coding (Published + local backdrop library)
+### Block Coding (Published)
 
-Status: Phase 1–3 Scratch parity + uploads + monitors published; backdrop library local. See `documentation/06-block-coding/implementation-status.md`.
+Status: Phase 1–3 Scratch parity + uploads + monitors + backdrop library published. See `documentation/06-block-coding/implementation-status.md`.
 
 Developed:
 
@@ -187,14 +187,13 @@ Developed:
 - Blockly Zelos theme and Scratch palette order,
 - ACE Stage Engine Phases 1–3,
 - Operators/Lists/My Blocks,
-- project envelope through v1.7 (local),
+- project envelope through v1.7,
 - ACE backdrop library + procedural generator,
 - block registry and scratch parity strategy docs,
 - StageRuntime smoke 32/32; PHPUnit 110.
 
 Next action:
 
-- publish backdrop library slice,
 - configure PostgreSQL once local services are available.
 
 ## Partially Developed Artifacts
@@ -300,7 +299,7 @@ Latest local verification:
 - Scratch Phase 3 clones/sensing/operators/lists/My Blocks (StageRuntime smoke 25/25; published `a79c32b`).
 - block project backdrop upload/list/stream/delete with envelope v1.5 (PHPUnit 6; smoke 27/27; published `e39ec5d`).
 - stage reporter monitors with envelope v1.6 (PHPUnit persistence; smoke 31/31; published `ae12511`).
-- ACE backdrop library + procedural backdrops with envelope v1.7 (PHPUnit persistence; smoke 32/32; local pending publish).
+- ACE backdrop library + procedural backdrops with envelope v1.7 (PHPUnit persistence; smoke 32/32; published `8e929eb`).
 
 Learning:
 
