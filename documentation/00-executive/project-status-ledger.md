@@ -39,6 +39,7 @@ Current local implementation status:
 - **Pixel color touching sensing (DOM canvas sampler)** published in `7718d34`.
 - **ACE sprite library + Choose sprite/costume modals (envelope v1.8)** published in `34728d0`.
 - **Variable/list stage monitors (envelope v1.9)** published in `0fe6297`.
+- **AI-generated backdrops (envelope v2.0)** published in `0ece71b`.
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
@@ -182,10 +183,11 @@ Developed:
 - pixel color touching sensing via DOM canvas sampler (`stageColorSampler.js`).
 - ACE sprite library (48 SVGs) with Scratch-style Choose sprite/costume modals (envelope v1.8).
 - variable/list stage monitors with Blockly checkboxes (envelope v1.9).
+- AI-generated backdrops via AI Gateway with theme picker (envelope v2.0).
 
 ### Block Coding (Published)
 
-Status: Phase 1–3 Scratch parity + libraries + variable/list monitors published. See `documentation/06-block-coding/implementation-status.md`.
+Status: Phase 1–3 Scratch parity + libraries + monitors + AI backdrops published. See `documentation/06-block-coding/implementation-status.md`.
 
 Developed:
 
@@ -193,13 +195,13 @@ Developed:
 - Blockly Zelos theme and Scratch palette order,
 - ACE Stage Engine Phases 1–3,
 - Operators/Lists/My Blocks,
-- project envelope through v1.9,
-- ACE backdrop library + procedural generator,
+- project envelope through v2.0,
+- ACE backdrop library + procedural generator + AI-generated SVG backdrops,
 - DOM canvas color sampler for touching-color blocks,
 - shared Scratch-style asset library modal + ACE sprite library (48 SVGs),
 - Blockly variable/list stage monitors with runtime variable store,
 - block registry and scratch parity strategy docs,
-- StageRuntime smoke 44/44; PHPUnit 112.
+- StageRuntime smoke 47/47; PHPUnit 117.
 
 Next action:
 
