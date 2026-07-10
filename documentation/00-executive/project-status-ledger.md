@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `afdb00f` — Add pen stamp block (envelope v2.2) and Scratch 3.0 studio UI polish.
+- `53bbd6c` — Add video sensing extension with microphone loudness and envelope v2.3.
 
 Current local implementation status:
 
@@ -44,7 +44,7 @@ Current local implementation status:
 - **Pen layer + Pixi advanced looks (envelope v2.1)** published in `ce19a08`.
 - **Pen stamp block + envelope v2.2 stamps** published in `afdb00f`.
 - **Scratch 3.0 studio UI sizing/styling polish** published in `afdb00f`.
-- **Video sensing extension (envelope v2.3, loudness + motion blocks)** implemented locally (not yet published).
+- **Video sensing extension (envelope v2.3, loudness + motion blocks)** published in `53bbd6c`.
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
@@ -193,10 +193,11 @@ Developed:
 - Pen layer with Blockly blocks, DOM/Pixi rendering, and envelope v2.1 pen trails.
 - Pen stamp block (`ace_pen_stamp`) with DOM/Pixi stamp rendering and envelope v2.2 `stage.stamps`.
 - Scratch 3.0 studio UI polish: Zelos 75% grid, Scratch Blockly inject options, toolbox/flyout/stage/sprite-pane CSS.
+- Video sensing extension with `MediaSensingEngine`, Blockly video blocks, `VideoOverlay.jsx`, microphone loudness, and envelope v2.3 `stage.video`.
 
 ### Block Coding (Published)
 
-Status: Phase 1–3 Scratch parity + libraries + monitors + AI backdrops + Pixi adapter + pen layer + pen stamp (v2.2) + Scratch UI polish published. See `documentation/06-block-coding/implementation-status.md`.
+Status: Phase 1–3 Scratch parity + libraries + monitors + AI backdrops + Pixi adapter + pen layer + pen stamp (v2.2) + Scratch UI polish + video sensing (v2.3) published. See `documentation/06-block-coding/implementation-status.md`.
 
 Developed:
 
@@ -204,7 +205,7 @@ Developed:
 - Blockly Zelos theme and Scratch palette order,
 - ACE Stage Engine Phases 1–3,
 - Operators/Lists/My Blocks/Pen (including stamp),
-- project envelope through v2.2 (local),
+- project envelope through v2.3,
 - ACE backdrop library + procedural generator + AI-generated SVG backdrops,
 - DOM canvas color sampler for touching-color blocks,
 - shared Scratch-style asset library modal + ACE sprite library (48 SVGs),
@@ -213,8 +214,9 @@ Developed:
 - pen trail runtime + Blockly pen blocks + DOM/Pixi pen layer,
 - pen stamp runtime + Blockly block + DOM/Pixi stamp overlay,
 - Scratch 3.0 studio sizing/styling polish (`scratchBlocklyOptions.js`, `app.css`),
+- video sensing + microphone loudness via `MediaSensingEngine` (`videoLayer.js`, `VideoOverlay.jsx`, envelope v2.3),
 - block registry and scratch parity strategy docs,
-- StageRuntime smoke 53/53; stage renderer smoke 11/11; PHPUnit 121.
+- StageRuntime smoke 59/59; media sensing smoke 13/13; stage renderer smoke 13/13; PHPUnit 122.
 
 Next action:
 
@@ -439,7 +441,6 @@ Published:
 Not published (local only):
 
 - PostgreSQL local setup (Docker unavailable).
-- Video sensing extension (envelope v2.3, `MediaSensingEngine`, Blockly video blocks, `VideoOverlay.jsx`).
 
 Not published (blocked):
 
@@ -447,7 +448,7 @@ Not published (blocked):
 
 1. Configure PostgreSQL once local services are available.
 2. ~~Publish pen stamp (v2.2) and Scratch UI polish slice.~~ Done (`afdb00f`).
-3. ~~Video sensing extension.~~ Done locally (envelope v2.3); publish next.
+3. ~~Video sensing extension.~~ Done (`53bbd6c`).
 4. ACE-only AI / robotics blocks (Phase 4).
 
 ## Ledger Update Rule
