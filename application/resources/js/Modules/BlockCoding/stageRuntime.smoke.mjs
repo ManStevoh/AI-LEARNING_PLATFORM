@@ -174,6 +174,15 @@ runtime.setVariableById('items-var', ['a', 'b']);
 runtime.setMonitorVisible('list:length:items-var', true, { label: 'length of items' });
 assert('list length monitor', runtime.getMonitorSnapshot().find((m) => m.id === 'list:length:items-var')?.value === 2);
 
+runtime.penDown();
+runtime.setPenColorTo('#ff0000');
+runtime.setPenSizeTo(4);
+await runtime.goToXY(40, 20);
+runtime.penUp();
+assert('pen trail recorded', Array.isArray(runtime.stage.penTrails) && runtime.stage.penTrails.length >= 1);
+runtime.clearPen();
+assert('clear pen trails', runtime.stage.penTrails.length === 0);
+
 let backdropHit = false;
 runtime.onBackdropSwitched('grass', async () => {
     backdropHit = true;

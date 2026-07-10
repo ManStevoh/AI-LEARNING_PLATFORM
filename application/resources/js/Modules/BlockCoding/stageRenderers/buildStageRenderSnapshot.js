@@ -1,5 +1,6 @@
 import { normalizeBackdropEntry, resolveBackdropImageUrl } from '../backdropAssets.js';
 import { resolveCostumeImageUrl } from '../costumeAssets.js';
+import { normalizePenTrails } from '../penLayer.js';
 
 export function scratchToStagePixels(sprite, stage) {
     const width = stage.width ?? 480;
@@ -53,6 +54,10 @@ function buildSpriteRenderModel(sprite, stage, lessonSlug) {
             ghost: Math.max(0, Math.min(100, sprite.effects?.ghost ?? 0)),
             brightness: Math.max(-100, Math.min(100, sprite.effects?.brightness ?? 0)),
             color: (sprite.effects?.color ?? 0) % 200,
+            fisheye: Math.max(0, sprite.effects?.fisheye ?? 0),
+            whirl: Math.max(0, sprite.effects?.whirl ?? 0),
+            pixelate: Math.max(0, sprite.effects?.pixelate ?? 0),
+            mosaic: Math.max(0, sprite.effects?.mosaic ?? 0),
         },
         say: sprite.say ?? null,
         think: sprite.think ?? null,
@@ -71,6 +76,7 @@ export function buildStageRenderSnapshot(snapshot, lessonSlug = null) {
         backdropImageUrl: normalizedBackdrop
             ? resolveBackdropImageUrl(normalizedBackdrop, lessonSlug)
             : null,
+        penTrails: normalizePenTrails(stage.penTrails),
         sprites: (snapshot?.sprites ?? [])
             .map((sprite) => buildSpriteRenderModel(sprite, stage, lessonSlug))
             .sort((left, right) => left.layer - right.layer),

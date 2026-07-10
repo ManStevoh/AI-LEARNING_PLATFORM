@@ -6,9 +6,9 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 
 - **Last updated:** 2026-07-10
 - **Engine phase:** Phase 3 — assets + libraries + monitors
-- **Published to GitHub:** `0d42a45`
-- **Custom ACE blocks:** ~78 done (plus Blockly control/math/text/variables/lists/procedures)
-- **Tests:** 117 PHPUnit + StageRuntime smoke 47/47
+- **Published to GitHub:** pending (pen layer slice)
+- **Custom ACE blocks:** ~84 done (plus Blockly control/math/text/variables/lists/procedures)
+- **Tests:** 120 PHPUnit + StageRuntime smoke 49/49 + stage renderer smoke 11/11
 
 ## Done
 
@@ -28,6 +28,7 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 | Sensing | Pixel color touching (canvas sampler) | `stageColorSampler.js` |
 | Architecture | Stage rendering ADR | ADR 0010 |
 | Architecture | PixiJS stage renderer adapter (feature-flagged) | `stageRenderers/` |
+| Runtime | Pen layer with Blockly blocks + Pixi/DOM rendering | envelope v2.1, `penLayer.js` |
 | Teacher | Skill mastery | `/teacher/skills` |
 
 ## In Progress / Partial
@@ -35,20 +36,20 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 | Item | Blocker or remaining work |
 |------|---------------------------|
 | Loudness | Stub until microphone path |
-| PixiJS pen/effects polish | Pen trails and advanced filters still runtime-first |
 
 ## Pending (Next Slices)
 
 | Priority | Item | Phase | Ref |
 |----------|------|-------|-----|
-| P1 | Pen layer + advanced looks effects on Pixi path | 3 | ADR 0010 |
+| P1 | Pen stamp block | 3 | block registry |
+| P2 | Video sensing extension | 4 | block registry |
 
 ## Verification (Latest)
 
 ```text
-php artisan test                 → 119 passed
-node stageRuntime.smoke.mjs      → 47/47 passed
-node stageRenderer.smoke.mjs     → pass
+php artisan test                 → 120 passed
+node stageRuntime.smoke.mjs      → 49/49 passed
+node stageRenderer.smoke.mjs     → 11/11 passed
 npm run build                    → pass
 ```
 

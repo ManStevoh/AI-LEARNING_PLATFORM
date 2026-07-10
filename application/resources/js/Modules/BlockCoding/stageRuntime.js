@@ -14,11 +14,13 @@ import {
     defaultMonitorLayout,
     normalizeMonitorState,
 } from './stageMonitors.js';
+import { DEFAULT_PEN, normalizePenColor, normalizePenSize, normalizePenState, normalizePenTrails } from './penLayer.js';
 
 const DEFAULT_STAGE = {
     width: 480,
     height: 360,
     background: '#dbeafe',
+    penTrails: [],
     backdrops: [
         { id: 'backdrop-1', name: 'blue sky', color: '#dbeafe' },
         { id: 'backdrop-2', name: 'grass', color: '#bbf7d0' },
@@ -55,6 +57,7 @@ const DEFAULT_SPRITE = {
     isClone: false,
     cloneOf: null,
     dragMode: 'draggable',
+    pen: structuredClone(DEFAULT_PEN),
 };
 
 export class StageRuntime {
@@ -123,6 +126,7 @@ export class StageRuntime {
             Math.max(0, normalized.backdropIndex ?? 0),
             normalized.backdrops.length - 1,
         );
+        normalized.penTrails = normalizePenTrails(normalized.penTrails);
 
         this.applyBackdropVisual(normalized);
 
@@ -195,6 +199,7 @@ export class StageRuntime {
         this.initialStage.backdropAssetUuid = this.stage.backdropAssetUuid;
         this.initialStage.backdropLibraryId = this.stage.backdropLibraryId;
         this.initialStage.backdropProceduralSeed = this.stage.backdropProceduralSeed;
+        this.initialStage.penTrails = structuredClone(this.stage.penTrails ?? []);
     }
 
     ensureSpriteLayers() {
@@ -236,6 +241,10 @@ export class StageRuntime {
                 ...structuredClone(DEFAULT_SPRITE.effects),
                 ...(normalized.effects ?? {}),
             };
+            normalized.pen = normalizePenState({
+                ...structuredClone(DEFAULT_PEN),
+                ...(normalized.pen ?? {}),
+            });
 
             return normalized;
         });
@@ -539,7 +548,9 @@ export class StageRuntime {
         this.stopResolve = null;
         this.loopCount = 0;
         this.error = null;
+        const preservedPenTrails = structuredClone(this.stage?.penTrails ?? []);
         this.stage = structuredClone(this.initialStage);
+        this.stage.penTrails = preservedPenTrails;
         this.sprites = structuredClone(this.initialSprites);
         this.ensureSpriteLayers();
         this.keysHeld.clear();
@@ -989,15 +1000,110 @@ export class StageRuntime {
         await this.turnDegrees(-(Number(degrees) || 0));
     }
 
+    ensurePenState(sprite) {
+        sprite.pen = normalizePenState(sprite.pen ?? DEFAULT_PEN);
+    }
+
+    recordPenSegment(sprite, x1, y1, x2, y2) {
+        this.ensurePenState(sprite);
+
+        if (!sprite.pen.down || (x1 === x2 && y1 === y2)) {
+            return;
+        }
+
+        this.stage.penTrails = this.stage.penTrails ?? [];
+        this.stage.penTrails.push({
+            x1,
+            y1,
+            x2,
+            y2,
+            color: sprite.pen.color,
+            size: sprite.pen.size,
+            spriteId: sprite.id,
+        });
+    }
+
+    trackSpriteMove(sprite, previousX, previousY) {
+        this.recordPenSegment(sprite, previousX, previousY, sprite.x, sprite.y);
+    }
+
+    penDown() {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const sprite = this.getActiveSprite();
+        this.ensurePenState(sprite);
+        sprite.pen.down = true;
+        this.emitChange();
+    }
+
+    penUp() {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const sprite = this.getActiveSprite();
+        this.ensurePenState(sprite);
+        sprite.pen.down = false;
+        this.emitChange();
+    }
+
+    setPenColorTo(color = '#000000') {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const sprite = this.getActiveSprite();
+        this.ensurePenState(sprite);
+        sprite.pen.color = normalizePenColor(color);
+        this.emitChange();
+    }
+
+    changePenSizeBy(amount = 0) {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const sprite = this.getActiveSprite();
+        this.ensurePenState(sprite);
+        sprite.pen.size = normalizePenSize(sprite.pen.size + (Number(amount) || 0));
+        this.emitChange();
+    }
+
+    setPenSizeTo(size = 1) {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const sprite = this.getActiveSprite();
+        this.ensurePenState(sprite);
+        sprite.pen.size = normalizePenSize(size);
+        this.emitChange();
+    }
+
+    clearPen() {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        this.stage.penTrails = [];
+        this.syncInitialStage();
+        this.emitChange();
+    }
+
     async goToXY(x = 0, y = 0) {
         if (this.shouldStop()) {
             return;
         }
 
         const sprite = this.getActiveSprite();
+        const previousX = sprite.x;
+        const previousY = sprite.y;
         sprite.x = Number(x) || 0;
         sprite.y = Number(y) || 0;
         this.clampSprite(sprite);
+        this.trackSpriteMove(sprite, previousX, previousY);
         this.emitChange();
         await this.wait(250);
     }
@@ -1039,9 +1145,12 @@ export class StageRuntime {
             }
 
             const progress = frame / frames;
+            const previousX = sprite.x;
+            const previousY = sprite.y;
             sprite.x = startX + (targetX - startX) * progress;
             sprite.y = startY + (targetY - startY) * progress;
             this.clampSprite(sprite);
+            this.trackSpriteMove(sprite, previousX, previousY);
             this.emitChange();
             await this.wait(frameDelayMs);
         }
@@ -1103,8 +1212,11 @@ export class StageRuntime {
         }
 
         const sprite = this.getActiveSprite();
+        const previousX = sprite.x;
+        const previousY = sprite.y;
         sprite.x += Number(amount) || 0;
         this.clampSprite(sprite);
+        this.trackSpriteMove(sprite, previousX, previousY);
         this.emitChange();
         await this.wait(100);
     }
@@ -1115,8 +1227,11 @@ export class StageRuntime {
         }
 
         const sprite = this.getActiveSprite();
+        const previousX = sprite.x;
+        const previousY = sprite.y;
         sprite.x = Number(value) || 0;
         this.clampSprite(sprite);
+        this.trackSpriteMove(sprite, previousX, previousY);
         this.emitChange();
         await this.wait(100);
     }
@@ -1127,8 +1242,11 @@ export class StageRuntime {
         }
 
         const sprite = this.getActiveSprite();
+        const previousX = sprite.x;
+        const previousY = sprite.y;
         sprite.y += Number(amount) || 0;
         this.clampSprite(sprite);
+        this.trackSpriteMove(sprite, previousX, previousY);
         this.emitChange();
         await this.wait(100);
     }
@@ -1139,8 +1257,11 @@ export class StageRuntime {
         }
 
         const sprite = this.getActiveSprite();
+        const previousX = sprite.x;
+        const previousY = sprite.y;
         sprite.y = Number(value) || 0;
         this.clampSprite(sprite);
+        this.trackSpriteMove(sprite, previousX, previousY);
         this.emitChange();
         await this.wait(100);
     }

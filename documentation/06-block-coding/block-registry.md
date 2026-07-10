@@ -170,13 +170,25 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 | Procedural | Seed-based unique SVG surprise backdrops | done |
 | AI-generated | Child-safe prompts via AI Gateway | done |
 
+## Pen
+
+| Block ID | Label | Scratch equivalent | Generator | Runtime | Phase | Status |
+|----------|-------|--------------------|-----------|---------|-------|--------|
+| `ace_pen_down` | pen down | pen down | yes | yes | 3 | done |
+| `ace_pen_up` | pen up | pen up | yes | yes | 3 | done |
+| `ace_pen_set_color` | set pen color to | set pen color to | yes | yes | 3 | done |
+| `ace_pen_change_size` | change pen size by | change pen size by | yes | yes | 3 | done |
+| `ace_pen_set_size` | set pen size to | set pen size to | yes | yes | 3 | done |
+| `ace_pen_clear` | erase all | erase all | yes | yes | 3 | done |
+
 ## Not in this slice (later)
 
 | Item | Reason |
 |------|--------|
 | Scratch-style dynamic “Make a List” | Blockly 13 has no `listsDynamic`; static list blocks used |
 | Microphone loudness | Stub until media permission path exists |
-| Video sensing / pen / extensions | Phase 3+ |
+| Video sensing | Stub until media permission path |
+| Pen stamp block | Future slice |
 | ACE-only AI / robotics blocks | Phase 4 |
 
 ## ACE-only (future)

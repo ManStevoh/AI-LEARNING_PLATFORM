@@ -1219,6 +1219,98 @@ const COLOUR_OPTIONS = [
     ['white', '#ffffff'],
 ];
 
+Blockly.Blocks.ace_pen_down = {
+    init() {
+        this.appendDummyInput().appendField('pen down');
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('ace_pen_blocks');
+        this.setTooltip('Start drawing with the pen as the sprite moves.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_pen_down = function () {
+    return 'runtime.penDown();\n';
+};
+
+Blockly.Blocks.ace_pen_up = {
+    init() {
+        this.appendDummyInput().appendField('pen up');
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('ace_pen_blocks');
+        this.setTooltip('Stop drawing with the pen.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_pen_up = function () {
+    return 'runtime.penUp();\n';
+};
+
+Blockly.Blocks.ace_pen_set_color = {
+    init() {
+        this.appendDummyInput()
+            .appendField('set pen color to')
+            .appendField(new Blockly.FieldDropdown(COLOUR_OPTIONS), 'COLOR');
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('ace_pen_blocks');
+        this.setTooltip('Set the pen color.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_pen_set_color = function (block) {
+    const color = block.getFieldValue('COLOR');
+
+    return `runtime.setPenColorTo(${JSON.stringify(color)});\n`;
+};
+
+Blockly.Blocks.ace_pen_change_size = {
+    init() {
+        this.appendValueInput('SIZE').setCheck('Number').appendField('change pen size by');
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('ace_pen_blocks');
+        this.setTooltip('Change the pen thickness.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_pen_change_size = function (block, generator) {
+    const size = generator.valueToCode(block, 'SIZE', Order.NONE) || '1';
+
+    return `runtime.changePenSizeBy(${size});\n`;
+};
+
+Blockly.Blocks.ace_pen_set_size = {
+    init() {
+        this.appendValueInput('SIZE').setCheck('Number').appendField('set pen size to');
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('ace_pen_blocks');
+        this.setTooltip('Set the pen thickness.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_pen_set_size = function (block, generator) {
+    const size = generator.valueToCode(block, 'SIZE', Order.NONE) || '1';
+
+    return `runtime.setPenSizeTo(${size});\n`;
+};
+
+Blockly.Blocks.ace_pen_clear = {
+    init() {
+        this.appendDummyInput().appendField('erase all');
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('ace_pen_blocks');
+        this.setTooltip('Clear all pen marks from the stage.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_pen_clear = function () {
+    return 'runtime.clearPen();\n';
+};
+
 Blockly.Blocks.ace_sensing_touching_color = {
     init() {
         this.appendDummyInput()

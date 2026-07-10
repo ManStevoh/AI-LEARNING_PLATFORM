@@ -27,9 +27,35 @@ Raw Blockly serialization only:
 
 Loaders detect legacy format when `format` is absent.
 
+## ACE project envelope (schema `2.1`)
+
+Current version. Adds persisted pen trail segments on top of v2.0.
+
+```json
+{
+  "format": "ace_project",
+  "version": "2.1",
+  "stage": {
+    "backdrops": [{ "id": "backdrop-1", "name": "blue sky", "color": "#dbeafe" }],
+    "backdropIndex": 0,
+    "penTrails": [
+      {
+        "x1": 0,
+        "y1": 0,
+        "x2": 40,
+        "y2": 20,
+        "color": "#ff0000",
+        "size": 4,
+        "spriteId": "sprite-1"
+      }
+    ]
+  }
+}
+```
+
 ## ACE project envelope (schema `2.0`)
 
-Current version. Adds AI-generated backdrop refs (tenant-scoped SVG assets + theme metadata) on top of v1.9.
+Adds AI-generated backdrop refs (tenant-scoped SVG assets + theme metadata) on top of v1.9.
 
 ```json
 {
@@ -272,7 +298,8 @@ Same as above without the `sounds` array.
 | `1.7` | Platform backdrop library + procedural backdrops | legacy |
 | `1.8` | Platform sprite/costume library refs | legacy |
 | `1.9` | Blockly variable/list stage monitors | legacy |
-| `2.0` | AI-generated backdrop refs | **current** |
+| `2.0` | AI-generated backdrop refs | legacy |
+| `2.1` | Pen trail segments on stage | **current** |
 
 Migrations must accept all prior versions on read and write the latest supported version on save.
 

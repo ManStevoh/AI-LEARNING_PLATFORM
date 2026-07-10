@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `0d42a45` — Add PixiJS stage renderer adapter behind feature flag.
+- `pending` — Add pen layer with Pixi advanced looks effects (envelope v2.1).
 
 Current local implementation status:
 
@@ -41,6 +41,7 @@ Current local implementation status:
 - **Variable/list stage monitors (envelope v1.9)** published in `0fe6297`.
 - **AI-generated backdrops (envelope v2.0)** published in `0ece71b`.
 - **PixiJS stage renderer adapter (ADR 0010)** published in `0d42a45`.
+- **Pen layer + Pixi advanced looks (envelope v2.1)** pending publish.
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
@@ -186,25 +187,27 @@ Developed:
 - variable/list stage monitors with Blockly checkboxes (envelope v1.9).
 - AI-generated backdrops via AI Gateway with theme picker (envelope v2.0).
 - PixiJS stage renderer adapter with DOM default and feature-flagged Pixi path.
+- Pen layer with Blockly blocks, DOM/Pixi rendering, and envelope v2.1 pen trails.
 
 ### Block Coding (Published)
 
-Status: Phase 1–3 Scratch parity + libraries + monitors + AI backdrops + Pixi adapter published. See `documentation/06-block-coding/implementation-status.md`.
+Status: Phase 1–3 Scratch parity + libraries + monitors + AI backdrops + Pixi adapter + pen layer published. See `documentation/06-block-coding/implementation-status.md`.
 
 Developed:
 
 - Scratch-style coding studio UI (tabs, stage, sprite pane, green flag/stop),
 - Blockly Zelos theme and Scratch palette order,
 - ACE Stage Engine Phases 1–3,
-- Operators/Lists/My Blocks,
-- project envelope through v2.0,
+- Operators/Lists/My Blocks/Pen,
+- project envelope through v2.1,
 - ACE backdrop library + procedural generator + AI-generated SVG backdrops,
 - DOM canvas color sampler for touching-color blocks,
 - shared Scratch-style asset library modal + ACE sprite library (48 SVGs),
 - Blockly variable/list stage monitors with runtime variable store,
-- PixiJS stage renderer adapter (`stageRenderers/`, dynamic import),
+- PixiJS stage renderer adapter with advanced looks filters (`stageRenderers/`),
+- pen trail runtime + Blockly pen blocks + DOM/Pixi pen layer,
 - block registry and scratch parity strategy docs,
-- StageRuntime smoke 47/47; stage renderer smoke 9/9; PHPUnit 119.
+- StageRuntime smoke 49/49; stage renderer smoke 11/11; PHPUnit 120.
 
 Next action:
 
@@ -418,6 +421,7 @@ Published:
 - variable/list stage monitors with Blockly checkboxes (envelope v1.9),
 - AI-generated backdrops via AI Gateway with theme picker (envelope v2.0),
 - PixiJS stage renderer adapter (ADR 0010, feature-flagged),
+- pen layer with Blockly blocks and envelope v2.1 pen trails,
 - Scratch block coding studio and ACE Stage Engine Phases 1–3,
 - block coding docs (registry, parity strategy, status procedure).
 
@@ -430,7 +434,7 @@ Not published (blocked):
 ## Immediate Next Build Sequence
 
 1. Configure PostgreSQL once local services are available.
-2. Pen layer + advanced looks effects on Pixi renderer path.
+2. Pen stamp block and video sensing extension.
 
 ## Ledger Update Rule
 

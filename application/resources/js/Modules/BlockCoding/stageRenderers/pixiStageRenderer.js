@@ -1,4 +1,6 @@
 import { buildStageRenderSnapshot } from './buildStageRenderSnapshot.js';
+import { scratchSegmentToStagePixels } from '../penLayer.js';
+import { buildPixiSpriteFilters } from './pixiSpriteFilters.js';
 
 const SPRITE_FACE_PX = 48;
 
@@ -29,20 +31,16 @@ async function loadTextureFromUrl(url, cache, Texture) {
     }
 }
 
-function applySpriteEffects(displayObject, effects, ColorMatrixFilter) {
-    const ghost = effects?.ghost ?? 0;
-    const brightness = effects?.brightness ?? 0;
-    const hue = (effects?.color ?? 0) * 1.8;
+function applySpritePresentation(node, displayObject, effects, pixi) {
+    const presentation = buildPixiSpriteFilters(effects, pixi);
 
-    displayObject.alpha = 1 - ghost / 100;
+    displayObject.alpha = presentation.alpha;
+    node.filters = presentation.filters;
 
-    if (brightness !== 0 || hue !== 0) {
-        const filter = new ColorMatrixFilter();
-        filter.hue(hue, false);
-        filter.brightness(1 + brightness / 100, false);
-        displayObject.filters = [filter];
-    } else {
-        displayObject.filters = null;
+    if (presentation.quantize > 0) {
+        const step = presentation.quantize;
+        node.x = Math.round(node.x / step) * step;
+        node.y = Math.round(node.y / step) * step;
     }
 }
 
@@ -81,9 +79,14 @@ export class PixiStageRenderer {
         container.appendChild(this.app.canvas);
 
         this.backdropLayer = new pixi.Graphics();
+        this.penLayer = new pixi.Graphics();
         this.spriteLayer = new pixi.Container();
         this.app.stage.sortableChildren = true;
+        this.backdropLayer.zIndex = 0;
+        this.penLayer.zIndex = 5;
+        this.spriteLayer.zIndex = 10;
         this.app.stage.addChild(this.backdropLayer);
+        this.app.stage.addChild(this.penLayer);
         this.app.stage.addChild(this.spriteLayer);
         this.mounted = true;
     }
@@ -99,7 +102,24 @@ export class PixiStageRenderer {
         const activeSpriteId = runtimeOptions.activeSpriteId ?? renderSnapshot.activeSpriteId;
 
         await this.drawBackdrop(renderSnapshot);
+        this.drawPen(renderSnapshot);
         await this.drawSprites(renderSnapshot, { interactive, onSpriteClick, activeSpriteId });
+    }
+
+    drawPen(renderSnapshot) {
+        const stage = { width: renderSnapshot.width, height: renderSnapshot.height };
+        this.penLayer.clear();
+
+        for (const segment of renderSnapshot.penTrails ?? []) {
+            const line = scratchSegmentToStagePixels(segment, stage);
+            this.penLayer.moveTo(line.x1, line.y1);
+            this.penLayer.lineTo(line.x2, line.y2);
+            this.penLayer.stroke({
+                width: segment.size,
+                color: segment.color,
+                cap: 'round',
+            });
+        }
     }
 
     async drawBackdrop(renderSnapshot) {
@@ -147,7 +167,7 @@ export class PixiStageRenderer {
             }
 
             node.visible = sprite.visible;
-            node.zIndex = sprite.layer;
+            node.zIndex = 10 + sprite.layer;
             node.x = sprite.x;
             node.y = sprite.y;
             node.rotation = (sprite.rotation * Math.PI) / 180;
@@ -176,7 +196,7 @@ export class PixiStageRenderer {
                 displayObject.anchor.set(0.5);
             }
 
-            applySpriteEffects(displayObject, sprite.effects, this.pixi.ColorMatrixFilter);
+            applySpritePresentation(node, displayObject, sprite.effects, this.pixi);
             node.addChild(displayObject);
 
             node.off('pointertap');

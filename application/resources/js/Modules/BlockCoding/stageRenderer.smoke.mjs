@@ -59,6 +59,16 @@ const renderSnapshot = buildStageRenderSnapshot(snapshot);
 assert('buildStageRenderSnapshot width', renderSnapshot.width === 480);
 assert('buildStageRenderSnapshot sprite count', renderSnapshot.sprites.length === 1);
 assert('buildStageRenderSnapshot sprite layer', renderSnapshot.sprites[0].layer === 2);
+assert('buildStageRenderSnapshot advanced effects', renderSnapshot.sprites[0].effects.fisheye === 0);
+
+const withPen = {
+    ...snapshot,
+    stage: {
+        ...snapshot.stage,
+        penTrails: [{ x1: 0, y1: 0, x2: 50, y2: 50, color: '#ff0000', size: 2 }],
+    },
+};
+assert('pen trails in render snapshot', buildStageRenderSnapshot(withPen).penTrails.length === 1);
 
 const pixels = scratchToStagePixels(snapshot.sprites[0], snapshot.stage);
 assert('scratchToStagePixels x', pixels.x === 340);

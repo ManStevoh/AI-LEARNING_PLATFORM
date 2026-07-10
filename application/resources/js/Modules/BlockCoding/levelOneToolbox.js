@@ -194,6 +194,27 @@ export function getLevelOneToolbox(preset = 'level_1_default') {
             },
             {
                 kind: 'category',
+                name: 'Pen',
+                categorystyle: 'pen_category',
+                contents: [
+                    { kind: 'block', type: 'ace_pen_down' },
+                    { kind: 'block', type: 'ace_pen_up' },
+                    { kind: 'block', type: 'ace_pen_set_color' },
+                    {
+                        kind: 'block',
+                        type: 'ace_pen_change_size',
+                        inputs: { SIZE: { shadow: { type: 'math_number', fields: { NUM: 1 } } } },
+                    },
+                    {
+                        kind: 'block',
+                        type: 'ace_pen_set_size',
+                        inputs: { SIZE: { shadow: { type: 'math_number', fields: { NUM: 1 } } } },
+                    },
+                    { kind: 'block', type: 'ace_pen_clear' },
+                ],
+            },
+            {
+                kind: 'category',
                 name: 'Sound',
                 categorystyle: 'sound_category',
                 contents: [

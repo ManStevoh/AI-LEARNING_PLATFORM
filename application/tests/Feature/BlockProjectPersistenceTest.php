@@ -416,6 +416,71 @@ class BlockProjectPersistenceTest extends TestCase
             );
     }
 
+    public function test_learner_can_save_project_envelope_with_pen_trails(): void
+    {
+        $this->seed(CurriculumFoundationSeeder::class);
+
+        $user = User::factory()->create();
+        $institution = Institution::factory()->create();
+        $this->attachLearner($user, $institution);
+
+        $lessonSlug = 'unit-01-meet-the-coding-studio';
+        $workspace = [
+            'format' => 'ace_project',
+            'version' => '2.1',
+            'blockly' => $this->sampleWorkspace(),
+            'sprites' => [
+                [
+                    'id' => 'sprite-1',
+                    'name' => 'Sprite1',
+                    'x' => 0,
+                    'y' => 0,
+                    'direction' => 90,
+                    'visible' => true,
+                    'emoji' => '🐱',
+                ],
+            ],
+            'active_sprite_id' => 'sprite-1',
+            'stage' => [
+                'backdrops' => [
+                    [
+                        'id' => 'backdrop-1',
+                        'name' => 'blue sky',
+                        'color' => '#dbeafe',
+                    ],
+                ],
+                'backdropIndex' => 0,
+                'penTrails' => [
+                    [
+                        'x1' => 0,
+                        'y1' => 0,
+                        'x2' => 40,
+                        'y2' => 20,
+                        'color' => '#ff0000',
+                        'size' => 4,
+                        'spriteId' => 'sprite-1',
+                    ],
+                ],
+            ],
+        ];
+
+        $this->actingAs($user)->postJson("/learner/learn/{$lessonSlug}/project", [
+            'workspace' => $workspace,
+            'generated_code' => 'runtime.penDown(); runtime.goToXY(40, 20);',
+        ])->assertOk()->assertJsonPath('saved_project.schema_version', '2.1');
+
+        $this->withoutVite()->actingAs($user)->get("/learner/learn/{$lessonSlug}")
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('savedProject', fn (Assert $project) => $project
+                    ->where('schema_version', '2.1')
+                    ->where('workspace.stage.penTrails.0.color', '#ff0000')
+                    ->where('workspace.stage.penTrails.0.size', 4)
+                    ->etc()
+                )
+            );
+    }
+
     private function attachLearner(User $user, Institution $institution): void
     {
         $institution->users()->attach($user, [

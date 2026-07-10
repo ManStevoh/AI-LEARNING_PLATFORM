@@ -4,6 +4,7 @@ import { resolveCostumeImageUrl } from './costumeAssets.js';
 import { createStageColorSamplerAdapter } from './stageColorSampler.js';
 import SpriteThumb from './SpriteThumb';
 import StageMonitorOverlay from './StageMonitorOverlay';
+import PenTrailOverlay from './PenTrailOverlay.jsx';
 import { STAGE_RENDERER_PIXI } from './stageRenderers/stageRendererConfig.js';
 import { useStageRenderer } from './stageRenderers/useStageRenderer.js';
 
@@ -225,6 +226,7 @@ export default function BlockStage({
                                     src={backdropImage}
                                 />
                             ) : null}
+                            <PenTrailOverlay stage={stage} trails={stage.penTrails} />
                             {snapshot.sprites.map((sprite) =>
                                 sprite.visible ? (
                                     <SpriteVisual
@@ -287,6 +289,7 @@ export default function BlockStage({
                                 src={backdropImage}
                             />
                         ) : null}
+                        <PenTrailOverlay stage={stage} trails={stage.penTrails} />
                         {snapshot.sprites.map((sprite) =>
                             sprite.visible ? (
                                 <div key={sprite.id} className="absolute" style={spritePositionStyle(sprite, stage)}>
