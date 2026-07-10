@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `pending` — Add PixiJS stage renderer adapter (ADR 0010).
+- `0d42a45` — Add PixiJS stage renderer adapter behind feature flag.
 
 Current local implementation status:
 
@@ -40,7 +40,7 @@ Current local implementation status:
 - **ACE sprite library + Choose sprite/costume modals (envelope v1.8)** published in `34728d0`.
 - **Variable/list stage monitors (envelope v1.9)** published in `0fe6297`.
 - **AI-generated backdrops (envelope v2.0)** published in `0ece71b`.
-- **PixiJS stage renderer adapter (ADR 0010)** pending publish.
+- **PixiJS stage renderer adapter (ADR 0010)** published in `0d42a45`.
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
