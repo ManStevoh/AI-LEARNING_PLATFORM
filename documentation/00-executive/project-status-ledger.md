@@ -46,7 +46,7 @@ Current local implementation status:
 - **Scratch 3.0 studio UI sizing/styling polish** published in `afdb00f`.
 - **Video sensing extension (envelope v2.3, loudness + motion blocks)** published in `53bbd6c`.
 - **ACE-only AI / curriculum / robotics blocks (envelope v2.4)** published in `ec59a85`.
-- **Institution-specific block packs (AI/Curriculum/Robotics gating)** implemented locally (not yet published).
+- **Institution-specific block packs (AI/Curriculum/Robotics gating)** published in `e2eb4df`.
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
@@ -458,7 +458,7 @@ Not published (blocked):
 2. ~~Publish pen stamp (v2.2) and Scratch UI polish slice.~~ Done (`afdb00f`).
 3. ~~Video sensing extension.~~ Done (`53bbd6c`).
 4. ~~ACE-only AI / robotics blocks (Phase 4).~~ Done (`ec59a85`).
-5. ~~Institution-specific block packs or Level 2 code bridge (Phase 4+).~~ Block packs done locally; publish next.
+5. ~~Institution-specific block packs (Phase 4+).~~ Done (`e2eb4df`).
 6. Level 2 read-only generated-code panel (needs mapping spec).
 
 ## Ledger Update Rule
