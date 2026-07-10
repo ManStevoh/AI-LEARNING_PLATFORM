@@ -284,8 +284,8 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
 
     return (
         <section className="scratch-studio rounded-lg border border-[#d9d9d9] bg-white shadow-sm">
-            <div className="flex items-center justify-between border-b border-[#d9d9d9] bg-[#fafafa] px-3 py-2">
-                <div className="flex items-center gap-1">
+            <div className="scratch-studio-tabs flex items-end justify-between px-3 pt-1">
+                <div className="flex items-end gap-0.5">
                     {[
                         ['code', 'Code'],
                         ['costumes', 'Costumes'],
@@ -293,11 +293,7 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
                         ['sounds', 'Sounds'],
                     ].map(([tab, label]) => (
                         <button
-                            className={`rounded-t-md px-4 py-1.5 text-sm ${
-                                activeTab === tab
-                                    ? 'border border-b-0 border-[#d9d9d9] bg-white font-semibold text-[#855cd6]'
-                                    : 'text-[#999] hover:text-[#575e75]'
-                            }`}
+                            className={`scratch-studio-tab ${activeTab === tab ? 'is-active' : ''}`}
                             key={tab}
                             onClick={() => setActiveTab(tab)}
                             type="button"
@@ -322,8 +318,8 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
             </div>
 
             {activeTab === 'code' ? (
-                <div className="grid min-h-[min(720px,calc(100vh-11rem))] lg:grid-cols-[minmax(0,1fr)_420px]">
-                    <div className="min-w-0 border-b border-[#d9d9d9] lg:border-b-0 lg:border-r">
+                <div className="grid min-h-[min(640px,calc(100vh-12rem))] lg:grid-cols-[minmax(0,1fr)_520px]">
+                    <div className="min-h-[480px] min-w-0 border-b border-[#d9d9d9] lg:min-h-0 lg:border-b-0 lg:border-r">
                         <BlockWorkspace
                             externalSaveTrigger={assetSaveRevision}
                             getProjectExtras={getProjectExtras}
@@ -337,8 +333,8 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
                         />
                     </div>
 
-                    <div className="flex min-h-[320px] flex-col bg-[#fafafa]">
-                        <div className="flex items-center gap-2 border-b border-[#d9d9d9] px-3 py-2">
+                    <div className="flex min-h-[480px] flex-col bg-[#fafafa] lg:min-h-0">
+                        <div className="flex items-center gap-2 border-b border-[#d9d9d9] px-3 py-1.5">
                             <button
                                 aria-label="Run program"
                                 className="scratch-control-flag"

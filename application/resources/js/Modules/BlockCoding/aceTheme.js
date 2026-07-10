@@ -4,6 +4,18 @@ import { Theme, Themes } from 'blockly/core';
 export const aceTheme = Theme.defineTheme('ace', {
     base: Themes.Zelos,
     startHats: true,
+    fontStyle: {
+        family: 'Helvetica Neue, Helvetica, Arial, sans-serif',
+        weight: '500',
+        size: 12,
+    },
+    componentStyles: {
+        workspaceBackgroundColour: '#f2f2f2',
+        toolboxBackgroundColour: '#e6e6e6',
+        flyoutBackgroundColour: '#e6e6e6',
+        scrollbarColour: 'rgba(0, 0, 0, 0.18)',
+        scrollbarOpacity: 0.5,
+    },
     blockStyles: {
         ace_event_hat: {
             colourPrimary: '#FFBF00',

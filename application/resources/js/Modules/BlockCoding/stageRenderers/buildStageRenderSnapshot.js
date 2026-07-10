@@ -1,6 +1,6 @@
 import { normalizeBackdropEntry, resolveBackdropImageUrl } from '../backdropAssets.js';
 import { resolveCostumeImageUrl } from '../costumeAssets.js';
-import { normalizePenTrails } from '../penLayer.js';
+import { normalizePenTrails, normalizeStamps } from '../penLayer.js';
 
 export function scratchToStagePixels(sprite, stage) {
     const width = stage.width ?? 480;
@@ -64,6 +64,24 @@ function buildSpriteRenderModel(sprite, stage, lessonSlug) {
     };
 }
 
+function buildStampRenderModel(stamp, stage, lessonSlug) {
+    const position = scratchToStagePixels({ x: stamp.x, y: stamp.y }, stage);
+    const costume = stamp.costume;
+
+    return {
+        spriteId: stamp.spriteId,
+        x: position.x,
+        y: position.y,
+        rotation: stamp.direction - 90,
+        scale: (stamp.size ?? 100) / 100,
+        layer: stamp.layer ?? 0,
+        emoji:
+            costume?.emoji ??
+            (typeof costume === 'string' ? costume : '🐱'),
+        imageUrl: resolveCostumeImageUrl(costume, lessonSlug),
+    };
+}
+
 export function buildStageRenderSnapshot(snapshot, lessonSlug = null) {
     const stage = snapshot?.stage ?? {};
     const backdrop = stage.backdrops?.[stage.backdropIndex ?? 0];
@@ -77,6 +95,9 @@ export function buildStageRenderSnapshot(snapshot, lessonSlug = null) {
             ? resolveBackdropImageUrl(normalizedBackdrop, lessonSlug)
             : null,
         penTrails: normalizePenTrails(stage.penTrails),
+        stamps: normalizeStamps(stage.stamps)
+            .map((stamp) => buildStampRenderModel(stamp, stage, lessonSlug))
+            .sort((left, right) => left.layer - right.layer),
         sprites: (snapshot?.sprites ?? [])
             .map((sprite) => buildSpriteRenderModel(sprite, stage, lessonSlug))
             .sort((left, right) => left.layer - right.layer),

@@ -180,6 +180,17 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 | `ace_pen_change_size` | change pen size by | change pen size by | yes | yes | 3 | done |
 | `ace_pen_set_size` | set pen size to | set pen size to | yes | yes | 3 | done |
 | `ace_pen_clear` | erase all | erase all | yes | yes | 3 | done |
+| `ace_pen_stamp` | stamp | stamp | yes | yes | 3 | done |
+
+## Studio UI (Scratch parity)
+
+| Area | Description | Status |
+|------|-------------|--------|
+| Blockly inject | Zelos 75% grid unit, Scratch zoom/grid, Helvetica font | done |
+| Toolbox / flyout | Icon-only 60px toolbox, 56px category rows, flyout border | done |
+| Stage shell | 4:3 aspect ratio, max 480px, inset frame | done |
+| Sprite pane | Horizontal sprite strip, compact tiles, active highlight | done |
+| Studio tabs | Scratch-style tab bar with active state | done |
 
 ## Not in this slice (later)
 
@@ -188,7 +199,6 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 | Scratch-style dynamic “Make a List” | Blockly 13 has no `listsDynamic`; static list blocks used |
 | Microphone loudness | Stub until media permission path exists |
 | Video sensing | Stub until media permission path |
-| Pen stamp block | Future slice |
 | ACE-only AI / robotics blocks | Phase 4 |
 
 ## ACE-only (future)
@@ -206,4 +216,7 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 - Block definitions: `application/resources/js/Modules/BlockCoding/aceBlocks.js`
 - Toolbox: `application/resources/js/Modules/BlockCoding/levelOneToolbox.js`
 - Runtime: `application/resources/js/Modules/BlockCoding/stageRuntime.js`
+- Pen layer + stamps: `application/resources/js/Modules/BlockCoding/penLayer.js`, `PenTrailOverlay.jsx`
+- Scratch Blockly options: `application/resources/js/Modules/BlockCoding/scratchBlocklyOptions.js`
+- Studio CSS: `application/resources/css/app.css` (`.scratch-studio-*`, `.scratch-blockly-root`)
 - Smoke: `application/resources/js/Modules/BlockCoding/stageRuntime.smoke.mjs`

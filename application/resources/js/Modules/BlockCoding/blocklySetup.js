@@ -17,6 +17,11 @@ import { attachVariableMonitorCheckboxes, installRuntimeVariableGenerators } fro
 import { attachReporterMonitorCheckboxes } from './monitorCheckbox.js';
 import { aceTheme } from './aceTheme.js';
 import { getLevelOneToolbox } from './levelOneToolbox';
+import {
+    SCRATCH_GRID_OPTIONS,
+    SCRATCH_RENDERER_OVERRIDES,
+    SCRATCH_ZOOM_OPTIONS,
+} from './scratchBlocklyOptions.js';
 
 void blocks;
 void loops;
@@ -41,7 +46,9 @@ const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
 
 const BLOCKLY_MEDIA_URL = 'https://unpkg.com/blockly@13.1.1/media/';
 
-export function createBlockWorkspace(container, preset = 'level_1_default') {
+export function createBlockWorkspace(container, preset = 'level_1_default', options = {}) {
+    const scratch = options.scratch ?? false;
+
     return Blockly.inject(container, {
         toolbox: getLevelOneToolbox(preset),
         theme: aceTheme,
@@ -50,12 +57,13 @@ export function createBlockWorkspace(container, preset = 'level_1_default') {
         trashcan: true,
         sounds: false,
         scrollbars: true,
-        zoom: {
+        rendererOverrides: scratch ? SCRATCH_RENDERER_OVERRIDES : undefined,
+        zoom: scratch ? SCRATCH_ZOOM_OPTIONS : {
             controls: true,
             wheel: true,
             startScale: 0.9,
         },
-        grid: {
+        grid: scratch ? SCRATCH_GRID_OPTIONS : {
             spacing: 20,
             length: 1,
             colour: '#d9d9d9',

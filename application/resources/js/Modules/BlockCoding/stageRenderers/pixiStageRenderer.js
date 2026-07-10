@@ -80,14 +80,18 @@ export class PixiStageRenderer {
 
         this.backdropLayer = new pixi.Graphics();
         this.penLayer = new pixi.Graphics();
+        this.penStampLayer = new pixi.Container();
         this.spriteLayer = new pixi.Container();
         this.app.stage.sortableChildren = true;
         this.backdropLayer.zIndex = 0;
         this.penLayer.zIndex = 5;
+        this.penStampLayer.zIndex = 6;
         this.spriteLayer.zIndex = 10;
         this.app.stage.addChild(this.backdropLayer);
         this.app.stage.addChild(this.penLayer);
+        this.app.stage.addChild(this.penStampLayer);
         this.app.stage.addChild(this.spriteLayer);
+        this.stampNodes = new Map();
         this.mounted = true;
     }
 
@@ -103,6 +107,7 @@ export class PixiStageRenderer {
 
         await this.drawBackdrop(renderSnapshot);
         this.drawPen(renderSnapshot);
+        await this.drawStamps(renderSnapshot);
         await this.drawSprites(renderSnapshot, { interactive, onSpriteClick, activeSpriteId });
     }
 
@@ -120,6 +125,64 @@ export class PixiStageRenderer {
                 cap: 'round',
             });
         }
+    }
+
+    async drawStamps(renderSnapshot) {
+        const { Container, Sprite, Text } = this.pixi;
+        const seen = new Set();
+
+        for (const stamp of renderSnapshot.stamps ?? []) {
+            const stampKey = `${stamp.spriteId}-${stamp.x}-${stamp.y}-${stamp.rotation}`;
+            seen.add(stampKey);
+
+            let node = this.stampNodes.get(stampKey);
+
+            if (!node) {
+                node = new Container();
+                this.penStampLayer.addChild(node);
+                this.stampNodes.set(stampKey, node);
+            }
+
+            node.zIndex = stamp.layer ?? 0;
+            node.x = stamp.x;
+            node.y = stamp.y;
+            node.rotation = (stamp.rotation * Math.PI) / 180;
+            node.scale.set(stamp.scale ?? 1);
+            node.removeChildren();
+
+            const texture = await loadTextureFromUrl(stamp.imageUrl, this.textureCache, this.pixi.Texture);
+            let displayObject;
+
+            if (texture) {
+                displayObject = new Sprite(texture);
+                const size = SPRITE_FACE_PX * (stamp.scale ?? 1);
+                displayObject.anchor.set(0.5);
+                displayObject.width = size;
+                displayObject.height = size;
+            } else {
+                displayObject = new Text({
+                    text: stamp.emoji ?? '🐱',
+                    style: {
+                        fontFamily: '"Segoe UI Emoji", "Apple Color Emoji", sans-serif',
+                        fontSize: Math.round(32 * (stamp.scale ?? 1)),
+                        align: 'center',
+                    },
+                });
+                displayObject.anchor.set(0.5);
+            }
+
+            node.addChild(displayObject);
+        }
+
+        for (const [stampKey, node] of this.stampNodes.entries()) {
+            if (!seen.has(stampKey)) {
+                this.penStampLayer.removeChild(node);
+                node.destroy({ children: true });
+                this.stampNodes.delete(stampKey);
+            }
+        }
+
+        this.penStampLayer.sortChildren();
     }
 
     async drawBackdrop(renderSnapshot) {
@@ -231,6 +294,12 @@ export class PixiStageRenderer {
         }
 
         this.spriteNodes.clear();
+
+        for (const node of this.stampNodes?.values() ?? []) {
+            node.destroy({ children: true });
+        }
+
+        this.stampNodes?.clear();
 
         for (const texture of this.textureCache.values()) {
             texture.destroy(true);

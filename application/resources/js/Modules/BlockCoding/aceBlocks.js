@@ -1311,6 +1311,20 @@ javascriptGenerator.forBlock.ace_pen_clear = function () {
     return 'runtime.clearPen();\n';
 };
 
+Blockly.Blocks.ace_pen_stamp = {
+    init() {
+        this.appendDummyInput().appendField('stamp');
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('ace_pen_blocks');
+        this.setTooltip('Stamp a copy of the sprite costume at the current position.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_pen_stamp = function () {
+    return 'runtime.stamp();\n';
+};
+
 Blockly.Blocks.ace_sensing_touching_color = {
     init() {
         this.appendDummyInput()

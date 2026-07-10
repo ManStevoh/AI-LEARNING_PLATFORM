@@ -70,6 +70,27 @@ const withPen = {
 };
 assert('pen trails in render snapshot', buildStageRenderSnapshot(withPen).penTrails.length === 1);
 
+const withStamps = {
+    ...snapshot,
+    stage: {
+        ...snapshot.stage,
+        stamps: [
+            {
+                spriteId: 'sprite-1',
+                x: 100,
+                y: -40,
+                direction: 90,
+                size: 100,
+                costume: '🐱',
+                layer: 1,
+            },
+        ],
+    },
+};
+const stampSnapshot = buildStageRenderSnapshot(withStamps);
+assert('stamps in render snapshot', stampSnapshot.stamps.length === 1);
+assert('stamp render position', stampSnapshot.stamps[0].x === 340 && stampSnapshot.stamps[0].y === 220);
+
 const pixels = scratchToStagePixels(snapshot.sprites[0], snapshot.stage);
 assert('scratchToStagePixels x', pixels.x === 340);
 assert('scratchToStagePixels y', pixels.y === 220);

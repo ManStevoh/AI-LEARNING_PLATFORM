@@ -1,3 +1,5 @@
+import { normalizeCostumeEntry, serializeCostumeEntry } from './costumeAssets.js';
+
 export const DEFAULT_PEN = {
     down: false,
     color: '#000000',
@@ -46,6 +48,48 @@ export function normalizePenTrails(trails = []) {
     }
 
     return trails.map((segment) => normalizePenTrailSegment(segment));
+}
+
+export function normalizeStampEntry(stamp = {}) {
+    return {
+        spriteId: typeof stamp.spriteId === 'string' ? stamp.spriteId : null,
+        x: Number(stamp.x) || 0,
+        y: Number(stamp.y) || 0,
+        direction: Number(stamp.direction) || 90,
+        size: Math.max(1, Math.min(500, Math.round(Number(stamp.size) || 100))),
+        costume: normalizeCostumeEntry(stamp.costume),
+        layer: Number(stamp.layer) || 0,
+    };
+}
+
+export function normalizeStamps(stamps = []) {
+    if (!Array.isArray(stamps)) {
+        return [];
+    }
+
+    return stamps.map((stamp) => normalizeStampEntry(stamp));
+}
+
+export function serializeStampEntry(stamp = {}) {
+    const normalized = normalizeStampEntry(stamp);
+
+    return {
+        spriteId: normalized.spriteId,
+        x: normalized.x,
+        y: normalized.y,
+        direction: normalized.direction,
+        size: normalized.size,
+        costume: serializeCostumeEntry(normalized.costume),
+        layer: normalized.layer,
+    };
+}
+
+export function serializeStamps(stamps = []) {
+    if (!Array.isArray(stamps)) {
+        return [];
+    }
+
+    return stamps.map((stamp) => serializeStampEntry(stamp));
 }
 
 export function scratchSegmentToStagePixels(segment, stage) {

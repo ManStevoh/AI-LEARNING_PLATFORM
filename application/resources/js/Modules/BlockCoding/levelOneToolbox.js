@@ -211,6 +211,7 @@ export function getLevelOneToolbox(preset = 'level_1_default') {
                         inputs: { SIZE: { shadow: { type: 'math_number', fields: { NUM: 1 } } } },
                     },
                     { kind: 'block', type: 'ace_pen_clear' },
+                    { kind: 'block', type: 'ace_pen_stamp' },
                 ],
             },
             {

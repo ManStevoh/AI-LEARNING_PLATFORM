@@ -202,19 +202,20 @@ export default function BlockStage({
 
     if (scratch) {
         return (
-            <div className="relative flex-1 overflow-hidden border-b border-[#d9d9d9] bg-white">
-                <div
-                    className="relative h-full min-h-[220px] w-full"
-                    onMouseDown={(event) => {
-                        onPointerDown?.(true);
-                        reportPointer(event.clientX, event.clientY);
-                    }}
-                    onMouseLeave={() => onPointerUp?.(false)}
-                    onMouseMove={(event) => reportPointer(event.clientX, event.clientY)}
-                    onMouseUp={() => onPointerUp?.(false)}
-                    ref={stageRef}
-                    style={{ backgroundColor: usesPixi ? stage.background : stage.background }}
-                >
+            <div className="relative flex flex-1 flex-col overflow-hidden bg-[#fafafa]">
+                <div className="flex flex-1 items-center justify-center overflow-hidden p-2">
+                    <div
+                        className="scratch-stage-shell scratch-stage-frame relative overflow-hidden"
+                        onMouseDown={(event) => {
+                            onPointerDown?.(true);
+                            reportPointer(event.clientX, event.clientY);
+                        }}
+                        onMouseLeave={() => onPointerUp?.(false)}
+                        onMouseMove={(event) => reportPointer(event.clientX, event.clientY)}
+                        onMouseUp={() => onPointerUp?.(false)}
+                        ref={stageRef}
+                        style={{ backgroundColor: stage.background }}
+                    >
                     {usesPixi ? (
                         <div className="absolute inset-0" ref={surfaceRef} />
                     ) : (
@@ -226,7 +227,7 @@ export default function BlockStage({
                                     src={backdropImage}
                                 />
                             ) : null}
-                            <PenTrailOverlay stage={stage} trails={stage.penTrails} />
+                            <PenTrailOverlay lessonSlug={lessonSlug} stage={stage} stamps={stage.stamps} trails={stage.penTrails} />
                             {snapshot.sprites.map((sprite) =>
                                 sprite.visible ? (
                                     <SpriteVisual
@@ -261,10 +262,11 @@ export default function BlockStage({
                         onMoveMonitor={onMoveMonitor}
                         onMoveMonitorEnd={onMoveMonitorEnd}
                     />
+                    </div>
                 </div>
 
                 {snapshot.error ? (
-                    <div className="absolute inset-x-0 bottom-0 border-t border-rose-200 bg-rose-50 px-3 py-2 text-xs text-rose-700">
+                    <div className="border-t border-rose-200 bg-rose-50 px-3 py-2 text-xs text-rose-700">
                         {snapshot.error}
                     </div>
                 ) : null}
@@ -289,7 +291,7 @@ export default function BlockStage({
                                 src={backdropImage}
                             />
                         ) : null}
-                        <PenTrailOverlay stage={stage} trails={stage.penTrails} />
+                        <PenTrailOverlay lessonSlug={lessonSlug} stage={stage} stamps={stage.stamps} trails={stage.penTrails} />
                         {snapshot.sprites.map((sprite) =>
                             sprite.visible ? (
                                 <div key={sprite.id} className="absolute" style={spritePositionStyle(sprite, stage)}>

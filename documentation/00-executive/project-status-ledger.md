@@ -10,7 +10,7 @@ It should be updated after every meaningful implementation or documentation mile
 
 Date:
 
-- 2026-07-10.
+- 2026-07-11.
 
 Repository:
 
@@ -42,6 +42,8 @@ Current local implementation status:
 - **AI-generated backdrops (envelope v2.0)** published in `0ece71b`.
 - **PixiJS stage renderer adapter (ADR 0010)** published in `0d42a45`.
 - **Pen layer + Pixi advanced looks (envelope v2.1)** published in `ce19a08`.
+- **Pen stamp block + envelope v2.2 stamps** implemented locally (not yet published).
+- **Scratch 3.0 studio UI sizing/styling polish** implemented locally (Blockly Zelos 75%, toolbox/flyout/stage/sprite pane CSS).
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
@@ -188,26 +190,30 @@ Developed:
 - AI-generated backdrops via AI Gateway with theme picker (envelope v2.0).
 - PixiJS stage renderer adapter with DOM default and feature-flagged Pixi path.
 - Pen layer with Blockly blocks, DOM/Pixi rendering, and envelope v2.1 pen trails.
+- Pen stamp block (`ace_pen_stamp`) with DOM/Pixi stamp rendering and envelope v2.2 `stage.stamps`.
+- Scratch 3.0 studio UI polish: Zelos 75% grid, Scratch Blockly inject options, toolbox/flyout/stage/sprite-pane CSS.
 
 ### Block Coding (Published)
 
-Status: Phase 1–3 Scratch parity + libraries + monitors + AI backdrops + Pixi adapter + pen layer published. See `documentation/06-block-coding/implementation-status.md`.
+Status: Phase 1–3 Scratch parity + libraries + monitors + AI backdrops + Pixi adapter + pen layer published. Pen stamp (v2.2) and Scratch UI polish local only. See `documentation/06-block-coding/implementation-status.md`.
 
 Developed:
 
 - Scratch-style coding studio UI (tabs, stage, sprite pane, green flag/stop),
 - Blockly Zelos theme and Scratch palette order,
 - ACE Stage Engine Phases 1–3,
-- Operators/Lists/My Blocks/Pen,
-- project envelope through v2.1,
+- Operators/Lists/My Blocks/Pen (including stamp),
+- project envelope through v2.2 (local),
 - ACE backdrop library + procedural generator + AI-generated SVG backdrops,
 - DOM canvas color sampler for touching-color blocks,
 - shared Scratch-style asset library modal + ACE sprite library (48 SVGs),
 - Blockly variable/list stage monitors with runtime variable store,
 - PixiJS stage renderer adapter with advanced looks filters (`stageRenderers/`),
 - pen trail runtime + Blockly pen blocks + DOM/Pixi pen layer,
+- pen stamp runtime + Blockly block + DOM/Pixi stamp overlay,
+- Scratch 3.0 studio sizing/styling polish (`scratchBlocklyOptions.js`, `app.css`),
 - block registry and scratch parity strategy docs,
-- StageRuntime smoke 49/49; stage renderer smoke 11/11; PHPUnit 120.
+- StageRuntime smoke 53/53; stage renderer smoke 11/11; PHPUnit 121.
 
 Next action:
 
@@ -290,7 +296,7 @@ Application:
 Application verification:
 
 - `php artisan route:list` passes,
-- `php artisan test` passes with 110 tests and 629 assertions,
+- `php artisan test` passes with 121 tests,
 - `npm run build` passes,
 - `application/.env` is ignored,
 - `application/vendor`, `application/node_modules`, and `application/public/build` are ignored.
@@ -320,6 +326,8 @@ Latest local verification:
 - pixel color touching sensing via DOM canvas sampler (smoke 39/39; published `7718d34`).
 - ACE sprite library + Choose sprite/costume modals with envelope v1.8 (PHPUnit persistence; smoke 41/41; published `34728d0`).
 - variable/list stage monitors with envelope v1.9 (PHPUnit persistence; smoke 44/44; published `0fe6297`).
+- pen stamp block with envelope v2.2 stamps (PHPUnit persistence; smoke 53/53; local only).
+- Scratch 3.0 studio UI sizing/styling polish (local only).
 
 Learning:
 
@@ -428,13 +436,16 @@ Published:
 Not published (local only):
 
 - PostgreSQL local setup (Docker unavailable).
+- Pen stamp block + envelope v2.2 stamps.
+- Scratch 3.0 studio UI sizing/styling polish.
 
 Not published (blocked):
 
 ## Immediate Next Build Sequence
 
 1. Configure PostgreSQL once local services are available.
-2. Pen stamp block and video sensing extension.
+2. Publish pen stamp (v2.2) and Scratch UI polish slice.
+3. Video sensing extension.
 
 ## Ledger Update Rule
 

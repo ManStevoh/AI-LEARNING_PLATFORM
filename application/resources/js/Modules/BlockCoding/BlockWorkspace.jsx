@@ -70,7 +70,7 @@ export default function BlockWorkspace({
             return undefined;
         }
 
-        const workspace = createBlockWorkspace(container, preset);
+        const workspace = createBlockWorkspace(container, preset, { scratch });
         workspaceRef.current = workspace;
 
         if (!hasLoadedProjectRef.current) {
@@ -153,7 +153,7 @@ export default function BlockWorkspace({
             hasLoadedProjectRef.current = false;
             allowAutoSaveRef.current = false;
         };
-    }, [preset, lessonSlug, onReady, savedProject, starterProject, onSaveStatusChange, getProjectExtras]);
+    }, [preset, lessonSlug, onReady, savedProject, starterProject, onSaveStatusChange, getProjectExtras, scratch]);
 
     useEffect(() => {
         if (!allowAutoSaveRef.current || !queueSaveRef.current) {
@@ -193,17 +193,7 @@ export default function BlockWorkspace({
             <div
                 className={`blockly-root ${
                     scratch ? 'scratch-blockly-root' : 'bg-[#f9fafb]'
-                } ${
-                    scratch
-                        ? sidebarCollapsed
-                            ? 'h-[min(820px,calc(100vh-11rem))] min-h-[560px]'
-                            : 'h-[min(720px,calc(100vh-13rem))] min-h-[520px]'
-                        : embedded
-                          ? sidebarCollapsed
-                              ? 'h-[min(820px,calc(100vh-9rem))] min-h-[560px]'
-                              : 'h-[min(720px,calc(100vh-14rem))] min-h-[520px]'
-                          : 'h-[480px] min-h-[420px]'
-                }`}
+                } ${scratch ? 'h-full min-h-[480px]' : embedded ? (sidebarCollapsed ? 'h-[min(820px,calc(100vh-9rem))] min-h-[560px]' : 'h-[min(720px,calc(100vh-14rem))] min-h-[520px]') : 'h-[480px] min-h-[420px]'}`}
                 ref={containerRef}
             />
         </>

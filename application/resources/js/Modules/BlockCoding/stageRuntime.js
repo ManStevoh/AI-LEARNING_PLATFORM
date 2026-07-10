@@ -6,7 +6,7 @@ import {
     readDynamicMonitorValue,
 } from './dynamicMonitors.js';
 import { normalizeBackdropEntry } from './backdropAssets.js';
-import { normalizeCostumeEntry } from './costumeAssets.js';
+import { normalizeCostumeEntry, serializeCostumeEntry } from './costumeAssets.js';
 import { SoundEngine } from './soundEngine.js';
 import {
     MONITOR_BY_ID,
@@ -14,13 +14,21 @@ import {
     defaultMonitorLayout,
     normalizeMonitorState,
 } from './stageMonitors.js';
-import { DEFAULT_PEN, normalizePenColor, normalizePenSize, normalizePenState, normalizePenTrails } from './penLayer.js';
+import {
+    DEFAULT_PEN,
+    normalizePenColor,
+    normalizePenSize,
+    normalizePenState,
+    normalizePenTrails,
+    normalizeStamps,
+} from './penLayer.js';
 
 const DEFAULT_STAGE = {
     width: 480,
     height: 360,
     background: '#dbeafe',
     penTrails: [],
+    stamps: [],
     backdrops: [
         { id: 'backdrop-1', name: 'blue sky', color: '#dbeafe' },
         { id: 'backdrop-2', name: 'grass', color: '#bbf7d0' },
@@ -127,6 +135,7 @@ export class StageRuntime {
             normalized.backdrops.length - 1,
         );
         normalized.penTrails = normalizePenTrails(normalized.penTrails);
+        normalized.stamps = normalizeStamps(normalized.stamps);
 
         this.applyBackdropVisual(normalized);
 
@@ -200,6 +209,7 @@ export class StageRuntime {
         this.initialStage.backdropLibraryId = this.stage.backdropLibraryId;
         this.initialStage.backdropProceduralSeed = this.stage.backdropProceduralSeed;
         this.initialStage.penTrails = structuredClone(this.stage.penTrails ?? []);
+        this.initialStage.stamps = structuredClone(this.stage.stamps ?? []);
     }
 
     ensureSpriteLayers() {
@@ -549,8 +559,10 @@ export class StageRuntime {
         this.loopCount = 0;
         this.error = null;
         const preservedPenTrails = structuredClone(this.stage?.penTrails ?? []);
+        const preservedStamps = structuredClone(this.stage?.stamps ?? []);
         this.stage = structuredClone(this.initialStage);
         this.stage.penTrails = preservedPenTrails;
+        this.stage.stamps = preservedStamps;
         this.sprites = structuredClone(this.initialSprites);
         this.ensureSpriteLayers();
         this.keysHeld.clear();
@@ -1082,12 +1094,34 @@ export class StageRuntime {
         this.emitChange();
     }
 
+    stamp() {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const sprite = this.getActiveSprite();
+        const costume = sprite.costumes?.[sprite.costumeIndex ?? 0] ?? sprite.costumes?.[0];
+
+        this.stage.stamps = this.stage.stamps ?? [];
+        this.stage.stamps.push({
+            spriteId: sprite.id,
+            x: sprite.x,
+            y: sprite.y,
+            direction: sprite.direction,
+            size: sprite.size ?? 100,
+            costume: serializeCostumeEntry(costume),
+            layer: sprite.layer ?? 0,
+        });
+        this.emitChange();
+    }
+
     clearPen() {
         if (this.shouldStop()) {
             return;
         }
 
         this.stage.penTrails = [];
+        this.stage.stamps = [];
         this.syncInitialStage();
         this.emitChange();
     }

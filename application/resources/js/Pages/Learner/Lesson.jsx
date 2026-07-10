@@ -22,7 +22,7 @@ export default function Lesson({ lesson, workspace, savedProject, starterProject
                 </Link>
             </div>
 
-            <details className="mb-4 rounded-xl border border-[var(--color-border-subtle)] bg-white px-4 py-3">
+            <details className="mb-3 rounded-xl border border-[var(--color-border-subtle)] bg-white px-4 py-3">
                 <summary className="cursor-pointer text-sm font-medium text-[var(--color-text-primary)]">
                     Lesson info
                 </summary>

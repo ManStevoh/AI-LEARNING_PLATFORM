@@ -27,9 +27,48 @@ Raw Blockly serialization only:
 
 Loaders detect legacy format when `format` is absent.
 
+## ACE project envelope (schema `2.2`)
+
+Current version. Adds persisted pen costume stamps on top of v2.1.
+
+```json
+{
+  "format": "ace_project",
+  "version": "2.2",
+  "stage": {
+    "backdrops": [{ "id": "backdrop-1", "name": "blue sky", "color": "#dbeafe" }],
+    "backdropIndex": 0,
+    "penTrails": [
+      {
+        "x1": 0,
+        "y1": 0,
+        "x2": 40,
+        "y2": 20,
+        "color": "#ff0000",
+        "size": 4,
+        "spriteId": "sprite-1"
+      }
+    ],
+    "stamps": [
+      {
+        "spriteId": "sprite-1",
+        "x": 40,
+        "y": 20,
+        "direction": 135,
+        "size": 80,
+        "costume": "🐱",
+        "layer": 2
+      }
+    ]
+  }
+}
+```
+
+Stamp entries capture the active sprite's costume, position, direction, size, and layer at stamp time. `erase all` (`ace_pen_clear`) clears both `penTrails` and `stamps`. Stamps persist across green-flag resets (same as pen trails).
+
 ## ACE project envelope (schema `2.1`)
 
-Current version. Adds persisted pen trail segments on top of v2.0.
+Adds persisted pen trail segments on top of v2.0.
 
 ```json
 {
@@ -299,7 +338,8 @@ Same as above without the `sounds` array.
 | `1.8` | Platform sprite/costume library refs | legacy |
 | `1.9` | Blockly variable/list stage monitors | legacy |
 | `2.0` | AI-generated backdrop refs | legacy |
-| `2.1` | Pen trail segments on stage | **current** |
+| `2.1` | Pen trail segments on stage | legacy |
+| `2.2` | Pen costume stamps on stage | **current** |
 
 Migrations must accept all prior versions on read and write the latest supported version on save.
 

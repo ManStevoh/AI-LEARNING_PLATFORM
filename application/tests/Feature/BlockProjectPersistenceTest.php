@@ -481,6 +481,75 @@ class BlockProjectPersistenceTest extends TestCase
             );
     }
 
+    public function test_learner_can_save_project_envelope_with_pen_stamps(): void
+    {
+        $this->seed(CurriculumFoundationSeeder::class);
+
+        $user = User::factory()->create();
+        $institution = Institution::factory()->create();
+        $this->attachLearner($user, $institution);
+
+        $lessonSlug = 'unit-01-meet-the-coding-studio';
+        $workspace = [
+            'format' => 'ace_project',
+            'version' => '2.2',
+            'blockly' => $this->sampleWorkspace(),
+            'sprites' => [
+                [
+                    'id' => 'sprite-1',
+                    'name' => 'Sprite1',
+                    'x' => 0,
+                    'y' => 0,
+                    'direction' => 90,
+                    'visible' => true,
+                    'emoji' => '🐱',
+                ],
+            ],
+            'active_sprite_id' => 'sprite-1',
+            'stage' => [
+                'backdrops' => [
+                    [
+                        'id' => 'backdrop-1',
+                        'name' => 'blue sky',
+                        'color' => '#dbeafe',
+                    ],
+                ],
+                'backdropIndex' => 0,
+                'stamps' => [
+                    [
+                        'spriteId' => 'sprite-1',
+                        'x' => 40,
+                        'y' => 20,
+                        'direction' => 135,
+                        'size' => 80,
+                        'costume' => '🐱',
+                        'layer' => 2,
+                    ],
+                ],
+            ],
+        ];
+
+        $this->actingAs($user)->postJson("/learner/learn/{$lessonSlug}/project", [
+            'workspace' => $workspace,
+            'generated_code' => 'runtime.stamp();',
+        ])->assertOk()->assertJsonPath('saved_project.schema_version', '2.2');
+
+        $this->withoutVite()->actingAs($user)->get("/learner/learn/{$lessonSlug}")
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('savedProject', fn (Assert $project) => $project
+                    ->where('schema_version', '2.2')
+                    ->where('workspace.stage.stamps.0.spriteId', 'sprite-1')
+                    ->where('workspace.stage.stamps.0.x', 40)
+                    ->where('workspace.stage.stamps.0.direction', 135)
+                    ->where('workspace.stage.stamps.0.size', 80)
+                    ->where('workspace.stage.stamps.0.costume', '🐱')
+                    ->where('workspace.stage.stamps.0.layer', 2)
+                    ->etc()
+                )
+            );
+    }
+
     private function attachLearner(User $user, Institution $institution): void
     {
         $institution->users()->attach($user, [

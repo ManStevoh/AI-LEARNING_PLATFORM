@@ -174,14 +174,31 @@ runtime.setVariableById('items-var', ['a', 'b']);
 runtime.setMonitorVisible('list:length:items-var', true, { label: 'length of items' });
 assert('list length monitor', runtime.getMonitorSnapshot().find((m) => m.id === 'list:length:items-var')?.value === 2);
 
+runtime.activeSpriteId = 'sprite-1';
+await runtime.goToXY(0, 0);
 runtime.penDown();
 runtime.setPenColorTo('#ff0000');
 runtime.setPenSizeTo(4);
 await runtime.goToXY(40, 20);
 runtime.penUp();
 assert('pen trail recorded', Array.isArray(runtime.stage.penTrails) && runtime.stage.penTrails.length >= 1);
+runtime.stamp();
+assert('stamp recorded', Array.isArray(runtime.stage.stamps) && runtime.stage.stamps.length === 1);
+assert('stamp captures sprite state', runtime.stage.stamps[0].spriteId === 'sprite-1' && runtime.stage.stamps[0].x === 40);
 runtime.clearPen();
 assert('clear pen trails', runtime.stage.penTrails.length === 0);
+assert('clear pen stamps', runtime.stage.stamps.length === 0);
+
+const preservedStampRuntime = new StageRuntime({
+    stage: {
+        width: 480,
+        height: 360,
+        sprites: [{ id: 'sprite-1', name: 'Sprite1', x: 0, y: 0, direction: 90, emoji: '🐱' }],
+        stamps: [{ spriteId: 'sprite-1', x: 10, y: 5, direction: 90, size: 100, costume: '🐱', layer: 0 }],
+    },
+});
+preservedStampRuntime.resetForRun();
+assert('stamps persist across green-flag reset', preservedStampRuntime.stage.stamps.length === 1);
 
 let backdropHit = false;
 runtime.onBackdropSwitched('grass', async () => {

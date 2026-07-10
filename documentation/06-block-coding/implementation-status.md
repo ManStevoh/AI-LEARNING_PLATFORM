@@ -4,11 +4,11 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 
 ## Snapshot
 
-- **Last updated:** 2026-07-10
-- **Engine phase:** Phase 3 — assets + libraries + monitors
-- **Published to GitHub:** `ce19a08`
-- **Custom ACE blocks:** ~84 done (plus Blockly control/math/text/variables/lists/procedures)
-- **Tests:** 120 PHPUnit + StageRuntime smoke 49/49 + stage renderer smoke 11/11
+- **Last updated:** 2026-07-11
+- **Engine phase:** Phase 3 — assets + libraries + monitors + pen
+- **Published to GitHub:** `ce19a08` (pen stamp + Scratch UI polish local only)
+- **Custom ACE blocks:** ~85 done (plus Blockly control/math/text/variables/lists/procedures)
+- **Tests:** 121 PHPUnit + StageRuntime smoke 53/53 + stage renderer smoke 11/11
 
 ## Done
 
@@ -41,16 +41,15 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 
 | Priority | Item | Phase | Ref |
 |----------|------|-------|-----|
-| P1 | Pen stamp block | 3 | block registry |
-| P2 | Video sensing extension | 4 | block registry |
+| P1 | Video sensing extension | 4 | block registry |
 
 ## Verification (Latest)
 
 ```text
-php artisan test                 → 120 passed
-node stageRuntime.smoke.mjs      → 49/49 passed
+php artisan test                 → 121 passed
+node stageRuntime.smoke.mjs      → 53/53 passed
 node stageRenderer.smoke.mjs     → 11/11 passed
-npm run build                    → pass
+npm run build                    → pass (not re-run this slice)
 ```
 
 ## Related

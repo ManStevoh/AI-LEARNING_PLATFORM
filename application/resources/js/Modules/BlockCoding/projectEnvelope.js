@@ -1,10 +1,10 @@
 import { normalizeCostumeEntry, serializeCostumeEntry } from './costumeAssets.js';
 import { normalizeBackdropEntry, serializeBackdropEntry } from './backdropAssets.js';
 import { normalizeMonitorState, serializeMonitors } from './stageMonitors.js';
-import { normalizePenTrails } from './penLayer.js';
+import { normalizePenTrails, normalizeStamps, serializeStamps } from './penLayer.js';
 
 export const PROJECT_FORMAT = 'ace_project';
-export const PROJECT_VERSION = '2.1';
+export const PROJECT_VERSION = '2.2';
 
 export function isProjectEnvelope(value) {
     return (
@@ -67,6 +67,7 @@ export function extractInitialStage(projectState) {
         backdrops,
         backdropIndex: Math.min(Math.max(0, stage.backdropIndex ?? 0), backdrops.length - 1),
         penTrails: normalizePenTrails(stage.penTrails),
+        stamps: normalizeStamps(stage.stamps),
     };
 }
 
@@ -129,6 +130,7 @@ export function buildProjectEnvelope(blocklyState, extras = {}) {
             backdrops: extras.stage.backdrops.map((backdrop, index) => serializeBackdropEntry(backdrop, index)),
             backdropIndex: extras.stage.backdropIndex ?? 0,
             penTrails: normalizePenTrails(extras.stage.penTrails),
+            stamps: serializeStamps(extras.stage.stamps),
         };
     }
 
