@@ -13,6 +13,7 @@ import {
 import { javascriptGenerator } from 'blockly/javascript';
 import * as En from 'blockly/msg/en';
 import './aceBlocks.js';
+import { attachVariableMonitorCheckboxes, installRuntimeVariableGenerators } from './blocklyRuntimeVariables.js';
 import { attachReporterMonitorCheckboxes } from './monitorCheckbox.js';
 import { aceTheme } from './aceTheme.js';
 import { getLevelOneToolbox } from './levelOneToolbox';
@@ -28,7 +29,9 @@ void variablesDynamic;
 void procedures;
 
 Blockly.setLocale(En);
+installRuntimeVariableGenerators();
 attachReporterMonitorCheckboxes();
+attachVariableMonitorCheckboxes();
 
 if (typeof document !== 'undefined' && !Blockly.common.getParentContainer()) {
     Blockly.common.setParentContainer(document.body);
@@ -71,7 +74,7 @@ export function workspaceToJavaScript(workspace) {
 }
 
 export async function runWorkspaceProgram(workspace, runtime) {
-    runtime.resetForRun();
+    runtime.resetForRun(workspace);
 
     const code = workspaceToJavaScript(workspace).trim();
 

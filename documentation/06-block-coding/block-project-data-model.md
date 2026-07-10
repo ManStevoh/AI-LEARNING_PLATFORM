@@ -27,9 +27,24 @@ Raw Blockly serialization only:
 
 Loaders detect legacy format when `format` is absent.
 
+## ACE project envelope (schema `1.9`)
+
+Current version. Adds Blockly variable/list stage monitor refs on top of v1.8.
+
+```json
+{
+  "format": "ace_project",
+  "version": "1.9",
+  "monitors": [
+    { "id": "var:score-var", "label": "score", "visible": true, "x": 16, "y": 20 },
+    { "id": "list:length:items-var", "label": "length of items", "visible": true, "x": 16, "y": 54 }
+  ]
+}
+```
+
 ## ACE project envelope (schema `1.8`)
 
-Current version. Adds platform sprite/costume library refs on top of v1.7.
+Adds platform sprite/costume library refs on top of v1.7.
 
 ```json
 {
@@ -230,7 +245,8 @@ Same as above without the `sounds` array.
 | `1.5` | Stage backdrop asset refs | legacy |
 | `1.6` | Stage reporter monitors | legacy |
 | `1.7` | Platform backdrop library + procedural backdrops | legacy |
-| `1.8` | Platform sprite/costume library refs | **current** |
+| `1.8` | Platform sprite/costume library refs | legacy |
+| `1.9` | Blockly variable/list stage monitors | **current** |
 | `2.0` | Full stage-runtime spec alignment | planned |
 
 Migrations must accept all prior versions on read and write the latest supported version on save.

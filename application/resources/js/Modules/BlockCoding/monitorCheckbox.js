@@ -1,5 +1,57 @@
 import * as Blockly from 'blockly/core';
+import {
+    buildDynamicMonitorId,
+    getDynamicMonitorLabel,
+    getVariableIdFromBlock,
+} from './dynamicMonitors.js';
 import { MONITOR_BY_BLOCK_TYPE, MONITOR_BY_ID, STAGE_MONITORS } from './stageMonitors.js';
+
+function resolveMonitorFromBlock(block) {
+    if (!block) {
+        return null;
+    }
+
+    const staticMonitor = MONITOR_BY_BLOCK_TYPE[block.type];
+
+    if (staticMonitor) {
+        return { id: staticMonitor.id, label: staticMonitor.label };
+    }
+
+    const variableId = getVariableIdFromBlock(block);
+    const monitorId = buildDynamicMonitorId(block.type, variableId);
+
+    if (!monitorId) {
+        return null;
+    }
+
+    const variableName = block.getField('VAR')?.getVariable()?.getName() ?? 'variable';
+
+    return {
+        id: monitorId,
+        label: getDynamicMonitorLabel(block, variableName),
+        dynamic: true,
+    };
+}
+
+function applyMonitorField(block, visibleIds) {
+    const field = block.getField('MONITOR');
+
+    if (!field) {
+        return;
+    }
+
+    const monitor = resolveMonitorFromBlock(block);
+
+    if (!monitor) {
+        return;
+    }
+
+    const next = visibleIds.has(monitor.id) ? 'TRUE' : 'FALSE';
+
+    if (field.getValue() !== next) {
+        field.setValue(next);
+    }
+}
 
 export function attachReporterMonitorCheckboxes() {
     for (const monitor of STAGE_MONITORS) {
@@ -42,18 +94,7 @@ export function applyMonitorVisibilityToWorkspace(workspace, monitors) {
         }
 
         for (const block of ws.getAllBlocks(false)) {
-            const monitor = MONITOR_BY_BLOCK_TYPE[block.type];
-            const field = block.getField('MONITOR');
-
-            if (!monitor || !field) {
-                continue;
-            }
-
-            const next = visibleIds.has(monitor.id) ? 'TRUE' : 'FALSE';
-
-            if (field.getValue() !== next) {
-                field.setValue(next);
-            }
+            applyMonitorField(block, visibleIds);
         }
     };
 
@@ -75,14 +116,18 @@ export function createMonitorChangeListener(workspace, runtime, onPersist) {
             const block =
                 workspace.getBlockById(event.blockId) ??
                 workspace.getFlyout()?.getWorkspace?.()?.getBlockById(event.blockId);
-            const monitor = block ? MONITOR_BY_BLOCK_TYPE[block.type] : null;
+            const monitor = block ? resolveMonitorFromBlock(block) : null;
 
-            if (!monitor || !MONITOR_BY_ID[monitor.id]) {
+            if (!monitor) {
+                return;
+            }
+
+            if (!monitor.dynamic && !MONITOR_BY_ID[monitor.id]) {
                 return;
             }
 
             const visible = event.newValue === 'TRUE';
-            runtime.setMonitorVisible(monitor.id, visible);
+            runtime.setMonitorVisible(monitor.id, visible, monitor);
             applyMonitorVisibilityToWorkspace(workspace, runtime.getMonitors());
             onPersist?.();
 

@@ -38,6 +38,7 @@ Current local implementation status:
 - **ACE backdrop library + procedural backdrops (envelope v1.7)** published in `8e929eb`.
 - **Pixel color touching sensing (DOM canvas sampler)** published in `7718d34`.
 - **ACE sprite library + Choose sprite/costume modals (envelope v1.8)** published in `34728d0`.
+- **Variable/list stage monitors (envelope v1.9)** implemented locally (ready to publish).
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation

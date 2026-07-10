@@ -148,7 +148,7 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 | `size` / `costume_number` / `backdrop_number` | Looks reporters | done |
 | `volume` | Sound volume | done |
 | `mouse_x` / `mouse_y` / `timer` / `loudness` / `answer` | Sensing reporters | done |
-| Variable / list monitors | Blockly variables/lists | planned |
+| Variable / list monitors | Blockly variables/lists | done |
 
 ## Sprite & costume assets
 
@@ -176,7 +176,6 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 |------|--------|
 | Scratch-style dynamic “Make a List” | Blockly 13 has no `listsDynamic`; static list blocks used |
 | Microphone loudness | Stub until media permission path exists |
-| Variable/list stage monitors | Blockly variable UI chrome |
 | Video sensing / pen / extensions | Phase 3+ |
 | ACE-only AI / robotics blocks | Phase 4 |
 

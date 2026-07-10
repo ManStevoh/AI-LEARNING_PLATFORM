@@ -5,10 +5,10 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 ## Snapshot
 
 - **Last updated:** 2026-07-10
-- **Engine phase:** Phase 3 — assets + libraries + pixel color sensing
-- **Published to GitHub:** `34728d0`
+- **Engine phase:** Phase 3 — assets + libraries + monitors
+- **Published to GitHub:** pending (local slice ready)
 - **Custom ACE blocks:** ~78 done (plus Blockly control/math/text/variables/lists/procedures)
-- **Tests:** 111 PHPUnit + StageRuntime smoke 41/41
+- **Tests:** 112 PHPUnit + StageRuntime smoke 44/44
 
 ## Done
 
@@ -23,6 +23,7 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 | Assets | Shared Scratch-style asset library UI | `AssetLibraryModal.jsx` |
 | Assets | Procedural surprise backdrops | `proceduralBackdrop.js` |
 | UI | Stage monitor checkboxes + overlay | envelope v1.6 |
+| UI | Variable/list stage monitors (Blockly chrome) | envelope v1.9, `dynamicMonitors.js` |
 | Sensing | Pixel color touching (canvas sampler) | `stageColorSampler.js` |
 | Architecture | Stage rendering ADR | ADR 0010 |
 | Teacher | Skill mastery | `/teacher/skills` |
@@ -33,7 +34,6 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 |------|---------------------------|
 | Loudness | Stub until microphone path |
 | AI-generated backdrops | Future slice via AI Gateway |
-| Variable/list stage monitors | Blockly variable UI chrome |
 | PixiJS renderer adapter | When pen/effects need WebGL path |
 
 ## Pending (Next Slices)
@@ -41,14 +41,13 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 | Priority | Item | Phase | Ref |
 |----------|------|-------|-----|
 | P1 | AI backdrop generation (child-safe) | 4 | AI Gateway |
-| P2 | Variable/list stage monitors | 3 | Blockly chrome |
-| P3 | PixiJS renderer adapter when needed | 2 | ADR 0010 |
+| P2 | PixiJS renderer adapter when needed | 2 | ADR 0010 |
 
 ## Verification (Latest)
 
 ```text
 php artisan test              → 110 passed
-node stageRuntime.smoke.mjs   → 41/41 passed
+node stageRuntime.smoke.mjs   → 45/45 passed
 npm run build                 → pass
 ```
 

@@ -1,4 +1,10 @@
 import { createSpriteFromLibrary } from './spriteLibrary.js';
+import {
+    getDynamicMonitorPresentation,
+    isDynamicMonitorId,
+    parseDynamicMonitorId,
+    readDynamicMonitorValue,
+} from './dynamicMonitors.js';
 import { normalizeBackdropEntry } from './backdropAssets.js';
 import { normalizeCostumeEntry } from './costumeAssets.js';
 import { SoundEngine } from './soundEngine.js';
@@ -89,6 +95,9 @@ export class StageRuntime {
         this.cloneCounter = 0;
         this.monitors = this.normalizeMonitors(config.monitors);
         this.colorSampler = null;
+        this.variableValues = new Map();
+        this.variableNames = new Map();
+        this.boundWorkspace = null;
         this.stage = structuredClone(this.initialStage);
         this.sprites = structuredClone(this.initialSprites);
         this.ensureSpriteLayers();
@@ -380,11 +389,31 @@ export class StageRuntime {
             .map((monitor) => {
                 const meta = MONITOR_BY_ID[monitor.id];
 
+                if (meta) {
+                    return {
+                        ...monitor,
+                        label: meta.label,
+                        color: meta.color,
+                        value: meta.read(this),
+                    };
+                }
+
+                const parsed = parseDynamicMonitorId(monitor.id);
+
+                if (!parsed) {
+                    return null;
+                }
+
+                const presentation = getDynamicMonitorPresentation(parsed, monitor, this);
+
                 return {
                     ...monitor,
-                    value: meta ? meta.read(this) : null,
+                    label: presentation.label,
+                    color: presentation.color,
+                    value: readDynamicMonitorValue(parsed, this),
                 };
-            });
+            })
+            .filter(Boolean);
     }
 
     setMonitors(monitors) {
@@ -392,8 +421,8 @@ export class StageRuntime {
         this.emitChange();
     }
 
-    setMonitorVisible(id, visible) {
-        if (!MONITOR_BY_ID[id]) {
+    setMonitorVisible(id, visible, meta = {}) {
+        if (!MONITOR_BY_ID[id] && !isDynamicMonitorId(id)) {
             return;
         }
 
@@ -402,10 +431,16 @@ export class StageRuntime {
         if (visible) {
             if (existing) {
                 existing.visible = true;
+
+                if (meta.label) {
+                    existing.label = meta.label;
+                }
             } else {
                 this.monitors.push({
                     id,
+                    label: meta.label,
                     visible: true,
+                    dynamic: isDynamicMonitorId(id),
                     ...defaultMonitorLayout(this.monitors.length),
                 });
             }
@@ -486,7 +521,11 @@ export class StageRuntime {
         this.emitChange();
     }
 
-    resetForRun() {
+    resetForRun(workspace = null) {
+        if (workspace) {
+            this.boundWorkspace = workspace;
+        }
+
         this.greenFlagHandlers = [];
         this.keyHandlers = new Map();
         this.broadcastHandlers = new Map();
@@ -514,9 +553,52 @@ export class StageRuntime {
             this.askResolve = null;
         }
         this.cloneCounter = 0;
+        this.resetVariableStore(this.boundWorkspace);
         this.soundEngine.stopAll();
         this.finishEventLoop();
         this.setState('idle');
+    }
+
+    resetVariableStore(workspace = this.boundWorkspace) {
+        this.variableValues = new Map();
+        this.variableNames = new Map();
+
+        const variableMap = workspace?.getVariableMap?.();
+
+        if (!variableMap) {
+            return;
+        }
+
+        for (const variable of variableMap.getAllVariables()) {
+            const id = variable.getId();
+            const name = variable.getName();
+            const type = String(variable.getType?.() ?? '').toLowerCase();
+
+            this.variableNames.set(id, name);
+            this.variableValues.set(id, type === 'list' ? [] : 0);
+        }
+    }
+
+    getVariableNameById(variableId) {
+        return this.variableNames.get(variableId) ?? null;
+    }
+
+    getVariableById(variableId) {
+        if (!this.variableValues.has(variableId)) {
+            this.variableValues.set(variableId, 0);
+        }
+
+        return this.variableValues.get(variableId);
+    }
+
+    setVariableById(variableId, value) {
+        this.variableValues.set(variableId, value);
+        this.emitChange();
+    }
+
+    changeVariableById(variableId, delta) {
+        const current = Number(this.getVariableById(variableId)) || 0;
+        this.setVariableById(variableId, current + Number(delta));
     }
 
     onGreenFlag(handler) {

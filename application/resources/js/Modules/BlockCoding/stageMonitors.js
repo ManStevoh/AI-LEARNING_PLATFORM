@@ -1,3 +1,8 @@
+import {
+    isDynamicMonitorId,
+    parseDynamicMonitorId,
+} from './dynamicMonitors.js';
+
 export const STAGE_MONITORS = [
     {
         id: 'x_position',
@@ -129,6 +134,19 @@ export function normalizeMonitorState(value, index = 0) {
         };
     }
 
+    if (value !== null && typeof value === 'object' && typeof value.id === 'string' && isDynamicMonitorId(value.id)) {
+        const layout = defaultMonitorLayout(index);
+
+        return {
+            id: value.id,
+            label: typeof value.label === 'string' ? value.label : 'variable',
+            visible: value.visible !== false,
+            x: Number.isFinite(value.x) ? value.x : layout.x,
+            y: Number.isFinite(value.y) ? value.y : layout.y,
+            dynamic: true,
+        };
+    }
+
     return null;
 }
 
@@ -145,5 +163,6 @@ export function serializeMonitors(monitors) {
             visible: true,
             x: monitor.x,
             y: monitor.y,
+            ...(monitor.label ? { label: monitor.label } : {}),
         }));
 }

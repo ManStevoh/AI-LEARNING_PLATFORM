@@ -150,6 +150,15 @@ assert('isColorTouchingColor delegated', runtime.isColorTouchingColor('#ff0000',
 runtime.setColorSampler(null);
 assert('isTouchingColor without sampler', runtime.isTouchingColor('#ff0000') === false);
 
+runtime.setVariableById('score-var', 7);
+runtime.setMonitorVisible('var:score-var', true, { label: 'score' });
+assert('variable monitor value', runtime.getMonitorSnapshot().some((m) => m.id === 'var:score-var' && m.value === 7));
+runtime.changeVariableById('score-var', 3);
+assert('variable monitor updates', runtime.getMonitorSnapshot().find((m) => m.id === 'var:score-var')?.value === 10);
+runtime.setVariableById('items-var', ['a', 'b']);
+runtime.setMonitorVisible('list:length:items-var', true, { label: 'length of items' });
+assert('list length monitor', runtime.getMonitorSnapshot().find((m) => m.id === 'list:length:items-var')?.value === 2);
+
 let backdropHit = false;
 runtime.onBackdropSwitched('grass', async () => {
     backdropHit = true;

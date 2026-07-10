@@ -8,9 +8,11 @@ export default function StageMonitorOverlay({ monitors = [], onMoveMonitor = nul
     return (
         <div className="pointer-events-none absolute inset-0 z-10 overflow-hidden">
             {monitors.map((monitor) => {
-                const meta = MONITOR_BY_ID[monitor.id];
+                const staticMeta = MONITOR_BY_ID[monitor.id];
+                const label = monitor.label ?? staticMeta?.label;
+                const color = monitor.color ?? staticMeta?.color;
 
-                if (!meta || monitor.visible === false) {
+                if (!label || monitor.visible === false) {
                     return null;
                 }
 
@@ -51,9 +53,9 @@ export default function StageMonitorOverlay({ monitors = [], onMoveMonitor = nul
                     >
                         <div
                             className="flex min-w-[7.5rem] items-center justify-between gap-3 rounded-md border border-black/10 px-2 py-1 text-xs shadow-sm"
-                            style={{ backgroundColor: meta.color, color: '#fff' }}
+                            style={{ backgroundColor: color, color: '#fff' }}
                         >
-                            <span className="font-medium opacity-95">{meta.label}</span>
+                            <span className="font-medium opacity-95">{label}</span>
                             <span className="rounded bg-white/95 px-1.5 py-0.5 font-semibold text-slate-800">
                                 {formatMonitorValue(monitor.value)}
                             </span>
