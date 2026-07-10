@@ -481,6 +481,64 @@ class BlockProjectPersistenceTest extends TestCase
             );
     }
 
+    public function test_learner_can_save_project_envelope_with_video_sensing_state(): void
+    {
+        $this->seed(CurriculumFoundationSeeder::class);
+
+        $user = User::factory()->create();
+        $institution = Institution::factory()->create();
+        $this->attachLearner($user, $institution);
+
+        $lessonSlug = 'unit-01-meet-the-coding-studio';
+        $workspace = [
+            'format' => 'ace_project',
+            'version' => '2.3',
+            'blockly' => $this->sampleWorkspace(),
+            'sprites' => [
+                [
+                    'id' => 'sprite-1',
+                    'name' => 'Sprite1',
+                    'x' => 0,
+                    'y' => 0,
+                    'direction' => 90,
+                    'visible' => true,
+                    'emoji' => '🐱',
+                ],
+            ],
+            'active_sprite_id' => 'sprite-1',
+            'stage' => [
+                'backdrops' => [
+                    [
+                        'id' => 'backdrop-1',
+                        'name' => 'blue sky',
+                        'color' => '#dbeafe',
+                    ],
+                ],
+                'backdropIndex' => 0,
+                'video' => [
+                    'state' => 'on-flipped',
+                    'transparency' => 25,
+                ],
+            ],
+        ];
+
+        $this->actingAs($user)->postJson("/learner/learn/{$lessonSlug}/project", [
+            'workspace' => $workspace,
+            'generated_code' => 'runtime.setVideoState("on-flipped");',
+        ])->assertOk()->assertJsonPath('saved_project.schema_version', '2.3');
+
+        $this->withoutVite()->actingAs($user)->get("/learner/learn/{$lessonSlug}")
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('savedProject', fn (Assert $project) => $project
+                    ->where('schema_version', '2.3')
+                    ->where('workspace.stage.video.state', 'on-flipped')
+                    ->where('workspace.stage.video.transparency', 25)
+                    ->etc()
+                )
+            );
+    }
+
     public function test_learner_can_save_project_envelope_with_pen_stamps(): void
     {
         $this->seed(CurriculumFoundationSeeder::class);

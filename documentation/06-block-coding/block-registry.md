@@ -12,7 +12,7 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 | `ace_event_key_pressed` | when key pressed | when key pressed | yes | yes | 1 | done |
 | `ace_event_sprite_clicked` | when this sprite clicked | when this sprite clicked | yes | yes | 1 | done |
 | `ace_event_backdrop_switches` | when backdrop switches to | when backdrop switches to | yes | yes | 2 | done |
-| `ace_event_greater_than` | when loudness/timer > | when loudness > | yes | yes | 2 | done |
+| `ace_event_greater_than` | when loudness/timer/video motion > | when loudness > | yes | yes | 2–3 | done |
 | `ace_event_broadcast` | broadcast | broadcast | yes | yes | 1 | done |
 | `ace_event_broadcast_and_wait` | broadcast and wait | broadcast and wait | yes | yes | 2 | done |
 | `ace_event_broadcast_received` | when I receive | when I receive | yes | yes | 1 | done |
@@ -109,7 +109,7 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 | `ace_sensing_mouse_x` | mouse x | mouse x | yes | yes | 2–3 | done |
 | `ace_sensing_mouse_y` | mouse y | mouse y | yes | yes | 2–3 | done |
 | `ace_sensing_set_drag_mode` | set drag mode | set drag mode | yes | yes | 3 | done |
-| `ace_sensing_loudness` | loudness | loudness | yes | stub | 3 | partial |
+| `ace_sensing_loudness` | loudness | loudness | yes | yes | 3 | done |
 | `ace_sensing_timer` | timer | timer | yes | yes | 2–3 | done |
 | `ace_sensing_reset_timer` | reset timer | reset timer | yes | yes | 3 | done |
 | `ace_sensing_current` | current [year…] | current | yes | yes | 3 | done |
@@ -182,6 +182,16 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 | `ace_pen_clear` | erase all | erase all | yes | yes | 3 | done |
 | `ace_pen_stamp` | stamp | stamp | yes | yes | 3 | done |
 
+## Video Sensing
+
+| Block ID | Label | Scratch equivalent | Generator | Runtime | Phase | Status |
+|----------|-------|--------------------|-----------|---------|-------|--------|
+| `ace_event_video_motion` | when video motion > | when video motion > | yes | yes | 3 | done |
+| `ace_video_turn_on` | turn video on/off | turn video | yes | yes | 3 | done |
+| `ace_video_set_transparency` | set video transparency | set video transparency | yes | yes | 3 | done |
+| `ace_sensing_video_motion` | video motion | video motion | yes | yes | 3 | done |
+| `ace_sensing_video_on` | video on? | video on | yes | yes | 3 | done |
+
 ## Studio UI (Scratch parity)
 
 | Area | Description | Status |
@@ -197,8 +207,6 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 | Item | Reason |
 |------|--------|
 | Scratch-style dynamic “Make a List” | Blockly 13 has no `listsDynamic`; static list blocks used |
-| Microphone loudness | Stub until media permission path exists |
-| Video sensing | Stub until media permission path |
 | ACE-only AI / robotics blocks | Phase 4 |
 
 ## ACE-only (future)
@@ -217,6 +225,7 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 - Toolbox: `application/resources/js/Modules/BlockCoding/levelOneToolbox.js`
 - Runtime: `application/resources/js/Modules/BlockCoding/stageRuntime.js`
 - Pen layer + stamps: `application/resources/js/Modules/BlockCoding/penLayer.js`, `PenTrailOverlay.jsx`
+- Video sensing: `application/resources/js/Modules/BlockCoding/videoLayer.js`, `mediaSensingEngine.js`, `VideoOverlay.jsx`
 - Scratch Blockly options: `application/resources/js/Modules/BlockCoding/scratchBlocklyOptions.js`
 - Studio CSS: `application/resources/css/app.css` (`.scratch-studio-*`, `.scratch-blockly-root`)
-- Smoke: `application/resources/js/Modules/BlockCoding/stageRuntime.smoke.mjs`
+- Smoke: `application/resources/js/Modules/BlockCoding/stageRuntime.smoke.mjs`, `mediaSensingEngine.smoke.mjs`

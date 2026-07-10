@@ -58,6 +58,11 @@ export const aceTheme = Theme.defineTheme('ace', {
             colourSecondary: '#0DA57A',
             colourTertiary: '#0B8E69',
         },
+        ace_video_blocks: {
+            colourPrimary: '#247C63',
+            colourSecondary: '#206F58',
+            colourTertiary: '#1B604D',
+        },
     },
     categoryStyles: {
         event_category: { colour: '#FFBF00' },
@@ -71,5 +76,6 @@ export const aceTheme = Theme.defineTheme('ace', {
         list_category: { colour: '#FF661A' },
         procedure_category: { colour: '#FF6680' },
         pen_category: { colour: '#0FBD8C' },
+        video_category: { colour: '#247C63' },
     },
 });

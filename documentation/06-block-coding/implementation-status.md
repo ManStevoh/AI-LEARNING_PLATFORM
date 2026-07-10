@@ -5,10 +5,10 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 ## Snapshot
 
 - **Last updated:** 2026-07-11
-- **Engine phase:** Phase 3 — assets + libraries + monitors + pen
+- **Engine phase:** Phase 3 — assets + libraries + monitors + pen + video sensing
 - **Published to GitHub:** `afdb00f`
-- **Custom ACE blocks:** ~85 done (plus Blockly control/math/text/variables/lists/procedures)
-- **Tests:** 121 PHPUnit + StageRuntime smoke 53/53 + stage renderer smoke 13/13
+- **Custom ACE blocks:** ~90 done (plus Blockly control/math/text/variables/lists/procedures)
+- **Tests:** 122 PHPUnit + StageRuntime smoke 59/59 + stage renderer smoke 13/13 + media sensing smoke 13/13
 
 ## Done
 
@@ -26,6 +26,8 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 | UI | Stage monitor checkboxes + overlay | envelope v1.6 |
 | UI | Variable/list stage monitors (Blockly chrome) | envelope v1.9, `dynamicMonitors.js` |
 | Sensing | Pixel color touching (canvas sampler) | `stageColorSampler.js` |
+| Sensing | Microphone loudness via `MediaSensingEngine` | `mediaSensingEngine.js`, `ace_sensing_loudness` |
+| Sensing | Video sensing (motion, on/off, transparency) | envelope v2.3, `videoLayer.js`, `VideoOverlay.jsx` |
 | Architecture | Stage rendering ADR | ADR 0010 |
 | Architecture | PixiJS stage renderer adapter (feature-flagged) | `stageRenderers/` |
 | Runtime | Pen layer with Blockly blocks + Pixi/DOM rendering | envelope v2.1, `penLayer.js` |
@@ -37,21 +39,22 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 
 | Item | Blocker or remaining work |
 |------|---------------------------|
-| Loudness | Stub until microphone path |
+| — | — |
 
 ## Pending (Next Slices)
 
 | Priority | Item | Phase | Ref |
 |----------|------|-------|-----|
-| P1 | Video sensing extension | 4 | block registry |
+| P1 | ACE-only AI / robotics blocks | 4 | block registry |
 
 ## Verification (Latest)
 
 ```text
-php artisan test                 → 121 passed
-node stageRuntime.smoke.mjs      → 53/53 passed
-node stageRenderer.smoke.mjs     → 13/13 passed
-npm run build                    → pass (not re-run this slice)
+php artisan test --filter=BlockProjectPersistenceTest → 12 passed
+node stageRuntime.smoke.mjs                          → 59/59 passed
+node mediaSensingEngine.smoke.mjs                    → 13/13 passed
+node stageRenderer.smoke.mjs                         → 13/13 passed
+npm run build                                        → pass (not re-run this slice)
 ```
 
 ## Related

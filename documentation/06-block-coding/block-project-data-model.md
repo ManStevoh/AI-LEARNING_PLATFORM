@@ -27,9 +27,41 @@ Raw Blockly serialization only:
 
 Loaders detect legacy format when `format` is absent.
 
+## ACE project envelope (schema `2.3`)
+
+Current version. Adds persisted webcam video sensing state on top of v2.2.
+
+```json
+{
+  "format": "ace_project",
+  "version": "2.3",
+  "stage": {
+    "backdrops": [{ "id": "backdrop-1", "name": "blue sky", "color": "#dbeafe" }],
+    "backdropIndex": 0,
+    "stamps": [
+      {
+        "spriteId": "sprite-1",
+        "x": 40,
+        "y": 20,
+        "direction": 135,
+        "size": 80,
+        "costume": "🐱",
+        "layer": 2
+      }
+    ],
+    "video": {
+      "state": "on-flipped",
+      "transparency": 25
+    }
+  }
+}
+```
+
+`stage.video.state` is one of `on`, `off`, `on-flipped`, or `off-flipped`. `stage.video.transparency` is 0–100 (Scratch parity: 100 = fully transparent overlay, 0 = opaque). Video frames are processed locally in the browser; nothing is uploaded.
+
 ## ACE project envelope (schema `2.2`)
 
-Current version. Adds persisted pen costume stamps on top of v2.1.
+Adds persisted pen costume stamps on top of v2.1.
 
 ```json
 {
@@ -339,7 +371,8 @@ Same as above without the `sounds` array.
 | `1.9` | Blockly variable/list stage monitors | legacy |
 | `2.0` | AI-generated backdrop refs | legacy |
 | `2.1` | Pen trail segments on stage | legacy |
-| `2.2` | Pen costume stamps on stage | **current** |
+| `2.2` | Pen costume stamps on stage | legacy |
+| `2.3` | Stage video sensing state (`state`, `transparency`) | **current** |
 
 Migrations must accept all prior versions on read and write the latest supported version on save.
 

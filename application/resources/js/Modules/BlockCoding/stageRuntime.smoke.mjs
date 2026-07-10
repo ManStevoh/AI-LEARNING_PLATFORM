@@ -9,6 +9,8 @@ import { normalizeBackdropEntry, serializeBackdropEntry } from './backdropAssets
 import { createAiBackdropEntry } from './aiBackdrop.js';
 
 globalThis.window = globalThis;
+const nativeSetInterval = globalThis.setInterval.bind(globalThis);
+const nativeClearInterval = globalThis.clearInterval.bind(globalThis);
 globalThis.window.setInterval = () => 1;
 globalThis.window.clearInterval = () => {};
 
@@ -207,6 +209,55 @@ runtime.onBackdropSwitched('grass', async () => {
 runtime.setBackdrop('grass');
 await new Promise((r) => setTimeout(r, 20));
 assert('backdrop switch event', backdropHit);
+
+const mockMediaEngine = {
+    getVideoMotion: () => 42,
+    isVideoOn: () => true,
+    getLoudness: () => 75,
+    setVideoState: async () => {},
+    setVideoTransparency: () => {},
+    ensureVideo: async () => {},
+    ensureAudio: async () => {},
+    startPolling: () => {},
+    stopPolling: () => {},
+};
+
+const videoRuntime = new StageRuntime({
+    stage: {
+        width: 480,
+        height: 360,
+        sprites: [{ id: 'sprite-1', name: 'Sprite1', x: 0, y: 0, direction: 90, emoji: '🐱' }],
+    },
+});
+videoRuntime.setMediaEngine(mockMediaEngine);
+videoRuntime.setState('running');
+videoRuntime.runStartedAt = Date.now();
+
+videoRuntime.setVideoTransparency(25);
+assert('setVideoTransparency', videoRuntime.stage.video.transparency === 25);
+assert('getVideoMotion', videoRuntime.getVideoMotion() === 42);
+assert('isVideoOn', videoRuntime.isVideoOn() === true);
+assert('getLoudness via mediaEngine', videoRuntime.getLoudness() === 75);
+
+let motionHit = false;
+videoRuntime.onGreaterThan('video motion', 40, async () => {
+    motionHit = true;
+});
+globalThis.window.setInterval = nativeSetInterval;
+globalThis.window.clearInterval = nativeClearInterval;
+videoRuntime.startGreaterThanPolling();
+await new Promise((r) => setTimeout(r, 150));
+videoRuntime.stopGreaterThanPolling();
+globalThis.window.setInterval = () => 1;
+globalThis.window.clearInterval = () => {};
+assert('onGreaterThan video motion polling', motionHit);
+
+videoRuntime.stage.video = { state: 'on-flipped', transparency: 25 };
+const snapshotVideo = videoRuntime.getSnapshot().stage.video;
+assert(
+    'stage.video persisted in snapshot',
+    snapshotVideo.state === 'on-flipped' && snapshotVideo.transparency === 25,
+);
 
 const failed = checks.filter((c) => !c.ok);
 console.log(`StageRuntime smoke: ${checks.length - failed.length}/${checks.length} passed`);

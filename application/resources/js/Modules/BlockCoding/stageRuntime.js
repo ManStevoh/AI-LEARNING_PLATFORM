@@ -22,6 +22,7 @@ import {
     normalizePenTrails,
     normalizeStamps,
 } from './penLayer.js';
+import { DEFAULT_VIDEO, isVideoVisible, normalizeVideoState } from './videoLayer.js';
 
 const DEFAULT_STAGE = {
     width: 480,
@@ -36,6 +37,7 @@ const DEFAULT_STAGE = {
         { id: 'backdrop-4', name: 'night', color: '#1e293b' },
     ],
     backdropIndex: 0,
+    video: structuredClone(DEFAULT_VIDEO),
 };
 
 const DEFAULT_SPRITE = {
@@ -106,6 +108,7 @@ export class StageRuntime {
         this.cloneCounter = 0;
         this.monitors = this.normalizeMonitors(config.monitors);
         this.colorSampler = null;
+        this.mediaEngine = null;
         this.variableValues = new Map();
         this.variableNames = new Map();
         this.boundWorkspace = null;
@@ -136,6 +139,7 @@ export class StageRuntime {
         );
         normalized.penTrails = normalizePenTrails(normalized.penTrails);
         normalized.stamps = normalizeStamps(normalized.stamps);
+        normalized.video = normalizeVideoState(normalized.video ?? DEFAULT_VIDEO);
 
         this.applyBackdropVisual(normalized);
 
@@ -210,6 +214,7 @@ export class StageRuntime {
         this.initialStage.backdropProceduralSeed = this.stage.backdropProceduralSeed;
         this.initialStage.penTrails = structuredClone(this.stage.penTrails ?? []);
         this.initialStage.stamps = structuredClone(this.stage.stamps ?? []);
+        this.initialStage.video = structuredClone(this.stage.video ?? DEFAULT_VIDEO);
     }
 
     ensureSpriteLayers() {
@@ -751,11 +756,22 @@ export class StageRuntime {
         this.stopMonitorPolling();
         this.stopAll();
         this.setColorSampler(null);
+        this.setMediaEngine(null);
     }
 
     setColorSampler(sampler) {
         this.colorSampler?.dispose?.();
         this.colorSampler = sampler;
+    }
+
+    setMediaEngine(engine) {
+        this.mediaEngine?.dispose?.();
+        this.mediaEngine = engine ?? null;
+
+        if (this.mediaEngine) {
+            void this.mediaEngine.setVideoState(this.stage.video?.state ?? DEFAULT_VIDEO.state);
+            this.mediaEngine.setVideoTransparency(this.stage.video?.transparency ?? DEFAULT_VIDEO.transparency);
+        }
     }
 
     stopThisScript() {
@@ -849,9 +865,45 @@ export class StageRuntime {
         }
     }
 
+    greaterThanHandlersNeedMediaPolling() {
+        return this.greaterThanHandlers.some(
+            (entry) => entry.sensor === 'loudness' || entry.sensor === 'video motion',
+        );
+    }
+
+    async ensureMediaForGreaterThanHandlers() {
+        if (!this.mediaEngine) {
+            return;
+        }
+
+        const needsLoudness = this.greaterThanHandlers.some((entry) => entry.sensor === 'loudness');
+        const needsVideoMotion = this.greaterThanHandlers.some((entry) => entry.sensor === 'video motion');
+
+        if (needsLoudness) {
+            await this.mediaEngine.ensureAudio();
+        }
+
+        if (needsVideoMotion) {
+            await this.mediaEngine.ensureVideo();
+        }
+
+        if (needsLoudness || needsVideoMotion) {
+            this.mediaEngine.startPolling();
+        }
+    }
+
+    stopMediaPolling() {
+        this.mediaEngine?.stopPolling();
+    }
+
     async start() {
         this.runStartedAt = Date.now();
         this.attachInputListeners();
+
+        if (this.greaterThanHandlersNeedMediaPolling()) {
+            await this.ensureMediaForGreaterThanHandlers();
+        }
+
         this.startGreaterThanPolling();
         this.setState('running');
 
@@ -869,6 +921,7 @@ export class StageRuntime {
         }
 
         this.stopGreaterThanPolling();
+        this.stopMediaPolling();
         this.detachInputListeners();
     }
 
@@ -889,7 +942,12 @@ export class StageRuntime {
                     continue;
                 }
 
-                const value = entry.sensor === 'loudness' ? this.getLoudness() : this.getTimer();
+                const value =
+                    entry.sensor === 'loudness'
+                        ? this.getLoudness()
+                        : entry.sensor === 'video motion'
+                          ? this.getVideoMotion()
+                          : this.getTimer();
 
                 if (value > entry.threshold) {
                     entry.fired = true;
@@ -914,6 +972,7 @@ export class StageRuntime {
 
     finishEventLoop() {
         this.stopGreaterThanPolling();
+        this.stopMediaPolling();
         this.detachInputListeners();
 
         if (this.stopResolve) {
@@ -1695,7 +1754,44 @@ export class StageRuntime {
     }
 
     getLoudness() {
-        return Math.round((this.soundEngine.volume ?? 1) * 100);
+        return this.mediaEngine?.getLoudness() ?? -1;
+    }
+
+    async setVideoState(state) {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        this.stage.video = normalizeVideoState({ ...this.stage.video, state });
+        await this.mediaEngine?.setVideoState(this.stage.video.state);
+        this.syncInitialStage();
+        this.emitChange();
+    }
+
+    setVideoTransparency(value) {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        this.stage.video = normalizeVideoState({
+            ...this.stage.video,
+            transparency: value,
+        });
+        this.mediaEngine?.setVideoTransparency(this.stage.video.transparency);
+        this.syncInitialStage();
+        this.emitChange();
+    }
+
+    getVideoMotion() {
+        return this.mediaEngine?.getVideoMotion() ?? 0;
+    }
+
+    isVideoOn() {
+        return this.mediaEngine?.isVideoOn() ?? isVideoVisible(this.stage.video?.state);
+    }
+
+    getVideoOn() {
+        return this.isVideoOn();
     }
 
     async createCloneOf(target = 'myself') {

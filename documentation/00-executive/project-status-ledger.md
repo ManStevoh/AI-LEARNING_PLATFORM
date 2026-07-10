@@ -44,6 +44,7 @@ Current local implementation status:
 - **Pen layer + Pixi advanced looks (envelope v2.1)** published in `ce19a08`.
 - **Pen stamp block + envelope v2.2 stamps** published in `afdb00f`.
 - **Scratch 3.0 studio UI sizing/styling polish** published in `afdb00f`.
+- **Video sensing extension (envelope v2.3, loudness + motion blocks)** implemented locally (not yet published).
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
@@ -438,6 +439,7 @@ Published:
 Not published (local only):
 
 - PostgreSQL local setup (Docker unavailable).
+- Video sensing extension (envelope v2.3, `MediaSensingEngine`, Blockly video blocks, `VideoOverlay.jsx`).
 
 Not published (blocked):
 
@@ -445,7 +447,8 @@ Not published (blocked):
 
 1. Configure PostgreSQL once local services are available.
 2. ~~Publish pen stamp (v2.2) and Scratch UI polish slice.~~ Done (`afdb00f`).
-3. Video sensing extension.
+3. ~~Video sensing extension.~~ Done locally (envelope v2.3); publish next.
+4. ACE-only AI / robotics blocks (Phase 4).
 
 ## Ledger Update Rule
 

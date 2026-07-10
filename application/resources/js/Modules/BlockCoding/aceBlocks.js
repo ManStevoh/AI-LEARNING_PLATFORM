@@ -929,6 +929,7 @@ javascriptGenerator.forBlock.ace_event_backdrop_switches = function (block, gene
 const GREATER_THAN_SENSOR_OPTIONS = [
     ['loudness', 'loudness'],
     ['timer', 'timer'],
+    ['video motion', 'video motion'],
 ];
 
 Blockly.Blocks.ace_event_greater_than = {
@@ -1463,6 +1464,90 @@ Blockly.Blocks.ace_sensing_loudness = {
 
 javascriptGenerator.forBlock.ace_sensing_loudness = function () {
     return ['runtime.getLoudness()', Order.FUNCTION_CALL];
+};
+
+const VIDEO_STATE_OPTIONS = [
+    ['on', 'on'],
+    ['off', 'off'],
+    ['on flipped', 'on-flipped'],
+    ['off flipped', 'off-flipped'],
+];
+
+Blockly.Blocks.ace_video_turn_on = {
+    init() {
+        this.appendDummyInput()
+            .appendField('turn video')
+            .appendField(new Blockly.FieldDropdown(VIDEO_STATE_OPTIONS), 'STATE');
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('ace_video_blocks');
+        this.setTooltip('Turn the camera on or off, optionally flipped.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_video_turn_on = function (block) {
+    const state = block.getFieldValue('STATE');
+
+    return `await runtime.setVideoState(${JSON.stringify(state)});\n`;
+};
+
+Blockly.Blocks.ace_video_set_transparency = {
+    init() {
+        this.appendValueInput('VALUE').setCheck('Number').appendField('set video transparency to');
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('ace_video_blocks');
+        this.setTooltip('Set how transparent the video is (0 = opaque, 100 = invisible).');
+    },
+};
+
+javascriptGenerator.forBlock.ace_video_set_transparency = function (block, generator) {
+    const value = generator.valueToCode(block, 'VALUE', Order.NONE) || '50';
+
+    return `runtime.setVideoTransparency(${value});\n`;
+};
+
+Blockly.Blocks.ace_event_video_motion = {
+    init() {
+        this.appendDummyInput().appendField('when video motion >');
+        this.appendValueInput('VALUE').setCheck('Number');
+        this.appendStatementInput('STACK');
+        this.setStyle('ace_event_hat');
+        this.setTooltip('Runs when video motion goes above the given value.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_event_video_motion = function (block, generator) {
+    const value = generator.valueToCode(block, 'VALUE', Order.NONE) || '10';
+    const branch = generator.statementToCode(block, 'STACK');
+
+    return `runtime.onGreaterThan('video motion', ${value}, async () => {\n${branch}});\n`;
+};
+
+Blockly.Blocks.ace_sensing_video_motion = {
+    init() {
+        this.appendDummyInput().appendField('video motion');
+        this.setOutput(true, 'Number');
+        this.setStyle('ace_video_blocks');
+        this.setTooltip('Amount of motion detected by the camera (0–100).');
+    },
+};
+
+javascriptGenerator.forBlock.ace_sensing_video_motion = function () {
+    return ['runtime.getVideoMotion()', Order.FUNCTION_CALL];
+};
+
+Blockly.Blocks.ace_sensing_video_on = {
+    init() {
+        this.appendDummyInput().appendField('video on?');
+        this.setOutput(true, 'Boolean');
+        this.setStyle('ace_video_blocks');
+        this.setTooltip('True when the video is turned on.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_sensing_video_on = function () {
+    return ['runtime.isVideoOn()', Order.FUNCTION_CALL];
 };
 
 Blockly.Blocks.ace_sensing_reset_timer = {

@@ -5,6 +5,7 @@ import { createStageColorSamplerAdapter } from './stageColorSampler.js';
 import SpriteThumb from './SpriteThumb';
 import StageMonitorOverlay from './StageMonitorOverlay';
 import PenTrailOverlay from './PenTrailOverlay.jsx';
+import VideoOverlay from './VideoOverlay.jsx';
 import { STAGE_RENDERER_PIXI } from './stageRenderers/stageRendererConfig.js';
 import { useStageRenderer } from './stageRenderers/useStageRenderer.js';
 
@@ -151,6 +152,7 @@ export default function BlockStage({
     onMoveMonitor = null,
     onMoveMonitorEnd = null,
     onColorSamplerReady = null,
+    mediaEngine = null,
     lessonSlug = null,
 }) {
     const stageRef = useRef(null);
@@ -161,6 +163,7 @@ export default function BlockStage({
     const usesPixi = stageRenderer === STAGE_RENDERER_PIXI;
     const currentBackdrop = stage.backdrops?.[stage.backdropIndex ?? 0];
     const backdropImage = resolveBackdropImageUrl(normalizeBackdropEntry(currentBackdrop), lessonSlug);
+    const video = stage.video ?? {};
 
     useStageRenderer({
         mode: stageRenderer,
@@ -216,6 +219,11 @@ export default function BlockStage({
                         ref={stageRef}
                         style={{ backgroundColor: stage.background }}
                     >
+                    <VideoOverlay
+                        mediaEngine={mediaEngine}
+                        transparency={video.transparency}
+                        videoState={video.state}
+                    />
                     {usesPixi ? (
                         <div className="absolute inset-0" ref={surfaceRef} />
                     ) : (

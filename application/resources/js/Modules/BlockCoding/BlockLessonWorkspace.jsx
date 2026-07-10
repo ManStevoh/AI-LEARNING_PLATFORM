@@ -20,6 +20,7 @@ import {
 import { listLessonSounds } from './soundAssets.js';
 import { buildSoundLibraryMap, setProjectSounds as syncSoundLibrary } from './soundLibrary.js';
 import { StageRuntime } from './stageRuntime';
+import { MediaSensingEngine } from './mediaSensingEngine.js';
 import { resolveStageRenderer } from './stageRenderers/stageRendererConfig.js';
 
 function saveStatusLabel(status) {
@@ -72,6 +73,8 @@ function mergeSoundLists(envelopeSounds, serverSounds) {
 export default function BlockLessonWorkspace({ workspaceConfig, savedProject, starterProject }) {
     const runtimeRef = useRef(null);
     const workspaceRef = useRef(null);
+    const mediaEngineRef = useRef(null);
+    const [mediaEngine, setMediaEngine] = useState(null);
     const [snapshot, setSnapshot] = useState(null);
     const [isRunning, setIsRunning] = useState(false);
     const [saveStatus, setSaveStatus] = useState(savedProject ? 'saved' : starterProject ? 'starter' : 'idle');
@@ -116,6 +119,15 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
         setProjectSounds(envelopeSounds);
         syncSoundLibrary(envelopeSounds);
 
+        const engine = new MediaSensingEngine({
+            onUpdate: () => {
+                runtimeRef.current?.emitChange();
+            },
+        });
+        mediaEngineRef.current = engine;
+        setMediaEngine(engine);
+        runtimeRef.current.setMediaEngine(engine);
+
         let cancelled = false;
 
         void listLessonSounds(lessonSlug)
@@ -136,6 +148,10 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
 
         return () => {
             cancelled = true;
+            runtimeRef.current?.setMediaEngine(null);
+            mediaEngineRef.current?.dispose();
+            mediaEngineRef.current = null;
+            setMediaEngine(null);
             runtimeRef.current?.dispose?.() ?? runtimeRef.current?.stop();
         };
     }, [workspaceConfig, savedProject, starterProject, lessonSlug, applySoundLibrary]);
@@ -354,6 +370,7 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
                         <BlockStage
                             isRunning={isRunning || snapshot.state === 'running'}
                             lessonSlug={lessonSlug}
+                            mediaEngine={mediaEngine}
                             onColorSamplerReady={handleColorSamplerReady}
                             onMoveMonitor={handleMoveMonitor}
                             onMoveMonitorEnd={handleMoveMonitorEnd}

@@ -216,6 +216,30 @@ export function getLevelOneToolbox(preset = 'level_1_default') {
             },
             {
                 kind: 'category',
+                name: 'Video Sensing',
+                categorystyle: 'video_category',
+                contents: [
+                    {
+                        kind: 'block',
+                        type: 'ace_event_video_motion',
+                        inputs: {
+                            VALUE: { shadow: { type: 'math_number', fields: { NUM: 10 } } },
+                        },
+                    },
+                    { kind: 'block', type: 'ace_video_turn_on' },
+                    {
+                        kind: 'block',
+                        type: 'ace_video_set_transparency',
+                        inputs: {
+                            VALUE: { shadow: { type: 'math_number', fields: { NUM: 50 } } },
+                        },
+                    },
+                    { kind: 'block', type: 'ace_sensing_video_motion' },
+                    { kind: 'block', type: 'ace_sensing_video_on' },
+                ],
+            },
+            {
+                kind: 'category',
                 name: 'Sound',
                 categorystyle: 'sound_category',
                 contents: [
