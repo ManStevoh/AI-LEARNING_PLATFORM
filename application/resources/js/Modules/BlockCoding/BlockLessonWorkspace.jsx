@@ -8,6 +8,7 @@ import ScratchSpritePane from './ScratchSpritePane';
 import { runWorkspaceProgram } from './blocklySetup';
 import {
     extractActiveSpriteId,
+    extractInitialCheckpoints,
     extractInitialMonitors,
     extractInitialSounds,
     extractInitialSprites,
@@ -98,12 +99,14 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
         const sprites = extractInitialSprites(projectState, workspaceConfig.stage?.sprites);
         const stageExtras = extractInitialStage(projectState);
         const monitors = extractInitialMonitors(projectState);
+        const checkpoints = extractInitialCheckpoints(projectState);
         const activeSpriteId = extractActiveSpriteId(projectState);
         const envelopeSounds = extractInitialSounds(projectState);
 
         runtimeRef.current = new StageRuntime(
             {
                 ...workspaceConfig,
+                lesson_slug: lessonSlug,
                 stage: {
                     ...workspaceConfig.stage,
                     ...(stageExtras ?? {}),
@@ -111,6 +114,7 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
                 },
                 active_sprite_id: activeSpriteId,
                 monitors,
+                checkpoints,
                 sound_library: buildSoundLibraryMap(lessonSlug, envelopeSounds),
             },
             setSnapshot,
@@ -194,6 +198,7 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
                 backdropIndex: runtimeSnapshot.stage?.backdropIndex ?? 0,
             },
             monitors: runtimeRef.current?.getMonitors() ?? [],
+            checkpoints: runtimeSnapshot.checkpoints ?? [],
         };
     }, [projectSounds]);
 

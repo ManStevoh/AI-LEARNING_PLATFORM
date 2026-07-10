@@ -23,6 +23,8 @@ import {
     normalizeStamps,
 } from './penLayer.js';
 import { DEFAULT_VIDEO, isVideoVisible, normalizeVideoState } from './videoLayer.js';
+import { explainBlockScript, markLessonCheckpoint } from './aceExtensionApi.js';
+import { computeRobotSensorReading } from './robotSimulator.js';
 
 const DEFAULT_STAGE = {
     width: 480,
@@ -105,6 +107,9 @@ export class StageRuntime {
         this.asking = null;
         this.askResolve = null;
         this.username = config.username ?? 'learner';
+        this.lessonSlug = config.lesson_slug ?? null;
+        this.checkpoints = new Set(Array.isArray(config.checkpoints) ? config.checkpoints : []);
+        this.lastExplainReply = '';
         this.cloneCounter = 0;
         this.monitors = this.normalizeMonitors(config.monitors);
         this.colorSampler = null;
@@ -379,6 +384,8 @@ export class StageRuntime {
             answer: this.answer,
             asking: this.asking,
             monitors: this.getMonitorSnapshot(),
+            checkpoints: Array.from(this.checkpoints),
+            lastExplainReply: this.lastExplainReply,
         };
     }
 
@@ -2079,5 +2086,83 @@ export class StageRuntime {
         const normalized = direction % 360;
 
         return normalized < 0 ? normalized + 360 : normalized;
+    }
+
+    buildRobotSensorContext() {
+        return {
+            sprite: this.getActiveSprite(),
+            stage: this.stage,
+            pointer: this.pointer,
+            colorSampler: this.colorSampler,
+        };
+    }
+
+    getRobotSensor(sensor) {
+        return computeRobotSensorReading(sensor, this.buildRobotSensorContext());
+    }
+
+    getLastExplainReply() {
+        return this.lastExplainReply;
+    }
+
+    async markCheckpoint(stepKey) {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const normalizedStep = String(stepKey ?? '').trim();
+
+        if (!normalizedStep) {
+            return;
+        }
+
+        if (this.lessonSlug) {
+            try {
+                await markLessonCheckpoint(this.lessonSlug, normalizedStep);
+            } catch {
+                // Keep local checkpoint even when the network call fails.
+            }
+        }
+
+        this.checkpoints.add(normalizedStep);
+        this.emitChange();
+    }
+
+    async explainScript(scriptText) {
+        if (this.shouldStop()) {
+            return;
+        }
+
+        const script = String(scriptText ?? '').trim();
+        let reply = 'No script to explain.';
+
+        if (script && this.lessonSlug) {
+            try {
+                const result = await explainBlockScript(this.lessonSlug, {
+                    script,
+                    context: {
+                        sprite: {
+                            x: this.getXPosition(),
+                            y: this.getYPosition(),
+                            direction: this.getDirection(),
+                        },
+                        stage: {
+                            backdrop: this.getBackdrop('name'),
+                            background: this.stage.background,
+                        },
+                        checkpoints: Array.from(this.checkpoints),
+                    },
+                });
+                reply = String(result?.reply ?? result?.message ?? result?.explanation ?? reply);
+            } catch {
+                reply = 'Unable to reach the AI mentor right now.';
+            }
+        } else if (script) {
+            reply = 'Connect this project to a lesson to use AI explain.';
+        }
+
+        this.lastExplainReply = reply;
+        this.emitChange();
+        await this.say(reply, 3);
     }
 }

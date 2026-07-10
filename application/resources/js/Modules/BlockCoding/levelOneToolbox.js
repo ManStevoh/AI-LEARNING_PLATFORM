@@ -240,6 +240,32 @@ export function getLevelOneToolbox(preset = 'level_1_default') {
             },
             {
                 kind: 'category',
+                name: 'AI',
+                categorystyle: 'ai_category',
+                contents: [
+                    {
+                        kind: 'block',
+                        type: 'ace_ai_explain',
+                        inputs: {
+                            SCRIPT: { shadow: { type: 'text', fields: { TEXT: 'move 10 steps' } } },
+                        },
+                    },
+                ],
+            },
+            {
+                kind: 'category',
+                name: 'Curriculum',
+                categorystyle: 'curriculum_category',
+                contents: [{ kind: 'block', type: 'ace_curriculum_checkpoint' }],
+            },
+            {
+                kind: 'category',
+                name: 'Robotics',
+                categorystyle: 'robot_category',
+                contents: [{ kind: 'block', type: 'ace_robot_read_sensor' }],
+            },
+            {
+                kind: 'category',
                 name: 'Sound',
                 categorystyle: 'sound_category',
                 contents: [

@@ -192,6 +192,14 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 | `ace_sensing_video_motion` | video motion | video motion | yes | yes | 3 | done |
 | `ace_sensing_video_on` | video on? | video on | yes | yes | 3 | done |
 
+## ACE-only
+
+| Block ID | Label | Purpose | Generator | Runtime | Phase | Status |
+|----------|-------|---------|-----------|---------|-------|--------|
+| `ace_ai_explain` | AI explain | Explain script via AI Gateway | yes | yes | 4 | done |
+| `ace_curriculum_checkpoint` | checkpoint | Mark lesson step complete | yes | yes | 4 | done |
+| `ace_robot_read_sensor` | robot sensor | Simulated distance/light/touch read | yes | yes | 4 | done |
+
 ## Studio UI (Scratch parity)
 
 | Area | Description | Status |
@@ -207,15 +215,6 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 | Item | Reason |
 |------|--------|
 | Scratch-style dynamic “Make a List” | Blockly 13 has no `listsDynamic`; static list blocks used |
-| ACE-only AI / robotics blocks | Phase 4 |
-
-## ACE-only (future)
-
-| Block ID | Purpose | Phase | Status |
-|----------|---------|-------|--------|
-| `ace_ai_explain` | AI mentor: explain selection | 4 | planned |
-| `ace_curriculum_checkpoint` | Mark lesson step complete | 4 | planned |
-| `ace_robot_read_sensor` | Simulated sensor read | 4 | planned |
 
 ---
 
@@ -226,6 +225,7 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 - Runtime: `application/resources/js/Modules/BlockCoding/stageRuntime.js`
 - Pen layer + stamps: `application/resources/js/Modules/BlockCoding/penLayer.js`, `PenTrailOverlay.jsx`
 - Video sensing: `application/resources/js/Modules/BlockCoding/videoLayer.js`, `mediaSensingEngine.js`, `VideoOverlay.jsx`
+- ACE extensions: `aceExtensionApi.js`, `robotSimulator.js`, `BlockScriptExplainService.php`, `LearnerLessonCheckpointService.php`
 - Scratch Blockly options: `application/resources/js/Modules/BlockCoding/scratchBlocklyOptions.js`
 - Studio CSS: `application/resources/css/app.css` (`.scratch-studio-*`, `.scratch-blockly-root`)
 - Smoke: `application/resources/js/Modules/BlockCoding/stageRuntime.smoke.mjs`, `mediaSensingEngine.smoke.mjs`

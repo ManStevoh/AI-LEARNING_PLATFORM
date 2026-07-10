@@ -1617,6 +1617,63 @@ javascriptGenerator.forBlock.ace_sensing_online = function () {
     return ['runtime.isOnline()', Order.FUNCTION_CALL];
 };
 
+const ROBOT_SENSOR_OPTIONS = [
+    ['distance', 'distance'],
+    ['light', 'light'],
+    ['touch', 'touch'],
+];
+
+Blockly.Blocks.ace_robot_read_sensor = {
+    init() {
+        this.appendDummyInput()
+            .appendField('robot sensor')
+            .appendField(new Blockly.FieldDropdown(ROBOT_SENSOR_OPTIONS), 'SENSOR');
+        this.setOutput(true, 'Number');
+        this.setStyle('ace_robot_blocks');
+        this.setTooltip('Read a simulated robot sensor value.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_robot_read_sensor = function (block) {
+    const sensor = block.getFieldValue('SENSOR');
+
+    return [`runtime.getRobotSensor(${JSON.stringify(sensor)})`, Order.FUNCTION_CALL];
+};
+
+Blockly.Blocks.ace_curriculum_checkpoint = {
+    init() {
+        this.appendDummyInput()
+            .appendField('checkpoint')
+            .appendField(new Blockly.FieldTextInput('step-1'), 'STEP');
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('ace_curriculum_blocks');
+        this.setTooltip('Mark a lesson checkpoint as complete.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_curriculum_checkpoint = function (block) {
+    const step = block.getFieldValue('STEP');
+
+    return `await runtime.markCheckpoint(${JSON.stringify(step)});\n`;
+};
+
+Blockly.Blocks.ace_ai_explain = {
+    init() {
+        this.appendValueInput('SCRIPT').setCheck('String').appendField('AI explain');
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('ace_ai_blocks');
+        this.setTooltip('Ask the AI mentor to explain the connected script.');
+    },
+};
+
+javascriptGenerator.forBlock.ace_ai_explain = function (block, generator) {
+    const script = generator.valueToCode(block, 'SCRIPT', Order.NONE) || "''";
+
+    return `await runtime.explainScript(${script});\n`;
+};
+
 javascriptGenerator.addReservedWords('runtime,await');
 
 javascriptGenerator.INFINITE_LOOP_TRAP = 'await runtime.checkLoop();\n';

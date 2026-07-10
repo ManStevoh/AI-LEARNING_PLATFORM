@@ -27,9 +27,31 @@ Raw Blockly serialization only:
 
 Loaders detect legacy format when `format` is absent.
 
+## ACE project envelope (schema `2.4`)
+
+Current version. Adds persisted curriculum checkpoint keys on top of v2.3.
+
+```json
+{
+  "format": "ace_project",
+  "version": "2.4",
+  "checkpoints": ["intro-blocks", "first-animation"],
+  "stage": {
+    "backdrops": [{ "id": "backdrop-1", "name": "blue sky", "color": "#dbeafe" }],
+    "backdropIndex": 0,
+    "video": {
+      "state": "on",
+      "transparency": 50
+    }
+  }
+}
+```
+
+`checkpoints` is an array of step keys the learner marked complete in the project. The `ace_curriculum_checkpoint` block also POSTs to `POST /learner/learn/{lessonSlug}/checkpoints` for server-side teacher visibility (`learner_lesson_checkpoints` table).
+
 ## ACE project envelope (schema `2.3`)
 
-Current version. Adds persisted webcam video sensing state on top of v2.2.
+Adds persisted webcam video sensing state on top of v2.2.
 
 ```json
 {

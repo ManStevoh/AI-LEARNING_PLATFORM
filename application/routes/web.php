@@ -10,6 +10,8 @@ use App\Http\Controllers\Learner\BlockProjectController;
 use App\Http\Controllers\Learner\BlockProjectBackdropController;
 use App\Http\Controllers\Learner\BlockProjectCostumeController;
 use App\Http\Controllers\Learner\BlockProjectSoundController;
+use App\Http\Controllers\Learner\BlockScriptExplainController;
+use App\Http\Controllers\Learner\LessonCheckpointController;
 use App\Http\Controllers\Learner\DashboardController as LearnerDashboardController;
 use App\Http\Controllers\Learner\LearnController as LearnerLearnController;
 use App\Http\Controllers\Learner\MentorController as LearnerMentorController;
@@ -48,6 +50,15 @@ Route::middleware(['auth', ResolveTenantContext::class])->group(function () {
     Route::post('learner/learn/{lessonSlug}/project', [BlockProjectController::class, 'store'])
         ->middleware('workspace.role:learner,parent')
         ->name('learner.project.store');
+    Route::get('learner/learn/{lessonSlug}/checkpoints', [LessonCheckpointController::class, 'index'])
+        ->middleware('workspace.role:learner,parent')
+        ->name('learner.checkpoints.index');
+    Route::post('learner/learn/{lessonSlug}/checkpoints', [LessonCheckpointController::class, 'store'])
+        ->middleware('workspace.role:learner,parent')
+        ->name('learner.checkpoints.store');
+    Route::post('learner/learn/{lessonSlug}/explain-script', [BlockScriptExplainController::class, 'store'])
+        ->middleware('workspace.role:learner,parent')
+        ->name('learner.explain-script.store');
     Route::get('learner/learn/{lessonSlug}/sounds', [BlockProjectSoundController::class, 'index'])
         ->middleware('workspace.role:learner,parent')
         ->name('learner.sounds.index');

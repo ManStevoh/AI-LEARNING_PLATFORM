@@ -9,6 +9,7 @@ import { normalizeBackdropEntry, serializeBackdropEntry } from './backdropAssets
 import { createAiBackdropEntry } from './aiBackdrop.js';
 
 globalThis.window = globalThis;
+globalThis.document = globalThis.document ?? { cookie: '' };
 const nativeSetInterval = globalThis.setInterval.bind(globalThis);
 const nativeClearInterval = globalThis.clearInterval.bind(globalThis);
 globalThis.window.setInterval = () => 1;
@@ -258,6 +259,61 @@ assert(
     'stage.video persisted in snapshot',
     snapshotVideo.state === 'on-flipped' && snapshotVideo.transparency === 25,
 );
+
+await runtime.goToXY(0, 0);
+assert('getRobotSensor distance at center', runtime.getRobotSensor('distance') === 0);
+assert('getRobotSensor light range', runtime.getRobotSensor('light') >= 0 && runtime.getRobotSensor('light') <= 100);
+assert('getRobotSensor touch center', runtime.getRobotSensor('touch') === 0);
+await runtime.goToXY(220, 0);
+assert('getRobotSensor touch at edge', runtime.getRobotSensor('touch') === 1);
+
+const checkpointRuntime = new StageRuntime({
+    lesson_slug: 'smoke-lesson',
+    checkpoints: ['step-0'],
+    stage: {
+        width: 480,
+        height: 360,
+        sprites: [{ id: 'sprite-1', name: 'Sprite1', x: 0, y: 0, direction: 90, emoji: '🐱' }],
+    },
+});
+checkpointRuntime.setState('running');
+checkpointRuntime.wait = async () => {};
+
+const originalFetch = globalThis.fetch;
+globalThis.fetch = async (url, options = {}) => {
+    if (String(url).endsWith('/checkpoints')) {
+        const body = JSON.parse(options.body ?? '{}');
+        assert('markCheckpoint posts step_key', body.step_key === 'step-1');
+
+        return {
+            ok: true,
+            json: async () => ({ ok: true, step_key: body.step_key }),
+        };
+    }
+
+    if (String(url).endsWith('/explain-script')) {
+        const body = JSON.parse(options.body ?? '{}');
+        assert('explainScript posts script', body.script === 'move 10 steps');
+
+        return {
+            ok: true,
+            json: async () => ({ reply: 'This moves the sprite forward.' }),
+        };
+    }
+
+    throw new Error(`Unexpected fetch: ${url}`);
+};
+
+await checkpointRuntime.markCheckpoint('step-1');
+assert('markCheckpoint adds to set', checkpointRuntime.checkpoints.has('step-1'));
+assert('markCheckpoint keeps initial checkpoints', checkpointRuntime.checkpoints.has('step-0'));
+assert('markCheckpoint in snapshot', checkpointRuntime.getSnapshot().checkpoints.includes('step-1'));
+
+await checkpointRuntime.explainScript('move 10 steps');
+assert('explainScript sets reply', checkpointRuntime.getLastExplainReply() === 'This moves the sprite forward.');
+assert('explainScript shows say bubble', checkpointRuntime.getActiveSprite().say === null);
+
+globalThis.fetch = originalFetch;
 
 const failed = checks.filter((c) => !c.ok);
 console.log(`StageRuntime smoke: ${checks.length - failed.length}/${checks.length} passed`);

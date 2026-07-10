@@ -5,10 +5,10 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 ## Snapshot
 
 - **Last updated:** 2026-07-11
-- **Engine phase:** Phase 3 — assets + libraries + monitors + pen + video sensing
+- **Engine phase:** Phase 4 — ACE-only extensions (AI, curriculum, robotics)
 - **Published to GitHub:** `53bbd6c`
-- **Custom ACE blocks:** ~90 done (plus Blockly control/math/text/variables/lists/procedures)
-- **Tests:** 122 PHPUnit + StageRuntime smoke 59/59 + stage renderer smoke 13/13 + media sensing smoke 13/13
+- **Custom ACE blocks:** ~93 done (plus Blockly control/math/text/variables/lists/procedures)
+- **Tests:** 129 PHPUnit + StageRuntime smoke 70/70 + media sensing smoke 13/13 + stage renderer smoke 13/13
 
 ## Done
 
@@ -28,6 +28,9 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 | Sensing | Pixel color touching (canvas sampler) | `stageColorSampler.js` |
 | Sensing | Microphone loudness via `MediaSensingEngine` | `mediaSensingEngine.js`, `ace_sensing_loudness` |
 | Sensing | Video sensing (motion, on/off, transparency) | envelope v2.3, `videoLayer.js`, `VideoOverlay.jsx` |
+| ACE | AI explain script block (AI Gateway) | `ace_ai_explain`, `BlockScriptExplainService` |
+| ACE | Curriculum checkpoint block | `ace_curriculum_checkpoint`, `LearnerLessonCheckpoint` |
+| ACE | Simulated robot sensor read | `ace_robot_read_sensor`, `robotSimulator.js` |
 | Architecture | Stage rendering ADR | ADR 0010 |
 | Architecture | PixiJS stage renderer adapter (feature-flagged) | `stageRenderers/` |
 | Runtime | Pen layer with Blockly blocks + Pixi/DOM rendering | envelope v2.1, `penLayer.js` |
@@ -45,13 +48,14 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 
 | Priority | Item | Phase | Ref |
 |----------|------|-------|-----|
-| P1 | ACE-only AI / robotics blocks | 4 | block registry |
+| P1 | Institution-specific block packs | 4+ | scratch parity strategy |
+| P2 | Level 2 generated-code / hybrid editing | 4+ | generated-code-mapping spec |
 
 ## Verification (Latest)
 
 ```text
-php artisan test --filter=BlockProjectPersistenceTest → 12 passed
-node stageRuntime.smoke.mjs                          → 59/59 passed
+php artisan test --filter=BlockProjectPersistenceTest|LearnerLessonCheckpointTest|BlockScriptExplainTest → 20 passed
+node stageRuntime.smoke.mjs                          → 70/70 passed
 node mediaSensingEngine.smoke.mjs                    → 13/13 passed
 node stageRenderer.smoke.mjs                         → 13/13 passed
 npm run build                                        → pass (not re-run this slice)

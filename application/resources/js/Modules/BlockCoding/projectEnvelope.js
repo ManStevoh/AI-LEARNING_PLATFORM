@@ -5,7 +5,7 @@ import { normalizePenTrails, normalizeStamps, serializeStamps } from './penLayer
 import { normalizeVideoState, serializeVideoState } from './videoLayer.js';
 
 export const PROJECT_FORMAT = 'ace_project';
-export const PROJECT_VERSION = '2.3';
+export const PROJECT_VERSION = '2.4';
 
 export function isProjectEnvelope(value) {
     return (
@@ -91,6 +91,16 @@ export function extractActiveSpriteId(projectState, fallbackId = null) {
     return fallbackId;
 }
 
+export function extractInitialCheckpoints(projectState) {
+    if (!isProjectEnvelope(projectState) || !Array.isArray(projectState.checkpoints)) {
+        return [];
+    }
+
+    return projectState.checkpoints
+        .map((step) => String(step ?? '').trim())
+        .filter(Boolean);
+}
+
 export function buildProjectEnvelope(blocklyState, extras = {}) {
     const envelope = {
         format: PROJECT_FORMAT,
@@ -141,6 +151,12 @@ export function buildProjectEnvelope(blocklyState, extras = {}) {
 
     if (monitors.length > 0) {
         envelope.monitors = monitors;
+    }
+
+    if (Array.isArray(extras.checkpoints) && extras.checkpoints.length > 0) {
+        envelope.checkpoints = extras.checkpoints
+            .map((step) => String(step ?? '').trim())
+            .filter(Boolean);
     }
 
     return envelope;

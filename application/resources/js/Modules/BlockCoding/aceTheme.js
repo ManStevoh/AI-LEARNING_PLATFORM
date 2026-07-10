@@ -63,6 +63,21 @@ export const aceTheme = Theme.defineTheme('ace', {
             colourSecondary: '#206F58',
             colourTertiary: '#1B604D',
         },
+        ace_ai_blocks: {
+            colourPrimary: '#7A84FF',
+            colourSecondary: '#6B74E6',
+            colourTertiary: '#5C64CC',
+        },
+        ace_curriculum_blocks: {
+            colourPrimary: '#FFAB19',
+            colourSecondary: '#EC9D00',
+            colourTertiary: '#CF8B17',
+        },
+        ace_robot_blocks: {
+            colourPrimary: '#4C97FF',
+            colourSecondary: '#4280D7',
+            colourTertiary: '#3373CC',
+        },
     },
     categoryStyles: {
         event_category: { colour: '#FFBF00' },
@@ -77,5 +92,8 @@ export const aceTheme = Theme.defineTheme('ace', {
         procedure_category: { colour: '#FF6680' },
         pen_category: { colour: '#0FBD8C' },
         video_category: { colour: '#247C63' },
+        ai_category: { colour: '#7A84FF' },
+        curriculum_category: { colour: '#FFAB19' },
+        robot_category: { colour: '#4C97FF' },
     },
 });
