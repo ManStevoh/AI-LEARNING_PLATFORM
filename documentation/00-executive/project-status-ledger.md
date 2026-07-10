@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `0fe6297` — Add Blockly variable and list stage monitors with envelope v1.9.
+- `0ece71b` — Add AI-generated backdrops via AI Gateway with envelope v2.0.
 
 Current local implementation status:
 

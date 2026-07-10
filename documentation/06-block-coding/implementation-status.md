@@ -6,7 +6,7 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 
 - **Last updated:** 2026-07-10
 - **Engine phase:** Phase 3 — assets + libraries + monitors
-- **Published to GitHub:** pending (AI backdrops slice)
+- **Published to GitHub:** `0ece71b`
 - **Custom ACE blocks:** ~78 done (plus Blockly control/math/text/variables/lists/procedures)
 - **Tests:** 117 PHPUnit + StageRuntime smoke 47/47
 
