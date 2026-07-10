@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `ec59a85` — Add Phase 4 ACE blocks: AI explain, curriculum checkpoint, robot sensor.
+- `e2eb4df` — Add institution-specific block pack gating for ACE extensions.
 
 Current local implementation status:
 
