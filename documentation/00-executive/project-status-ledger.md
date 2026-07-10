@@ -207,7 +207,7 @@ Developed:
 - Blockly Zelos theme and Scratch palette order,
 - ACE Stage Engine Phases 1–3,
 - Operators/Lists/My Blocks/Pen (including stamp),
-- project envelope through v2.3,
+- project envelope through v2.4,
 - ACE backdrop library + procedural generator + AI-generated SVG backdrops,
 - DOM canvas color sampler for touching-color blocks,
 - shared Scratch-style asset library modal + ACE sprite library (48 SVGs),
@@ -217,8 +217,9 @@ Developed:
 - pen stamp runtime + Blockly block + DOM/Pixi stamp overlay,
 - Scratch 3.0 studio sizing/styling polish (`scratchBlocklyOptions.js`, `app.css`),
 - video sensing + microphone loudness via `MediaSensingEngine` (`videoLayer.js`, `VideoOverlay.jsx`, envelope v2.3),
+- Phase 4 ACE blocks: AI explain, curriculum checkpoint, robot sensor (`aceExtensionApi.js`, `robotSimulator.js`),
 - block registry and scratch parity strategy docs,
-- StageRuntime smoke 59/59; media sensing smoke 13/13; stage renderer smoke 13/13; PHPUnit 122.
+- StageRuntime smoke 70/70; media sensing smoke 13/13; stage renderer smoke 13/13; PHPUnit 129.
 
 Next action:
 
@@ -334,6 +335,7 @@ Latest local verification:
 - pen stamp block with envelope v2.2 stamps (PHPUnit persistence; smoke 53/53; published `afdb00f`).
 - Scratch 3.0 studio UI sizing/styling polish (published `afdb00f`).
 - video sensing extension with envelope v2.3 (PHPUnit persistence; smoke 59/59 + 13/13; published `53bbd6c`).
+- Phase 4 ACE blocks with envelope v2.4 (PHPUnit 20; smoke 70/70; published `ec59a85`).
 
 Learning:
 
@@ -439,7 +441,8 @@ Published:
 - pen stamp block with envelope v2.2 stamps (published `afdb00f`),
 - Scratch 3.0 studio UI sizing/styling polish (published `afdb00f`),
 - video sensing extension with envelope v2.3 (published `53bbd6c`),
-- Scratch block coding studio and ACE Stage Engine Phases 1–3,
+- Phase 4 ACE blocks with envelope v2.4 (published `ec59a85`),
+- Scratch block coding studio and ACE Stage Engine Phases 1–4,
 - block coding docs (registry, parity strategy, status procedure).
 
 Not published (local only):
