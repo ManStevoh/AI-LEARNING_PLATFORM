@@ -265,6 +265,10 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
         setIsRunning(false);
     }, []);
 
+    const handleColorSamplerReady = useCallback((sampler) => {
+        runtimeRef.current?.setColorSampler(sampler);
+    }, []);
+
     if (!snapshot) {
         return null;
     }
@@ -347,6 +351,7 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
                         <BlockStage
                             isRunning={isRunning || snapshot.state === 'running'}
                             lessonSlug={lessonSlug}
+                            onColorSamplerReady={handleColorSamplerReady}
                             onMoveMonitor={handleMoveMonitor}
                             onMoveMonitorEnd={handleMoveMonitorEnd}
                             onPointerDown={handleStagePointerDown}

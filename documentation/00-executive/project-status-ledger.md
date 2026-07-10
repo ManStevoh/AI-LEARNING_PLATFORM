@@ -176,10 +176,11 @@ Developed:
 - tenant-scoped block project backdrop uploads with envelope v1.5 stage refs.
 - stage reporter monitors with toolbox checkboxes and overlay (envelope v1.6).
 - ACE backdrop library (25 SVGs) with Choose modal + procedural surprise backdrops (envelope v1.7).
+- pixel color touching sensing via DOM canvas sampler (`stageColorSampler.js`).
 
-### Block Coding (Published)
+### Block Coding (Published + local color sensing)
 
-Status: Phase 1–3 Scratch parity + uploads + monitors + backdrop library published. See `documentation/06-block-coding/implementation-status.md`.
+Status: Phase 1–3 Scratch parity + uploads + monitors + backdrop library published; pixel color sensing local. See `documentation/06-block-coding/implementation-status.md`.
 
 Developed:
 
@@ -189,11 +190,13 @@ Developed:
 - Operators/Lists/My Blocks,
 - project envelope through v1.7,
 - ACE backdrop library + procedural generator,
+- DOM canvas color sampler for touching-color blocks,
 - block registry and scratch parity strategy docs,
-- StageRuntime smoke 32/32; PHPUnit 110.
+- StageRuntime smoke 39/39; PHPUnit 110.
 
 Next action:
 
+- publish pixel color sensing slice,
 - configure PostgreSQL once local services are available.
 
 ## Partially Developed Artifacts
@@ -300,6 +303,7 @@ Latest local verification:
 - block project backdrop upload/list/stream/delete with envelope v1.5 (PHPUnit 6; smoke 27/27; published `e39ec5d`).
 - stage reporter monitors with envelope v1.6 (PHPUnit persistence; smoke 31/31; published `ae12511`).
 - ACE backdrop library + procedural backdrops with envelope v1.7 (PHPUnit persistence; smoke 32/32; published `8e929eb`).
+- pixel color touching sensing via DOM canvas sampler (smoke 39/39; local pending publish).
 
 Learning:
 
@@ -401,14 +405,15 @@ Published:
 
 Not published (local only):
 
+- pixel color touching sensing (DOM canvas sampler),
 - PostgreSQL local setup (Docker unavailable).
 
 Not published (blocked):
 
 ## Immediate Next Build Sequence
 
-1. Configure PostgreSQL once local services are available.
-2. Pixel color sensing (canvas/Pixi) when needed.
+1. Publish pixel color sensing slice.
+2. Configure PostgreSQL once local services are available.
 3. AI-generated backdrops via AI Gateway (child-safe).
 
 ## Ledger Update Rule

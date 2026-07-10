@@ -87,6 +87,7 @@ export class StageRuntime {
         this.username = config.username ?? 'learner';
         this.cloneCounter = 0;
         this.monitors = this.normalizeMonitors(config.monitors);
+        this.colorSampler = null;
         this.stage = structuredClone(this.initialStage);
         this.sprites = structuredClone(this.initialSprites);
         this.ensureSpriteLayers();
@@ -618,6 +619,12 @@ export class StageRuntime {
     dispose() {
         this.stopMonitorPolling();
         this.stopAll();
+        this.setColorSampler(null);
+    }
+
+    setColorSampler(sampler) {
+        this.colorSampler?.dispose?.();
+        this.colorSampler = sampler;
     }
 
     stopThisScript() {
@@ -1487,13 +1494,24 @@ export class StageRuntime {
         this.emitChange();
     }
 
-    isTouchingColor(_color = '#000000') {
-        // DOM stage has no pixel sampling yet; keep API for Scratch parity.
-        return false;
+    isTouchingColor(color = '#000000') {
+        const sprite = this.getActiveSprite();
+
+        if (!sprite || !this.colorSampler) {
+            return false;
+        }
+
+        return Boolean(this.colorSampler.isSpriteTouchingColor(sprite, color));
     }
 
-    isColorTouchingColor(_a = '#000000', _b = '#000000') {
-        return false;
+    isColorTouchingColor(colorA = '#000000', colorB = '#000000') {
+        const sprite = this.getActiveSprite();
+
+        if (!sprite || !this.colorSampler) {
+            return false;
+        }
+
+        return Boolean(this.colorSampler.isColorTouchingColor(sprite, colorA, colorB));
     }
 
     distanceTo(target = 'mouse-pointer') {

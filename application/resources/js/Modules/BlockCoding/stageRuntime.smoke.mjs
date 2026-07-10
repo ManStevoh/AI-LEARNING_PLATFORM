@@ -4,6 +4,7 @@
  */
 import { StageRuntime } from './stageRuntime.js';
 import { createProceduralBackdropEntry } from './proceduralBackdrop.js';
+import { colorsMatch, normalizeHexColor } from './stageColorSampler.js';
 
 globalThis.window = globalThis;
 globalThis.window.setInterval = () => 1;
@@ -124,6 +125,25 @@ runtime.onBroadcastReceived('ping', async () => {
 });
 await runtime.broadcastAndWait('ping');
 assert('broadcastAndWait', broadcastHit);
+
+assert('normalizeHexColor', normalizeHexColor('#ff0000').r === 255);
+assert('colorsMatch exact', colorsMatch({ r: 255, g: 0, b: 0 }, normalizeHexColor('#ff0000')));
+assert('colorsMatch tolerance', colorsMatch({ r: 248, g: 4, b: 4 }, normalizeHexColor('#ff0000')));
+
+runtime.setColorSampler({
+    isSpriteTouchingColor(sprite, color) {
+        return color === '#ff0000' && sprite.x === 100;
+    },
+    isColorTouchingColor(sprite, colorA, colorB) {
+        return colorA === '#ff0000' && colorB === '#00ff00' && sprite.y === 0;
+    },
+});
+assert('isTouchingColor without sampler match', runtime.isTouchingColor('#ff0000') === false);
+await runtime.goToXY(100, 0);
+assert('isTouchingColor delegated', runtime.isTouchingColor('#ff0000') === true);
+assert('isColorTouchingColor delegated', runtime.isColorTouchingColor('#ff0000', '#00ff00') === true);
+runtime.setColorSampler(null);
+assert('isTouchingColor without sampler', runtime.isTouchingColor('#ff0000') === false);
 
 let backdropHit = false;
 runtime.onBackdropSwitched('grass', async () => {

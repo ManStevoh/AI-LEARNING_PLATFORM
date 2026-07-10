@@ -99,8 +99,8 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 | Block ID | Label | Scratch equivalent | Generator | Runtime | Phase | Status |
 |----------|-------|--------------------|-----------|---------|-------|--------|
 | `ace_sensing_touching` | touching edge / mouse-pointer | touching | yes | yes | 2–3 | done |
-| `ace_sensing_touching_color` | touching color | touching color | yes | stub | 3 | partial |
-| `ace_sensing_color_touching` | color is touching | color is touching | yes | stub | 3 | partial |
+| `ace_sensing_touching_color` | touching color | touching color | yes | yes | 3 | done |
+| `ace_sensing_color_touching` | color is touching | color is touching | yes | yes | 3 | done |
 | `ace_sensing_distance` | distance to | distance to | yes | yes | 3 | done |
 | `ace_sensing_ask` | ask and wait | ask and wait | yes | yes | 3 | done |
 | `ace_sensing_answer` | answer | answer | yes | yes | 3 | done |
@@ -164,7 +164,6 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 
 | Item | Reason |
 |------|--------|
-| Pixel-accurate color touching | Needs canvas/Pixi sampling; stubs return false |
 | Scratch-style dynamic “Make a List” | Blockly 13 has no `listsDynamic`; static list blocks used |
 | Microphone loudness | Stub until media permission path exists |
 | Variable/list stage monitors | Blockly variable UI chrome |

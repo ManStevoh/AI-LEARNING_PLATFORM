@@ -1,6 +1,7 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { resolveBackdropImageUrl, normalizeBackdropEntry } from './backdropAssets.js';
 import { costumeImageUrl } from './costumeAssets.js';
+import { createStageColorSamplerAdapter } from './stageColorSampler.js';
 import StageMonitorOverlay from './StageMonitorOverlay';
 
 function spritePositionStyle(sprite, stage) {
@@ -105,6 +106,7 @@ export default function BlockStage({
     onPointerUp = null,
     onMoveMonitor = null,
     onMoveMonitorEnd = null,
+    onColorSamplerReady = null,
     lessonSlug = null,
 }) {
     const stageRef = useRef(null);
@@ -113,6 +115,27 @@ export default function BlockStage({
     const interactive = isRunning || snapshot.state === 'running';
     const currentBackdrop = stage.backdrops?.[stage.backdropIndex ?? 0];
     const backdropImage = resolveBackdropImageUrl(normalizeBackdropEntry(currentBackdrop), lessonSlug);
+
+    useEffect(() => {
+        if (!onColorSamplerReady) {
+            return undefined;
+        }
+
+        const adapter = createStageColorSamplerAdapter(snapshot, lessonSlug);
+        let cancelled = false;
+
+        void adapter.prepare().then(() => {
+            if (!cancelled) {
+                onColorSamplerReady(adapter);
+            }
+        });
+
+        return () => {
+            cancelled = true;
+            adapter.dispose();
+            onColorSamplerReady(null);
+        };
+    }, [snapshot, lessonSlug, onColorSamplerReady]);
 
     const reportPointer = (clientX, clientY) => {
         if (!stageRef.current) {

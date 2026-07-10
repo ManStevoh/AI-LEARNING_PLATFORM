@@ -5,10 +5,10 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 ## Snapshot
 
 - **Last updated:** 2026-07-10
-- **Engine phase:** Phase 3 — assets + monitors + backdrop library (envelope v1.7)
-- **Published to GitHub:** `8e929eb`
+- **Engine phase:** Phase 3 — assets + monitors + backdrop library + pixel color sensing
+- **Published to GitHub:** pending (local slice ready)
 - **Custom ACE blocks:** ~78 done (plus Blockly control/math/text/variables/lists/procedures)
-- **Tests:** 110 PHPUnit + StageRuntime smoke 32/32
+- **Tests:** 110 PHPUnit + StageRuntime smoke 39/39
 
 ## Done
 
@@ -21,6 +21,7 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 | Assets | ACE backdrop library (25 SVGs) + Choose modal | `backdropLibrary.js`, `ChooseBackdropModal.jsx` |
 | Assets | Procedural surprise backdrops | `proceduralBackdrop.js` |
 | UI | Stage monitor checkboxes + overlay | envelope v1.6 |
+| Sensing | Pixel color touching (canvas sampler) | `stageColorSampler.js` |
 | Architecture | Stage rendering ADR | ADR 0010 |
 | Teacher | Skill mastery | `/teacher/skills` |
 
@@ -28,24 +29,24 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 
 | Item | Blocker or remaining work |
 |------|---------------------------|
-| Color-touching sensing | API present; returns `false` until pixel sampling |
 | Loudness | Stub until microphone path |
 | AI-generated backdrops | Future slice via AI Gateway |
 | Variable/list stage monitors | Blockly variable UI chrome |
+| PixiJS renderer adapter | When pen/effects need WebGL path |
 
 ## Pending (Next Slices)
 
 | Priority | Item | Phase | Ref |
 |----------|------|-------|-----|
-| P1 | Pixel color sensing (canvas/Pixi) | 3 | ADR 0010 |
-| P2 | AI backdrop generation (child-safe) | 4 | AI Gateway |
+| P1 | AI backdrop generation (child-safe) | 4 | AI Gateway |
+| P2 | Variable/list stage monitors | 3 | Blockly chrome |
 | P3 | PixiJS renderer adapter when needed | 2 | ADR 0010 |
 
 ## Verification (Latest)
 
 ```text
 php artisan test              → 110 passed
-node stageRuntime.smoke.mjs   → 32/32 passed
+node stageRuntime.smoke.mjs   → 39/39 passed
 npm run build                 → pass
 ```
 
