@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `pending` — Add pen layer with Pixi advanced looks effects (envelope v2.1).
+- `ce19a08` — Add pen layer with Pixi advanced looks effects and envelope v2.1.
 
 Current local implementation status:
 
@@ -41,7 +41,7 @@ Current local implementation status:
 - **Variable/list stage monitors (envelope v1.9)** published in `0fe6297`.
 - **AI-generated backdrops (envelope v2.0)** published in `0ece71b`.
 - **PixiJS stage renderer adapter (ADR 0010)** published in `0d42a45`.
-- **Pen layer + Pixi advanced looks (envelope v2.1)** pending publish.
+- **Pen layer + Pixi advanced looks (envelope v2.1)** published in `ce19a08`.
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
