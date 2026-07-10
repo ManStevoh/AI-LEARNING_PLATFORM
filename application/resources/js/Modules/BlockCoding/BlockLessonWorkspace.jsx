@@ -219,6 +219,11 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
         runtimeRef.current?.setActiveSprite(spriteId);
     }, []);
 
+    const handleAddSpriteFromLibrary = useCallback((libraryId) => {
+        runtimeRef.current?.addSpriteFromLibrary(libraryId);
+        setAssetSaveRevision((revision) => revision + 1);
+    }, []);
+
     const handleSpriteStageClick = useCallback((spriteId) => {
         void runtimeRef.current?.handleSpriteClick(spriteId);
     }, []);
@@ -365,6 +370,7 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
                         <ScratchSpritePane
                             activeSpriteId={snapshot.activeSpriteId}
                             lessonSlug={lessonSlug}
+                            onAddSpriteFromLibrary={handleAddSpriteFromLibrary}
                             onSelectSprite={handleSelectSprite}
                             snapshot={snapshot}
                         />

@@ -150,6 +150,16 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 | `mouse_x` / `mouse_y` / `timer` / `loudness` / `answer` | Sensing reporters | done |
 | Variable / list monitors | Blockly variables/lists | planned |
 
+## Sprite & costume assets
+
+| Source | Description | Status |
+|--------|-------------|--------|
+| Emoji presets | Quick costume fills | done |
+| ACE library | 48 platform SVG sprites/costumes, categorized + searchable | done |
+| Uploads | Tenant-scoped learner costume images | done |
+| Choose sprite | Scratch-style modal adds new sprite from library | done |
+| Choose costume | Same library UI on Costumes tab | done |
+
 ## Backdrop assets
 
 | Source | Description | Status |

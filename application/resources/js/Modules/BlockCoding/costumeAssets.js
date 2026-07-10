@@ -1,3 +1,5 @@
+import { getLibrarySprite, librarySpriteUrl } from './spriteLibrary.js';
+
 function readCsrfToken() {
     const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);
 
@@ -102,6 +104,17 @@ export function costumeDisplayLabel(value) {
 }
 
 export function normalizeCostumeEntry(value) {
+    if (value !== null && typeof value === 'object' && typeof value.library_id === 'string') {
+        const library = getLibrarySprite(value.library_id);
+
+        return {
+            type: 'library',
+            library_id: value.library_id,
+            name: value.name ?? library?.name ?? 'Costume',
+            emoji: value.emoji ?? library?.emoji ?? '🎨',
+        };
+    }
+
     if (value !== null && typeof value === 'object' && typeof value.asset_uuid === 'string') {
         return {
             type: 'asset',
@@ -125,4 +138,42 @@ export function normalizeCostumeEntry(value) {
         emoji: typeof value === 'string' && value !== '' ? value : '🐱',
         name: typeof value === 'string' ? value : 'Costume',
     };
+}
+
+export function resolveCostumeImageUrl(costume, lessonSlug = null) {
+    const entry = normalizeCostumeEntry(costume);
+
+    if (entry.type === 'asset' && lessonSlug) {
+        return costumeImageUrl(lessonSlug, entry.asset_uuid);
+    }
+
+    if (entry.type === 'library') {
+        return librarySpriteUrl(entry.library_id);
+    }
+
+    return null;
+}
+
+export function serializeCostumeEntry(costume) {
+    const entry = normalizeCostumeEntry(costume);
+
+    if (entry.type === 'library') {
+        return {
+            type: 'library',
+            library_id: entry.library_id,
+            name: entry.name,
+            emoji: entry.emoji,
+        };
+    }
+
+    if (entry.type === 'asset') {
+        return {
+            type: 'asset',
+            asset_uuid: entry.asset_uuid,
+            name: entry.name,
+            emoji: entry.emoji,
+        };
+    }
+
+    return entry.emoji;
 }

@@ -1,12 +1,35 @@
-import { costumeImageUrl } from './costumeAssets.js';
+import { useState } from 'react';
+import ChooseSpriteModal from './ChooseSpriteModal.jsx';
+import SpriteThumb from './SpriteThumb.jsx';
 
-export default function ScratchSpritePane({ snapshot, activeSpriteId, onSelectSprite, lessonSlug }) {
+export default function ScratchSpritePane({
+    snapshot,
+    activeSpriteId,
+    onSelectSprite,
+    onAddSpriteFromLibrary,
+    lessonSlug,
+}) {
+    const [libraryOpen, setLibraryOpen] = useState(false);
     const activeSprite = snapshot.sprites.find((sprite) => sprite.id === activeSpriteId) ?? snapshot.sprites[0];
+
+    const handleChooseSprite = (libraryId) => {
+        onAddSpriteFromLibrary?.(libraryId);
+        setLibraryOpen(false);
+    };
 
     return (
         <div className="grid shrink-0 grid-cols-[minmax(0,1fr)_88px] gap-2 border-t border-[#d9d9d9] bg-[#fafafa] p-2">
             <div className="rounded-md border border-[#d9d9d9] bg-white p-2">
-                <p className="text-xs font-semibold text-[#575e75]">{activeSprite.name}</p>
+                <div className="flex items-center justify-between gap-2">
+                    <p className="text-xs font-semibold text-[#575e75]">{activeSprite.name}</p>
+                    <button
+                        className="rounded-full border border-[#855cd6] bg-white px-2 py-0.5 text-[10px] font-semibold text-[#855cd6] hover:bg-[#f6f0ff]"
+                        onClick={() => setLibraryOpen(true)}
+                        type="button"
+                    >
+                        Choose sprite
+                    </button>
+                </div>
                 <dl className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 text-xs text-[#575e75]">
                     <div>
                         <dt className="text-[#999]">x</dt>
@@ -43,22 +66,14 @@ export default function ScratchSpritePane({ snapshot, activeSpriteId, onSelectSp
                             onClick={() => onSelectSprite?.(sprite.id)}
                             type="button"
                         >
-                            {sprite.costumeAssetUuid && lessonSlug ? (
-                                <img
-                                    alt={sprite.name}
-                                    className="h-10 w-10 rounded-md border border-[#e0e0e0] bg-[#f5f5f5] object-contain"
-                                    src={costumeImageUrl(lessonSlug, sprite.costumeAssetUuid)}
-                                />
-                            ) : (
-                                <div className="flex h-10 w-10 items-center justify-center rounded-md border border-[#e0e0e0] bg-[#f5f5f5] text-xl">
-                                    {sprite.emoji}
-                                </div>
-                            )}
+                            <SpriteThumb lessonSlug={lessonSlug} sprite={sprite} />
                             <p className="mt-1 max-w-[72px] truncate text-[10px] font-medium text-[#575e75]">{sprite.name}</p>
                         </button>
                     );
                 })}
             </div>
+
+            <ChooseSpriteModal onClose={() => setLibraryOpen(false)} onSelect={handleChooseSprite} open={libraryOpen} />
         </div>
     );
 }

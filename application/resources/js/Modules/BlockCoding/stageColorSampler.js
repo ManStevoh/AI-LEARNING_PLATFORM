@@ -1,5 +1,6 @@
 import { normalizeBackdropEntry, resolveBackdropImageUrl } from './backdropAssets.js';
-import { costumeImageUrl } from './costumeAssets.js';
+import { costumeImageUrl, resolveCostumeImageUrl } from './costumeAssets.js';
+import { librarySpriteUrl } from './spriteLibrary.js';
 
 export const DEFAULT_COLOR_TOLERANCE = 10;
 
@@ -86,6 +87,16 @@ function spriteMaskPoints(sprite, width, height) {
 }
 
 function resolveCostumeUrl(sprite, lessonSlug) {
+    const costume = sprite?.costumes?.[sprite.costumeIndex ?? 0];
+
+    if (costume) {
+        return resolveCostumeImageUrl(costume, lessonSlug);
+    }
+
+    if (sprite?.costumeLibraryId) {
+        return resolveCostumeImageUrl({ type: 'library', library_id: sprite.costumeLibraryId }, lessonSlug);
+    }
+
     if (!sprite?.costumeAssetUuid || !lessonSlug) {
         return null;
     }
@@ -111,6 +122,13 @@ function collectImageUrls(snapshot, lessonSlug) {
 
         if (costumeUrl) {
             urls.add(costumeUrl);
+            continue;
+        }
+
+        const costume = sprite?.costumes?.[sprite.costumeIndex ?? 0];
+
+        if (costume?.type === 'library' && costume.library_id) {
+            urls.add(librarySpriteUrl(costume.library_id));
         }
     }
 

@@ -1,9 +1,9 @@
-import { normalizeCostumeEntry } from './costumeAssets.js';
+import { normalizeCostumeEntry, serializeCostumeEntry } from './costumeAssets.js';
 import { normalizeBackdropEntry, serializeBackdropEntry } from './backdropAssets.js';
 import { normalizeMonitorState, serializeMonitors } from './stageMonitors.js';
 
 export const PROJECT_FORMAT = 'ace_project';
-export const PROJECT_VERSION = '1.7';
+export const PROJECT_VERSION = '1.8';
 
 export function isProjectEnvelope(value) {
     return (
@@ -103,20 +103,9 @@ export function buildProjectEnvelope(blocklyState, extras = {}) {
             visible: sprite.visible,
             size: sprite.size ?? 100,
             emoji: typeof sprite.emoji === 'string' ? sprite.emoji : '🐱',
-            costumes: (Array.isArray(sprite.costumes) ? sprite.costumes : [sprite.emoji]).map((costume) => {
-                const entry = normalizeCostumeEntry(costume);
-
-                if (entry.type === 'asset') {
-                    return {
-                        type: 'asset',
-                        asset_uuid: entry.asset_uuid,
-                        name: entry.name,
-                        emoji: entry.emoji,
-                    };
-                }
-
-                return entry.emoji;
-            }),
+            costumes: (Array.isArray(sprite.costumes) ? sprite.costumes : [sprite.emoji]).map((costume) =>
+                serializeCostumeEntry(costume),
+            ),
             costumeIndex: sprite.costumeIndex ?? 0,
         }));
     }

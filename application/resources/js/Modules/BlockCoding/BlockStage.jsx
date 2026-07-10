@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { resolveBackdropImageUrl, normalizeBackdropEntry } from './backdropAssets.js';
-import { costumeImageUrl } from './costumeAssets.js';
+import { resolveCostumeImageUrl } from './costumeAssets.js';
 import { createStageColorSamplerAdapter } from './stageColorSampler.js';
+import SpriteThumb from './SpriteThumb';
 import StageMonitorOverlay from './StageMonitorOverlay';
 
 function spritePositionStyle(sprite, stage) {
@@ -34,12 +35,15 @@ function spritePositionStyle(sprite, stage) {
 }
 
 function CostumeFace({ sprite, lessonSlug, className, scale }) {
-    if (sprite.costumeAssetUuid && lessonSlug) {
+    const costume = sprite.costumes?.[sprite.costumeIndex ?? 0];
+    const imageUrl = resolveCostumeImageUrl(costume, lessonSlug);
+
+    if (imageUrl) {
         return (
             <img
                 alt={sprite.name}
                 className={`${className} object-contain`}
-                src={costumeImageUrl(lessonSlug, sprite.costumeAssetUuid)}
+                src={imageUrl}
                 style={{ transform: `scale(${scale})` }}
             />
         );

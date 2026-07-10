@@ -1,3 +1,4 @@
+import { createSpriteFromLibrary } from './spriteLibrary.js';
 import { normalizeBackdropEntry } from './backdropAssets.js';
 import { normalizeCostumeEntry } from './costumeAssets.js';
 import { SoundEngine } from './soundEngine.js';
@@ -243,9 +244,15 @@ export class StageRuntime {
         if (costume.type === 'asset') {
             sprite.emoji = costume.emoji ?? '🖼️';
             sprite.costumeAssetUuid = costume.asset_uuid;
+            sprite.costumeLibraryId = null;
+        } else if (costume.type === 'library') {
+            sprite.emoji = costume.emoji ?? '🎨';
+            sprite.costumeAssetUuid = null;
+            sprite.costumeLibraryId = costume.library_id;
         } else {
             sprite.emoji = costume.emoji ?? DEFAULT_SPRITE.emoji;
             sprite.costumeAssetUuid = null;
+            sprite.costumeLibraryId = null;
         }
     }
 
@@ -261,6 +268,23 @@ export class StageRuntime {
         this.applyCostumeVisual(sprite);
         this.syncInitialSprite(sprite);
         this.emitChange();
+    }
+
+    addSpriteFromLibrary(libraryId) {
+        const sprite = createSpriteFromLibrary(libraryId, this.sprites.length);
+
+        if (!sprite) {
+            return null;
+        }
+
+        const normalized = this.normalizeSprites([sprite])[0];
+        this.sprites.push(normalized);
+        this.initialSprites.push(structuredClone(normalized));
+        this.activeSpriteId = normalized.id;
+        this.ensureSpriteLayers();
+        this.emitChange();
+
+        return normalized;
     }
 
     selectCostume(spriteId, index) {
@@ -307,6 +331,7 @@ export class StageRuntime {
         initial.costumeIndex = sprite.costumeIndex;
         initial.emoji = sprite.emoji;
         initial.costumeAssetUuid = sprite.costumeAssetUuid;
+        initial.costumeLibraryId = sprite.costumeLibraryId ?? null;
     }
 
     getSnapshot() {

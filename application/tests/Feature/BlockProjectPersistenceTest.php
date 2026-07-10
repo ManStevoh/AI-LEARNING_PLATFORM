@@ -291,6 +291,70 @@ class BlockProjectPersistenceTest extends TestCase
             );
     }
 
+    public function test_learner_can_save_project_envelope_with_library_sprite_costumes(): void
+    {
+        $this->seed(CurriculumFoundationSeeder::class);
+
+        $user = User::factory()->create();
+        $institution = Institution::factory()->create();
+        $this->attachLearner($user, $institution);
+
+        $lessonSlug = 'unit-01-meet-the-coding-studio';
+        $workspace = [
+            'format' => 'ace_project',
+            'version' => '1.8',
+            'blockly' => $this->sampleWorkspace(),
+            'sprites' => [
+                [
+                    'id' => 'sprite-1',
+                    'name' => 'Sprite1',
+                    'x' => 0,
+                    'y' => 0,
+                    'direction' => 90,
+                    'visible' => true,
+                    'emoji' => '🐱',
+                    'costumes' => ['🐱'],
+                    'costumeIndex' => 0,
+                ],
+                [
+                    'id' => 'sprite-2',
+                    'name' => 'Owl',
+                    'x' => 40,
+                    'y' => -20,
+                    'direction' => 90,
+                    'visible' => true,
+                    'emoji' => '🦉',
+                    'costumes' => [
+                        [
+                            'type' => 'library',
+                            'library_id' => 'ace-owl',
+                            'name' => 'Owl',
+                            'emoji' => '🦉',
+                        ],
+                    ],
+                    'costumeIndex' => 0,
+                ],
+            ],
+            'active_sprite_id' => 'sprite-2',
+        ];
+
+        $this->actingAs($user)->postJson("/learner/learn/{$lessonSlug}/project", [
+            'workspace' => $workspace,
+            'generated_code' => 'runtime.addSpriteFromLibrary("ace-owl");',
+        ])->assertOk()->assertJsonPath('saved_project.schema_version', '1.8');
+
+        $this->withoutVite()->actingAs($user)->get("/learner/learn/{$lessonSlug}")
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('savedProject', fn (Assert $project) => $project
+                    ->where('schema_version', '1.8')
+                    ->where('workspace.sprites.1.costumes.0.library_id', 'ace-owl')
+                    ->where('workspace.active_sprite_id', 'sprite-2')
+                    ->etc()
+                )
+            );
+    }
+
     private function attachLearner(User $user, Institution $institution): void
     {
         $institution->users()->attach($user, [

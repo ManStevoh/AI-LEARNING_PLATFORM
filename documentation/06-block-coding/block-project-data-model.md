@@ -27,9 +27,36 @@ Raw Blockly serialization only:
 
 Loaders detect legacy format when `format` is absent.
 
+## ACE project envelope (schema `1.8`)
+
+Current version. Adds platform sprite/costume library refs on top of v1.7.
+
+```json
+{
+  "format": "ace_project",
+  "version": "1.8",
+  "sprites": [
+    {
+      "id": "sprite-2",
+      "name": "Owl",
+      "costumes": [
+        {
+          "type": "library",
+          "library_id": "ace-owl",
+          "name": "Owl",
+          "emoji": "🦉"
+        }
+      ],
+      "costumeIndex": 0
+    }
+  ],
+  "active_sprite_id": "sprite-2"
+}
+```
+
 ## ACE project envelope (schema `1.7`)
 
-Current version. Adds platform backdrop library refs and procedural surprise backdrops on top of v1.6.
+Adds platform backdrop library refs and procedural surprise backdrops on top of v1.6.
 
 ```json
 {
@@ -202,7 +229,8 @@ Same as above without the `sounds` array.
 | `1.4` | Costume asset refs on sprites | legacy |
 | `1.5` | Stage backdrop asset refs | legacy |
 | `1.6` | Stage reporter monitors | legacy |
-| `1.7` | Platform backdrop library + procedural backdrops | **current** |
+| `1.7` | Platform backdrop library + procedural backdrops | legacy |
+| `1.8` | Platform sprite/costume library refs | **current** |
 | `2.0` | Full stage-runtime spec alignment | planned |
 
 Migrations must accept all prior versions on read and write the latest supported version on save.

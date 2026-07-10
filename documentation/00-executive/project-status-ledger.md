@@ -178,10 +178,11 @@ Developed:
 - stage reporter monitors with toolbox checkboxes and overlay (envelope v1.6).
 - ACE backdrop library (25 SVGs) with Choose modal + procedural surprise backdrops (envelope v1.7).
 - pixel color touching sensing via DOM canvas sampler (`stageColorSampler.js`).
+- ACE sprite library (48 SVGs) with Scratch-style Choose sprite/costume modals (envelope v1.8).
 
-### Block Coding (Published)
+### Block Coding (Published + local sprite library)
 
-Status: Phase 1–3 Scratch parity + uploads + monitors + backdrop library + pixel color sensing published. See `documentation/06-block-coding/implementation-status.md`.
+Status: Phase 1–3 Scratch parity + uploads + monitors + backdrop library + pixel color sensing published; sprite library local. See `documentation/06-block-coding/implementation-status.md`.
 
 Developed:
 
@@ -192,11 +193,13 @@ Developed:
 - project envelope through v1.7,
 - ACE backdrop library + procedural generator,
 - DOM canvas color sampler for touching-color blocks,
+- shared Scratch-style asset library modal + ACE sprite library (48 SVGs),
 - block registry and scratch parity strategy docs,
-- StageRuntime smoke 39/39; PHPUnit 110.
+- StageRuntime smoke 41/41; PHPUnit 111.
 
 Next action:
 
+- publish sprite library slice,
 - configure PostgreSQL once local services are available.
 
 ## Partially Developed Artifacts
@@ -304,6 +307,7 @@ Latest local verification:
 - stage reporter monitors with envelope v1.6 (PHPUnit persistence; smoke 31/31; published `ae12511`).
 - ACE backdrop library + procedural backdrops with envelope v1.7 (PHPUnit persistence; smoke 32/32; published `8e929eb`).
 - pixel color touching sensing via DOM canvas sampler (smoke 39/39; published `7718d34`).
+- ACE sprite library + Choose sprite/costume modals with envelope v1.8 (PHPUnit persistence; smoke 41/41; local pending publish).
 
 Learning:
 
@@ -412,9 +416,9 @@ Not published (blocked):
 
 ## Immediate Next Build Sequence
 
-1. Configure PostgreSQL once local services are available.
-2. AI-generated backdrops via AI Gateway (child-safe).
-3. Variable/list stage monitors (Blockly chrome).
+1. Publish ACE sprite library slice (envelope v1.8).
+2. Configure PostgreSQL once local services are available.
+3. AI-generated backdrops via AI Gateway (child-safe).
 
 ## Ledger Update Rule
 

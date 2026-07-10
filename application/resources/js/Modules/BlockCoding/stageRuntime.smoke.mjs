@@ -96,6 +96,11 @@ assert('addBackdrop library', runtime.stage.backdropLibraryId === 'desert-dunes'
 
 runtime.addBackdrop(createProceduralBackdropEntry(424242));
 assert('addBackdrop procedural', runtime.sprites && runtime.stage.backdrops.some((b) => b.type === 'procedural'));
+
+const addedSprite = runtime.addSpriteFromLibrary('ace-owl');
+assert('addSpriteFromLibrary', addedSprite?.name === 'Owl' && runtime.sprites.length >= 2);
+assert('library costume persisted', runtime.sprites.some((s) => s.costumes?.[0]?.type === 'library'));
+
 runtime.selectBackdrop(0);
 assert('selectBackdrop', runtime.stage.backdropIndex === 0);
 

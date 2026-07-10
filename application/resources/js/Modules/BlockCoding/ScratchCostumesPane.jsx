@@ -1,10 +1,12 @@
 import { useRef, useState } from 'react';
+import ChooseCostumeModal from './ChooseCostumeModal.jsx';
 import {
-    costumeImageUrl,
     deleteLessonCostume,
     normalizeCostumeEntry,
+    resolveCostumeImageUrl,
     uploadLessonCostume,
 } from './costumeAssets.js';
+import { createLibraryCostumeEntry } from './spriteLibrary.js';
 
 const PRESET_EMOJIS = ['🐱', '🐶', '🦊', '🐻', '🐸', '🤖', '⭐', '🚀'];
 
@@ -22,13 +24,14 @@ function formatBytes(bytes) {
 
 function CostumeThumb({ costume, lessonSlug }) {
     const entry = normalizeCostumeEntry(costume);
+    const imageUrl = resolveCostumeImageUrl(costume, lessonSlug);
 
-    if (entry.type === 'asset') {
+    if (imageUrl) {
         return (
             <img
                 alt={entry.name}
                 className="h-10 w-10 rounded-md border border-[#e0e0e0] object-contain bg-[#f5f5f5]"
-                src={costumeImageUrl(lessonSlug, entry.asset_uuid)}
+                src={imageUrl}
             />
         );
     }
@@ -38,6 +41,17 @@ function CostumeThumb({ costume, lessonSlug }) {
             {entry.emoji}
         </div>
     );
+}
+
+function costumeTypeLabel(entry) {
+    switch (entry.type) {
+        case 'asset':
+            return 'Uploaded image';
+        case 'library':
+            return 'ACE library';
+        default:
+            return 'Emoji costume';
+    }
 }
 
 export default function ScratchCostumesPane({
@@ -51,6 +65,7 @@ export default function ScratchCostumesPane({
     const inputRef = useRef(null);
     const [status, setStatus] = useState('idle');
     const [error, setError] = useState('');
+    const [libraryOpen, setLibraryOpen] = useState(false);
 
     if (!activeSprite) {
         return (
@@ -101,6 +116,18 @@ export default function ScratchCostumesPane({
         onSaveRequest?.();
     };
 
+    const handleChooseLibrary = (libraryId) => {
+        const entry = createLibraryCostumeEntry(libraryId);
+
+        if (!entry) {
+            return;
+        }
+
+        onAddCostume?.(activeSprite.id, entry);
+        onSaveRequest?.();
+        setLibraryOpen(false);
+    };
+
     const handleDelete = async (index) => {
         const costume = costumes[index];
         const entry = normalizeCostumeEntry(costume);
@@ -132,16 +159,28 @@ export default function ScratchCostumesPane({
             <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                     <p className="text-sm font-semibold text-[#575e75]">Costumes · {activeSprite.name}</p>
-                    <p className="text-xs text-[#999]">Add emoji presets or upload an image (max 1 MB).</p>
+                    <p className="text-xs text-[#999]">
+                        Choose from the ACE library, add emoji presets, or upload an image (max 1 MB).
+                    </p>
                 </div>
-                <button
-                    className="rounded-md bg-[#855cd6] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#714bb8] disabled:opacity-60"
-                    disabled={status === 'uploading' || status === 'deleting'}
-                    onClick={() => inputRef.current?.click()}
-                    type="button"
-                >
-                    {status === 'uploading' ? 'Uploading…' : 'Upload costume'}
-                </button>
+                <div className="flex flex-wrap gap-2">
+                    <button
+                        className="rounded-md border border-[#855cd6] bg-white px-3 py-1.5 text-xs font-semibold text-[#855cd6] hover:bg-[#f6f0ff] disabled:opacity-60"
+                        disabled={status === 'uploading' || status === 'deleting'}
+                        onClick={() => setLibraryOpen(true)}
+                        type="button"
+                    >
+                        Choose costume
+                    </button>
+                    <button
+                        className="rounded-md bg-[#855cd6] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#714bb8] disabled:opacity-60"
+                        disabled={status === 'uploading' || status === 'deleting'}
+                        onClick={() => inputRef.current?.click()}
+                        type="button"
+                    >
+                        {status === 'uploading' ? 'Uploading…' : 'Upload'}
+                    </button>
+                </div>
                 <input
                     accept="image/*,.jpg,.jpeg,.png,.gif,.webp"
                     className="hidden"
@@ -182,7 +221,7 @@ export default function ScratchCostumesPane({
                                     ? 'border-[#855cd6] bg-white ring-2 ring-[#855cd6]/20'
                                     : 'border-[#d9d9d9] bg-white'
                             }`}
-                            key={`${entry.type}-${entry.asset_uuid ?? entry.emoji}-${index}`}
+                            key={`${entry.type}-${entry.library_id ?? entry.asset_uuid ?? entry.emoji}-${index}`}
                         >
                             <button
                                 className="flex min-w-0 flex-1 items-center gap-3 text-left"
@@ -197,8 +236,8 @@ export default function ScratchCostumesPane({
                                     </p>
                                     <p className="text-xs text-[#999]">
                                         {entry.type === 'asset'
-                                            ? formatBytes(costume.size_bytes) ?? 'Uploaded image'
-                                            : 'Emoji costume'}
+                                            ? formatBytes(costume.size_bytes) ?? costumeTypeLabel(entry)
+                                            : costumeTypeLabel(entry)}
                                     </p>
                                 </div>
                             </button>
@@ -215,6 +254,12 @@ export default function ScratchCostumesPane({
                     );
                 })}
             </ul>
+
+            <ChooseCostumeModal
+                onClose={() => setLibraryOpen(false)}
+                onSelect={handleChooseLibrary}
+                open={libraryOpen}
+            />
         </div>
     );
 }
