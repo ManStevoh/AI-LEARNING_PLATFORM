@@ -124,12 +124,16 @@ export class StageRuntime {
         if (!current) {
             stage.background = DEFAULT_STAGE.background;
             stage.backdropAssetUuid = null;
+            stage.backdropLibraryId = null;
+            stage.backdropProceduralSeed = null;
 
             return;
         }
 
         stage.background = current.color ?? DEFAULT_STAGE.background;
         stage.backdropAssetUuid = current.type === 'asset' ? current.asset_uuid : null;
+        stage.backdropLibraryId = current.type === 'library' ? current.library_id : null;
+        stage.backdropProceduralSeed = current.type === 'procedural' ? current.seed : null;
     }
 
     addBackdrop(backdrop) {
@@ -177,6 +181,8 @@ export class StageRuntime {
         this.initialStage.backdropIndex = this.stage.backdropIndex;
         this.initialStage.background = this.stage.background;
         this.initialStage.backdropAssetUuid = this.stage.backdropAssetUuid;
+        this.initialStage.backdropLibraryId = this.stage.backdropLibraryId;
+        this.initialStage.backdropProceduralSeed = this.stage.backdropProceduralSeed;
     }
 
     ensureSpriteLayers() {
@@ -1283,7 +1289,11 @@ export class StageRuntime {
 
         const value = String(nameOrColor);
         const byName = this.stage.backdrops?.findIndex(
-            (backdrop) => backdrop.name === value || backdrop.color === value || backdrop.asset_uuid === value,
+            (backdrop) =>
+                backdrop.name === value ||
+                backdrop.color === value ||
+                backdrop.asset_uuid === value ||
+                backdrop.library_id === value,
         );
         const byIndex = Number(value);
 

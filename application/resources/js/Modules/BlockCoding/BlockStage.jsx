@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { backdropImageUrl } from './backdropAssets.js';
+import { resolveBackdropImageUrl, normalizeBackdropEntry } from './backdropAssets.js';
 import { costumeImageUrl } from './costumeAssets.js';
 import StageMonitorOverlay from './StageMonitorOverlay';
 
@@ -111,6 +111,8 @@ export default function BlockStage({
     const stage = snapshot.stage;
     const scratch = variant === 'scratch';
     const interactive = isRunning || snapshot.state === 'running';
+    const currentBackdrop = stage.backdrops?.[stage.backdropIndex ?? 0];
+    const backdropImage = resolveBackdropImageUrl(normalizeBackdropEntry(currentBackdrop), lessonSlug);
 
     const reportPointer = (clientX, clientY) => {
         if (!stageRef.current) {
@@ -135,11 +137,11 @@ export default function BlockStage({
                     ref={stageRef}
                     style={{ backgroundColor: stage.background }}
                 >
-                    {stage.backdropAssetUuid && lessonSlug ? (
+                    {backdropImage ? (
                         <img
                             alt=""
                             className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-                            src={backdropImageUrl(lessonSlug, stage.backdropAssetUuid)}
+                            src={backdropImage}
                         />
                     ) : null}
                     <div
@@ -187,11 +189,11 @@ export default function BlockStage({
                 className="relative flex-1 overflow-hidden"
                 style={{ backgroundColor: stage.background }}
             >
-                {stage.backdropAssetUuid && lessonSlug ? (
+                {backdropImage ? (
                     <img
                         alt=""
                         className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-                        src={backdropImageUrl(lessonSlug, stage.backdropAssetUuid)}
+                        src={backdropImage}
                     />
                 ) : null}
                 <StageMonitorOverlay

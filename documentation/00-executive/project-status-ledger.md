@@ -35,6 +35,7 @@ Current local implementation status:
 - **Scratch Control clones + Sensing/Operators/Lists/My Blocks parity** published in `a79c32b`.
 - **Backdrop asset uploads (envelope v1.5)** published in `e39ec5d`.
 - **Stage reporter monitors (envelope v1.6)** published in `ae12511`.
+- **ACE backdrop library + procedural backdrops (envelope v1.7)** implemented locally (ready to publish).
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
@@ -174,10 +175,11 @@ Developed:
 - Scratch Control clones + Sensing/Operators/Lists/My Blocks palette parity.
 - tenant-scoped block project backdrop uploads with envelope v1.5 stage refs.
 - stage reporter monitors with toolbox checkboxes and overlay (envelope v1.6).
+- ACE backdrop library (25 SVGs) with Choose modal + procedural surprise backdrops (envelope v1.7; local pending publish).
 
-### Block Coding (Published)
+### Block Coding (Published + local backdrop library)
 
-Status: Phase 1–3 Scratch palette parity + backdrop uploads + stage monitors published. See `documentation/06-block-coding/implementation-status.md`.
+Status: Phase 1–3 Scratch parity + uploads + monitors published; backdrop library local. See `documentation/06-block-coding/implementation-status.md`.
 
 Developed:
 
@@ -185,13 +187,14 @@ Developed:
 - Blockly Zelos theme and Scratch palette order,
 - ACE Stage Engine Phases 1–3,
 - Operators/Lists/My Blocks,
-- project envelope through v1.6,
-- stage reporter monitors (checkbox + overlay),
+- project envelope through v1.7 (local),
+- ACE backdrop library + procedural generator,
 - block registry and scratch parity strategy docs,
-- StageRuntime smoke 31/31; PHPUnit 109.
+- StageRuntime smoke 32/32; PHPUnit 110.
 
 Next action:
 
+- publish backdrop library slice,
 - configure PostgreSQL once local services are available.
 
 ## Partially Developed Artifacts
@@ -271,7 +274,7 @@ Application:
 Application verification:
 
 - `php artisan route:list` passes,
-- `php artisan test` passes with 109 tests and 611 assertions,
+- `php artisan test` passes with 110 tests and 629 assertions,
 - `npm run build` passes,
 - `application/.env` is ignored,
 - `application/vendor`, `application/node_modules`, and `application/public/build` are ignored.
@@ -297,6 +300,7 @@ Latest local verification:
 - Scratch Phase 3 clones/sensing/operators/lists/My Blocks (StageRuntime smoke 25/25; published `a79c32b`).
 - block project backdrop upload/list/stream/delete with envelope v1.5 (PHPUnit 6; smoke 27/27; published `e39ec5d`).
 - stage reporter monitors with envelope v1.6 (PHPUnit persistence; smoke 31/31; published `ae12511`).
+- ACE backdrop library + procedural backdrops with envelope v1.7 (PHPUnit persistence; smoke 32/32; local pending publish).
 
 Learning:
 
@@ -392,19 +396,22 @@ Published:
 - Scratch Control clones + Sensing/Operators/Lists/My Blocks palette parity,
 - block project backdrop uploads with Backdrops tab and envelope v1.5,
 - stage reporter monitors with toolbox checkboxes and overlay (envelope v1.6),
+- ACE backdrop library with Choose modal + procedural surprise backdrops (envelope v1.7),
 - Scratch block coding studio and ACE Stage Engine Phases 1–3,
 - block coding docs (registry, parity strategy, status procedure).
 
 Not published (local only):
 
+- ACE backdrop library + procedural backdrops (envelope v1.7),
 - PostgreSQL local setup (Docker unavailable).
 
 Not published (blocked):
 
 ## Immediate Next Build Sequence
 
-1. Configure PostgreSQL once local services are available.
-2. Pixel color sensing (canvas/Pixi) when needed.
+1. Publish ACE backdrop library slice (envelope v1.7).
+2. Configure PostgreSQL once local services are available.
+3. Pixel color sensing (canvas/Pixi) when needed.
 
 ## Ledger Update Rule
 

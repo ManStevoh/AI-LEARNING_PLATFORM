@@ -150,6 +150,16 @@ Legend: `done` | `partial` | `planned` | `n/a` (ACE intentionally skips Scratch 
 | `mouse_x` / `mouse_y` / `timer` / `loudness` / `answer` | Sensing reporters | done |
 | Variable / list monitors | Blockly variables/lists | planned |
 
+## Backdrop assets
+
+| Source | Description | Status |
+|--------|-------------|--------|
+| Color presets | Solid fills | done |
+| ACE library | 25 platform SVG backdrops, categorized + searchable | done |
+| Uploads | Tenant-scoped learner images | done |
+| Procedural | Seed-based unique SVG surprise backdrops | done |
+| AI-generated | Child-safe prompts via AI Gateway | planned |
+
 ## Not in this slice (later)
 
 | Item | Reason |

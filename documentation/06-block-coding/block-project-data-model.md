@@ -27,9 +27,39 @@ Raw Blockly serialization only:
 
 Loaders detect legacy format when `format` is absent.
 
-## ACE project envelope (schema `1.6`)
+## ACE project envelope (schema `1.7`)
 
-Current version. Includes Blockly workspace, sprite costumes, uploaded sounds, stage backdrop refs, and stage reporter monitors.
+Current version. Adds platform backdrop library refs and procedural surprise backdrops on top of v1.6.
+
+```json
+{
+  "format": "ace_project",
+  "version": "1.7",
+  "stage": {
+    "backdrops": [
+      {
+        "type": "library",
+        "id": "backdrop-lib-desert-dunes",
+        "library_id": "desert-dunes",
+        "name": "Desert Dunes",
+        "color": "#f6c56b"
+      },
+      {
+        "type": "procedural",
+        "id": "backdrop-proc-424242",
+        "seed": 424242,
+        "name": "Surprise 242",
+        "color": "#dbeafe"
+      }
+    ],
+    "backdropIndex": 0
+  }
+}
+```
+
+### Envelope `1.6` (legacy)
+
+Includes Blockly workspace, sprite costumes, uploaded sounds, stage backdrop refs, and stage reporter monitors.
 
 ```json
 {
@@ -171,7 +201,8 @@ Same as above without the `sounds` array.
 | `1.3` | Sound asset refs | legacy |
 | `1.4` | Costume asset refs on sprites | legacy |
 | `1.5` | Stage backdrop asset refs | legacy |
-| `1.6` | Stage reporter monitors | **current** |
+| `1.6` | Stage reporter monitors | legacy |
+| `1.7` | Platform backdrop library + procedural backdrops | **current** |
 | `2.0` | Full stage-runtime spec alignment | planned |
 
 Migrations must accept all prior versions on read and write the latest supported version on save.

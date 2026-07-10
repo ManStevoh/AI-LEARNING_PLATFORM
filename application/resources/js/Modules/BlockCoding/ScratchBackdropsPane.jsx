@@ -1,6 +1,9 @@
 import { useRef, useState } from 'react';
+import BackdropThumb from './BackdropThumb.jsx';
+import ChooseBackdropModal from './ChooseBackdropModal.jsx';
 import {
-    backdropImageUrl,
+    createLibraryBackdropEntry,
+    createProceduralBackdropEntry,
     deleteLessonBackdrop,
     normalizeBackdropEntry,
     uploadLessonBackdrop,
@@ -27,26 +30,17 @@ function formatBytes(bytes) {
     return `${(bytes / 1024).toFixed(1)} KB`;
 }
 
-function BackdropThumb({ backdrop, lessonSlug }) {
-    const entry = normalizeBackdropEntry(backdrop);
-
-    if (entry.type === 'asset') {
-        return (
-            <img
-                alt={entry.name}
-                className="h-10 w-16 rounded-md border border-[#e0e0e0] object-cover bg-[#f5f5f5]"
-                src={backdropImageUrl(lessonSlug, entry.asset_uuid)}
-            />
-        );
+function backdropTypeLabel(entry) {
+    switch (entry.type) {
+        case 'asset':
+            return 'Uploaded image';
+        case 'library':
+            return 'ACE library';
+        case 'procedural':
+            return 'Surprise backdrop';
+        default:
+            return entry.color;
     }
-
-    return (
-        <div
-            aria-hidden="true"
-            className="h-10 w-16 rounded-md border border-[#e0e0e0]"
-            style={{ backgroundColor: entry.color }}
-        />
-    );
 }
 
 export default function ScratchBackdropsPane({
@@ -60,6 +54,7 @@ export default function ScratchBackdropsPane({
     const inputRef = useRef(null);
     const [status, setStatus] = useState('idle');
     const [error, setError] = useState('');
+    const [libraryOpen, setLibraryOpen] = useState(false);
 
     const backdrops = Array.isArray(stage?.backdrops) ? stage.backdrops : [];
     const backdropIndex = stage?.backdropIndex ?? 0;
@@ -104,6 +99,23 @@ export default function ScratchBackdropsPane({
         onSaveRequest?.();
     };
 
+    const handleChooseLibrary = (libraryId) => {
+        const entry = createLibraryBackdropEntry(libraryId);
+
+        if (!entry) {
+            return;
+        }
+
+        onAddBackdrop?.(entry);
+        onSaveRequest?.();
+        setLibraryOpen(false);
+    };
+
+    const handleSurpriseBackdrop = () => {
+        onAddBackdrop?.(createProceduralBackdropEntry());
+        onSaveRequest?.();
+    };
+
     const handleDelete = async (index) => {
         const backdrop = backdrops[index];
         const entry = normalizeBackdropEntry(backdrop);
@@ -135,29 +147,49 @@ export default function ScratchBackdropsPane({
             <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                     <p className="text-sm font-semibold text-[#575e75]">Backdrops · Stage</p>
-                    <p className="text-xs text-[#999]">Add color presets or upload an image (max 2 MB).</p>
+                    <p className="text-xs text-[#999]">
+                        Choose from the ACE library, upload your own, or generate a surprise backdrop.
+                    </p>
                 </div>
-                <button
-                    className="rounded-md bg-[#855cd6] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#714bb8] disabled:opacity-60"
-                    disabled={status === 'uploading' || status === 'deleting'}
-                    onClick={() => inputRef.current?.click()}
-                    type="button"
-                >
-                    {status === 'uploading' ? 'Uploading…' : 'Upload backdrop'}
-                </button>
-                <input
-                    accept="image/*,.jpg,.jpeg,.png,.gif,.webp"
-                    className="hidden"
-                    onChange={handleUpload}
-                    ref={inputRef}
-                    type="file"
-                />
+                <div className="flex flex-wrap gap-2">
+                    <button
+                        className="rounded-md border border-[#855cd6] bg-white px-3 py-1.5 text-xs font-semibold text-[#855cd6] hover:bg-[#f6f0ff] disabled:opacity-60"
+                        disabled={status === 'uploading' || status === 'deleting'}
+                        onClick={() => setLibraryOpen(true)}
+                        type="button"
+                    >
+                        Choose backdrop
+                    </button>
+                    <button
+                        className="rounded-md border border-[#d9d9d9] bg-white px-3 py-1.5 text-xs font-semibold text-[#575e75] hover:border-[#855cd6] disabled:opacity-60"
+                        disabled={status === 'uploading' || status === 'deleting'}
+                        onClick={handleSurpriseBackdrop}
+                        type="button"
+                    >
+                        Surprise me
+                    </button>
+                    <button
+                        className="rounded-md bg-[#855cd6] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#714bb8] disabled:opacity-60"
+                        disabled={status === 'uploading' || status === 'deleting'}
+                        onClick={() => inputRef.current?.click()}
+                        type="button"
+                    >
+                        {status === 'uploading' ? 'Uploading…' : 'Upload'}
+                    </button>
+                    <input
+                        accept="image/*,.jpg,.jpeg,.png,.gif,.webp"
+                        className="hidden"
+                        onChange={handleUpload}
+                        ref={inputRef}
+                        type="file"
+                    />
+                </div>
             </div>
 
             {error ? <p className="mt-3 text-xs text-rose-600">{error}</p> : null}
 
             <div className="mt-4">
-                <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-[#999]">Presets</p>
+                <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-[#999]">Color presets</p>
                 <div className="flex flex-wrap gap-2">
                     {PRESET_BACKDROPS.map((preset) => (
                         <button
@@ -185,7 +217,7 @@ export default function ScratchBackdropsPane({
                                     ? 'border-[#855cd6] bg-white ring-2 ring-[#855cd6]/20'
                                     : 'border-[#d9d9d9] bg-white'
                             }`}
-                            key={`${entry.type}-${entry.asset_uuid ?? entry.id}-${index}`}
+                            key={`${entry.type}-${entry.library_id ?? entry.asset_uuid ?? entry.seed ?? entry.id}-${index}`}
                         >
                             <button
                                 className="flex min-w-0 flex-1 items-center gap-3 text-left"
@@ -200,8 +232,8 @@ export default function ScratchBackdropsPane({
                                     </p>
                                     <p className="text-xs text-[#999]">
                                         {entry.type === 'asset'
-                                            ? formatBytes(backdrop.size_bytes) ?? 'Uploaded image'
-                                            : entry.color}
+                                            ? formatBytes(backdrop.size_bytes) ?? backdropTypeLabel(entry)
+                                            : backdropTypeLabel(entry)}
                                     </p>
                                 </div>
                             </button>
@@ -218,6 +250,12 @@ export default function ScratchBackdropsPane({
                     );
                 })}
             </ul>
+
+            <ChooseBackdropModal
+                onClose={() => setLibraryOpen(false)}
+                onSelect={handleChooseLibrary}
+                open={libraryOpen}
+            />
         </div>
     );
 }

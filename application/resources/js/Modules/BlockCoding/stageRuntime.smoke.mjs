@@ -3,6 +3,7 @@
  * Run: node resources/js/Modules/BlockCoding/stageRuntime.smoke.mjs
  */
 import { StageRuntime } from './stageRuntime.js';
+import { createProceduralBackdropEntry } from './proceduralBackdrop.js';
 
 globalThis.window = globalThis;
 globalThis.window.setInterval = () => 1;
@@ -85,12 +86,15 @@ runtime.nextBackdrop();
 assert('nextBackdrop', runtime.getBackdrop('number') >= 1);
 
 runtime.addBackdrop({
-    type: 'asset',
-    asset_uuid: '00000000-0000-4000-8000-000000000099',
-    name: 'Uploaded Park',
-    color: '#e5e7eb',
+    type: 'library',
+    library_id: 'desert-dunes',
+    name: 'Desert Dunes',
+    color: '#f6c56b',
 });
-assert('addBackdrop asset', runtime.stage.backdropAssetUuid === '00000000-0000-4000-8000-000000000099');
+assert('addBackdrop library', runtime.stage.backdropLibraryId === 'desert-dunes');
+
+runtime.addBackdrop(createProceduralBackdropEntry(424242));
+assert('addBackdrop procedural', runtime.sprites && runtime.stage.backdrops.some((b) => b.type === 'procedural'));
 runtime.selectBackdrop(0);
 assert('selectBackdrop', runtime.stage.backdropIndex === 0);
 

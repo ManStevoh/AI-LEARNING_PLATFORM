@@ -1,3 +1,12 @@
+import {
+    BACKDROP_LIBRARY_BASE,
+    createLibraryBackdropEntry,
+    filterLibraryBackdrops,
+    getLibraryBackdrop,
+    libraryBackdropUrl,
+} from './backdropLibrary.js';
+import { createProceduralBackdropEntry, proceduralBackdropDataUrl } from './proceduralBackdrop.js';
+
 function readCsrfToken() {
     const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);
 
@@ -66,6 +75,28 @@ export function backdropImageUrl(lessonSlug, assetUuid) {
 }
 
 export function normalizeBackdropEntry(value, index = 0) {
+    if (value !== null && typeof value === 'object' && typeof value.library_id === 'string') {
+        const library = getLibraryBackdrop(value.library_id);
+
+        return {
+            type: 'library',
+            id: value.id ?? `backdrop-lib-${value.library_id}`,
+            library_id: value.library_id,
+            name: value.name ?? library?.name ?? 'Backdrop',
+            color: value.color ?? library?.color ?? '#dbeafe',
+        };
+    }
+
+    if (value !== null && typeof value === 'object' && typeof value.seed === 'number') {
+        return {
+            type: 'procedural',
+            id: value.id ?? `backdrop-proc-${value.seed}`,
+            seed: value.seed,
+            name: value.name ?? `Surprise ${value.seed % 997}`,
+            color: value.color ?? '#dbeafe',
+        };
+    }
+
     if (value !== null && typeof value === 'object' && typeof value.asset_uuid === 'string') {
         return {
             type: 'asset',
@@ -105,6 +136,26 @@ export function normalizeBackdropEntry(value, index = 0) {
 export function serializeBackdropEntry(backdrop) {
     const entry = normalizeBackdropEntry(backdrop);
 
+    if (entry.type === 'library') {
+        return {
+            type: 'library',
+            id: entry.id,
+            library_id: entry.library_id,
+            name: entry.name,
+            color: entry.color,
+        };
+    }
+
+    if (entry.type === 'procedural') {
+        return {
+            type: 'procedural',
+            id: entry.id,
+            seed: entry.seed,
+            name: entry.name,
+            color: entry.color,
+        };
+    }
+
     if (entry.type === 'asset') {
         return {
             type: 'asset',
@@ -121,3 +172,30 @@ export function serializeBackdropEntry(backdrop) {
         color: entry.color,
     };
 }
+
+export function resolveBackdropImageUrl(entry, lessonSlug = null) {
+    const normalized = normalizeBackdropEntry(entry);
+
+    if (normalized.type === 'asset' && lessonSlug) {
+        return backdropImageUrl(lessonSlug, normalized.asset_uuid);
+    }
+
+    if (normalized.type === 'library') {
+        return libraryBackdropUrl(normalized.library_id);
+    }
+
+    if (normalized.type === 'procedural') {
+        return proceduralBackdropDataUrl(normalized.seed);
+    }
+
+    return null;
+}
+
+export {
+    BACKDROP_LIBRARY_BASE,
+    createLibraryBackdropEntry,
+    createProceduralBackdropEntry,
+    filterLibraryBackdrops,
+    getLibraryBackdrop,
+    libraryBackdropUrl,
+};

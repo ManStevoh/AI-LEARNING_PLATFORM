@@ -3,7 +3,7 @@ import { normalizeBackdropEntry, serializeBackdropEntry } from './backdropAssets
 import { normalizeMonitorState, serializeMonitors } from './stageMonitors.js';
 
 export const PROJECT_FORMAT = 'ace_project';
-export const PROJECT_VERSION = '1.6';
+export const PROJECT_VERSION = '1.7';
 
 export function isProjectEnvelope(value) {
     return (
