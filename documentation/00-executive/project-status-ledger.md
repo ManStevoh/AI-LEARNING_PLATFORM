@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `53bbd6c` — Add video sensing extension with microphone loudness and envelope v2.3.
+- `ec59a85` — Add Phase 4 ACE blocks: AI explain, curriculum checkpoint, robot sensor.
 
 Current local implementation status:
 
@@ -45,7 +45,7 @@ Current local implementation status:
 - **Pen stamp block + envelope v2.2 stamps** published in `afdb00f`.
 - **Scratch 3.0 studio UI sizing/styling polish** published in `afdb00f`.
 - **Video sensing extension (envelope v2.3, loudness + motion blocks)** published in `53bbd6c`.
-- **ACE-only AI / curriculum / robotics blocks (envelope v2.4)** implemented locally (not yet published).
+- **ACE-only AI / curriculum / robotics blocks (envelope v2.4)** published in `ec59a85`.
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
@@ -195,10 +195,11 @@ Developed:
 - Pen stamp block (`ace_pen_stamp`) with DOM/Pixi stamp rendering and envelope v2.2 `stage.stamps`.
 - Scratch 3.0 studio UI polish: Zelos 75% grid, Scratch Blockly inject options, toolbox/flyout/stage/sprite-pane CSS.
 - Video sensing extension with `MediaSensingEngine`, Blockly video blocks, `VideoOverlay.jsx`, microphone loudness, and envelope v2.3 `stage.video`.
+- Phase 4 ACE blocks: AI explain (`BlockScriptExplainService`), curriculum checkpoints (`LearnerLessonCheckpoint`), robot sensor simulator, envelope v2.4.
 
 ### Block Coding (Published)
 
-Status: Phase 1–3 Scratch parity + libraries + monitors + AI backdrops + Pixi adapter + pen layer + pen stamp (v2.2) + Scratch UI polish + video sensing (v2.3) published. See `documentation/06-block-coding/implementation-status.md`.
+Status: Phase 1–4 Scratch parity + ACE extensions published through envelope v2.4. See `documentation/06-block-coding/implementation-status.md`.
 
 Developed:
 
@@ -452,7 +453,7 @@ Not published (blocked):
 1. Configure PostgreSQL once local services are available.
 2. ~~Publish pen stamp (v2.2) and Scratch UI polish slice.~~ Done (`afdb00f`).
 3. ~~Video sensing extension.~~ Done (`53bbd6c`).
-4. ~~ACE-only AI / robotics blocks (Phase 4).~~ Done locally (envelope v2.4); publish next.
+4. ~~ACE-only AI / robotics blocks (Phase 4).~~ Done (`ec59a85`).
 5. Institution-specific block packs or Level 2 code bridge (Phase 4+).
 
 ## Ledger Update Rule

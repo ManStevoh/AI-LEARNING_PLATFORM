@@ -6,7 +6,7 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 
 - **Last updated:** 2026-07-11
 - **Engine phase:** Phase 4 — ACE-only extensions (AI, curriculum, robotics)
-- **Published to GitHub:** `53bbd6c`
+- **Published to GitHub:** `ec59a85`
 - **Custom ACE blocks:** ~93 done (plus Blockly control/math/text/variables/lists/procedures)
 - **Tests:** 129 PHPUnit + StageRuntime smoke 70/70 + media sensing smoke 13/13 + stage renderer smoke 13/13
 
