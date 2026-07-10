@@ -4,6 +4,8 @@ import { resolveCostumeImageUrl } from './costumeAssets.js';
 import { createStageColorSamplerAdapter } from './stageColorSampler.js';
 import SpriteThumb from './SpriteThumb';
 import StageMonitorOverlay from './StageMonitorOverlay';
+import { STAGE_RENDERER_PIXI } from './stageRenderers/stageRendererConfig.js';
+import { useStageRenderer } from './stageRenderers/useStageRenderer.js';
 
 function spritePositionStyle(sprite, stage) {
     const halfWidth = stage.width / 2;
@@ -56,6 +58,29 @@ function CostumeFace({ sprite, lessonSlug, className, scale }) {
     );
 }
 
+function SpriteSpeechOverlay({ sprite, stage }) {
+    if (!sprite.say && !sprite.think) {
+        return null;
+    }
+
+    return (
+        <div className="pointer-events-none absolute" style={spritePositionStyle(sprite, stage)}>
+            <div className="relative">
+                {sprite.say ? (
+                    <div className="absolute bottom-full left-1/2 mb-2 w-max max-w-[160px] -translate-x-1/2 rounded-xl bg-white px-3 py-2 text-xs font-medium text-slate-800 shadow-md">
+                        {sprite.say}
+                    </div>
+                ) : null}
+                {sprite.think ? (
+                    <div className="absolute bottom-full left-1/2 mb-2 w-max max-w-[160px] -translate-x-1/2 rounded-2xl border border-slate-200 bg-white px-3 py-2 text-xs italic text-slate-700 shadow-md">
+                        {sprite.think}
+                    </div>
+                ) : null}
+            </div>
+        </div>
+    );
+}
+
 function SpriteVisual({ sprite, stage, activeSpriteId, interactive, onSpriteClick, lessonSlug }) {
     const isActive = sprite.id === activeSpriteId;
     const canClick = interactive && onSpriteClick;
@@ -100,10 +125,24 @@ function SpriteVisual({ sprite, stage, activeSpriteId, interactive, onSpriteClic
     );
 }
 
+function StageGridOverlay() {
+    return (
+        <div
+            className="pointer-events-none absolute inset-0 opacity-25"
+            style={{
+                backgroundImage:
+                    'linear-gradient(to right, rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.5) 1px, transparent 1px)',
+                backgroundSize: '20px 20px',
+            }}
+        />
+    );
+}
+
 export default function BlockStage({
     snapshot,
     isRunning,
     variant = 'default',
+    stageRenderer = 'dom',
     onSpriteClick = null,
     onPointerMove = null,
     onPointerDown = null,
@@ -114,11 +153,22 @@ export default function BlockStage({
     lessonSlug = null,
 }) {
     const stageRef = useRef(null);
+    const surfaceRef = useRef(null);
     const stage = snapshot.stage;
     const scratch = variant === 'scratch';
     const interactive = isRunning || snapshot.state === 'running';
+    const usesPixi = stageRenderer === STAGE_RENDERER_PIXI;
     const currentBackdrop = stage.backdrops?.[stage.backdropIndex ?? 0];
     const backdropImage = resolveBackdropImageUrl(normalizeBackdropEntry(currentBackdrop), lessonSlug);
+
+    useStageRenderer({
+        mode: stageRenderer,
+        surfaceRef,
+        snapshot,
+        lessonSlug,
+        interactive,
+        onSpriteClick,
+    });
 
     useEffect(() => {
         if (!onColorSamplerReady) {
@@ -162,43 +212,53 @@ export default function BlockStage({
                     onMouseMove={(event) => reportPointer(event.clientX, event.clientY)}
                     onMouseUp={() => onPointerUp?.(false)}
                     ref={stageRef}
-                    style={{ backgroundColor: stage.background }}
+                    style={{ backgroundColor: usesPixi ? stage.background : stage.background }}
                 >
-                    {backdropImage ? (
-                        <img
-                            alt=""
-                            className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-                            src={backdropImage}
-                        />
-                    ) : null}
-                    <div
-                        className="pointer-events-none absolute inset-0 opacity-25"
-                        style={{
-                            backgroundImage:
-                                'linear-gradient(to right, rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.5) 1px, transparent 1px)',
-                            backgroundSize: '20px 20px',
-                        }}
-                    />
+                    {usesPixi ? (
+                        <div className="absolute inset-0" ref={surfaceRef} />
+                    ) : (
+                        <>
+                            {backdropImage ? (
+                                <img
+                                    alt=""
+                                    className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+                                    src={backdropImage}
+                                />
+                            ) : null}
+                            {snapshot.sprites.map((sprite) =>
+                                sprite.visible ? (
+                                    <SpriteVisual
+                                        activeSpriteId={snapshot.activeSpriteId}
+                                        interactive={interactive}
+                                        key={sprite.id}
+                                        lessonSlug={lessonSlug}
+                                        onSpriteClick={onSpriteClick}
+                                        sprite={sprite}
+                                        stage={stage}
+                                    />
+                                ) : null,
+                            )}
+                        </>
+                    )}
+
+                    {usesPixi ? (
+                        <>
+                            <StageGridOverlay />
+                            {snapshot.sprites.map((sprite) =>
+                                sprite.visible ? (
+                                    <SpriteSpeechOverlay key={`speech-${sprite.id}`} sprite={sprite} stage={stage} />
+                                ) : null,
+                            )}
+                        </>
+                    ) : (
+                        <StageGridOverlay />
+                    )}
 
                     <StageMonitorOverlay
                         monitors={snapshot.monitors}
                         onMoveMonitor={onMoveMonitor}
                         onMoveMonitorEnd={onMoveMonitorEnd}
                     />
-
-                    {snapshot.sprites.map((sprite) =>
-                        sprite.visible ? (
-                            <SpriteVisual
-                                activeSpriteId={snapshot.activeSpriteId}
-                                interactive={interactive}
-                                key={sprite.id}
-                                lessonSlug={lessonSlug}
-                                onSpriteClick={onSpriteClick}
-                                sprite={sprite}
-                                stage={stage}
-                            />
-                        ) : null,
-                    )}
                 </div>
 
                 {snapshot.error ? (
@@ -216,30 +276,36 @@ export default function BlockStage({
                 className="relative flex-1 overflow-hidden"
                 style={{ backgroundColor: stage.background }}
             >
-                {backdropImage ? (
-                    <img
-                        alt=""
-                        className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-                        src={backdropImage}
-                    />
-                ) : null}
+                {usesPixi ? (
+                    <div className="absolute inset-0" ref={surfaceRef} />
+                ) : (
+                    <>
+                        {backdropImage ? (
+                            <img
+                                alt=""
+                                className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+                                src={backdropImage}
+                            />
+                        ) : null}
+                        {snapshot.sprites.map((sprite) =>
+                            sprite.visible ? (
+                                <div key={sprite.id} className="absolute" style={spritePositionStyle(sprite, stage)}>
+                                    <CostumeFace
+                                        className="flex h-16 w-16 items-center justify-center rounded-2xl border border-white/70 bg-white/90 text-3xl shadow-md"
+                                        lessonSlug={lessonSlug}
+                                        scale={1}
+                                        sprite={sprite}
+                                    />
+                                </div>
+                            ) : null,
+                        )}
+                    </>
+                )}
                 <StageMonitorOverlay
                     monitors={snapshot.monitors}
                     onMoveMonitor={onMoveMonitor}
                     onMoveMonitorEnd={onMoveMonitorEnd}
                 />
-                {snapshot.sprites.map((sprite) =>
-                    sprite.visible ? (
-                        <div key={sprite.id} className="absolute" style={spritePositionStyle(sprite, stage)}>
-                            <CostumeFace
-                                className="flex h-16 w-16 items-center justify-center rounded-2xl border border-white/70 bg-white/90 text-3xl shadow-md"
-                                lessonSlug={lessonSlug}
-                                scale={1}
-                                sprite={sprite}
-                            />
-                        </div>
-                    ) : null,
-                )}
             </div>
             {snapshot.error ? (
                 <div className="border-t border-rose-200 bg-rose-50 px-4 py-3 text-xs text-rose-700">{snapshot.error}</div>

@@ -18,7 +18,7 @@ Repository:
 
 Published commit:
 
-- `0ece71b` — Add AI-generated backdrops via AI Gateway with envelope v2.0.
+- `pending` — Add PixiJS stage renderer adapter (ADR 0010).
 
 Current local implementation status:
 
@@ -40,6 +40,7 @@ Current local implementation status:
 - **ACE sprite library + Choose sprite/costume modals (envelope v1.8)** published in `34728d0`.
 - **Variable/list stage monitors (envelope v1.9)** published in `0fe6297`.
 - **AI-generated backdrops (envelope v2.0)** published in `0ece71b`.
+- **PixiJS stage renderer adapter (ADR 0010)** pending publish.
 - **Status tracking procedure** documented as standard process for done vs pending updates.
 
 ## Completed Documentation
@@ -184,10 +185,11 @@ Developed:
 - ACE sprite library (48 SVGs) with Scratch-style Choose sprite/costume modals (envelope v1.8).
 - variable/list stage monitors with Blockly checkboxes (envelope v1.9).
 - AI-generated backdrops via AI Gateway with theme picker (envelope v2.0).
+- PixiJS stage renderer adapter with DOM default and feature-flagged Pixi path.
 
 ### Block Coding (Published)
 
-Status: Phase 1–3 Scratch parity + libraries + monitors + AI backdrops published. See `documentation/06-block-coding/implementation-status.md`.
+Status: Phase 1–3 Scratch parity + libraries + monitors + AI backdrops + Pixi adapter published. See `documentation/06-block-coding/implementation-status.md`.
 
 Developed:
 
@@ -200,8 +202,9 @@ Developed:
 - DOM canvas color sampler for touching-color blocks,
 - shared Scratch-style asset library modal + ACE sprite library (48 SVGs),
 - Blockly variable/list stage monitors with runtime variable store,
+- PixiJS stage renderer adapter (`stageRenderers/`, dynamic import),
 - block registry and scratch parity strategy docs,
-- StageRuntime smoke 47/47; PHPUnit 117.
+- StageRuntime smoke 47/47; stage renderer smoke 9/9; PHPUnit 119.
 
 Next action:
 
@@ -414,6 +417,7 @@ Published:
 - ACE sprite library with Choose sprite/costume modals (envelope v1.8),
 - variable/list stage monitors with Blockly checkboxes (envelope v1.9),
 - AI-generated backdrops via AI Gateway with theme picker (envelope v2.0),
+- PixiJS stage renderer adapter (ADR 0010, feature-flagged),
 - Scratch block coding studio and ACE Stage Engine Phases 1–3,
 - block coding docs (registry, parity strategy, status procedure).
 
@@ -426,7 +430,7 @@ Not published (blocked):
 ## Immediate Next Build Sequence
 
 1. Configure PostgreSQL once local services are available.
-2. PixiJS renderer adapter when pen/effects need WebGL path (ADR 0010).
+2. Pen layer + advanced looks effects on Pixi renderer path.
 
 ## Ledger Update Rule
 

@@ -27,6 +27,7 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 | UI | Variable/list stage monitors (Blockly chrome) | envelope v1.9, `dynamicMonitors.js` |
 | Sensing | Pixel color touching (canvas sampler) | `stageColorSampler.js` |
 | Architecture | Stage rendering ADR | ADR 0010 |
+| Architecture | PixiJS stage renderer adapter (feature-flagged) | `stageRenderers/` |
 | Teacher | Skill mastery | `/teacher/skills` |
 
 ## In Progress / Partial
@@ -34,20 +35,21 @@ Living document. Update after every block-coding slice per [status-tracking-proc
 | Item | Blocker or remaining work |
 |------|---------------------------|
 | Loudness | Stub until microphone path |
-| PixiJS renderer adapter | When pen/effects need WebGL path |
+| PixiJS pen/effects polish | Pen trails and advanced filters still runtime-first |
 
 ## Pending (Next Slices)
 
 | Priority | Item | Phase | Ref |
 |----------|------|-------|-----|
-| P1 | PixiJS renderer adapter when needed | 2 | ADR 0010 |
+| P1 | Pen layer + advanced looks effects on Pixi path | 3 | ADR 0010 |
 
 ## Verification (Latest)
 
 ```text
-php artisan test              → 117 passed
-node stageRuntime.smoke.mjs   → 47/47 passed
-npm run build                 → pass
+php artisan test                 → 119 passed
+node stageRuntime.smoke.mjs      → 47/47 passed
+node stageRenderer.smoke.mjs     → pass
+npm run build                    → pass
 ```
 
 ## Related

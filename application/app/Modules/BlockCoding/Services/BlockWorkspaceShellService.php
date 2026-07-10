@@ -16,6 +16,7 @@ class BlockWorkspaceShellService
             'stage' => [
                 'title' => 'Stage',
                 'status' => 'active',
+                'renderer' => $this->resolveStageRenderer($lesson),
                 'width' => 480,
                 'height' => 360,
                 'background' => '#dbeafe',
@@ -36,5 +37,15 @@ class BlockWorkspaceShellService
                 'max_loop_iterations' => 10000,
             ],
         ];
+    }
+
+    /**
+     * @param  array<string, mixed>  $lesson
+     */
+    private function resolveStageRenderer(array $lesson): string
+    {
+        $renderer = $lesson['stage_renderer'] ?? 'dom';
+
+        return in_array($renderer, ['dom', 'pixi'], true) ? $renderer : 'dom';
     }
 }

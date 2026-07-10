@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import BlockStage from './BlockStage';
 import BlockWorkspace from './BlockWorkspace';
 import ScratchBackdropsPane from './ScratchBackdropsPane';
@@ -20,6 +20,7 @@ import {
 import { listLessonSounds } from './soundAssets.js';
 import { buildSoundLibraryMap, setProjectSounds as syncSoundLibrary } from './soundLibrary.js';
 import { StageRuntime } from './stageRuntime';
+import { resolveStageRenderer } from './stageRenderers/stageRendererConfig.js';
 
 function saveStatusLabel(status) {
     switch (status) {
@@ -79,6 +80,7 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
     const [assetSaveRevision, setAssetSaveRevision] = useState(0);
 
     const lessonSlug = workspaceConfig.lesson_slug;
+    const stageRenderer = useMemo(() => resolveStageRenderer(workspaceConfig), [workspaceConfig]);
 
     const applySoundLibrary = useCallback(
         (sounds) => {
@@ -364,6 +366,7 @@ export default function BlockLessonWorkspace({ workspaceConfig, savedProject, st
                             onPointerUp={handleStagePointerUp}
                             onSpriteClick={handleSpriteStageClick}
                             snapshot={snapshot}
+                            stageRenderer={stageRenderer}
                             variant="scratch"
                         />
 

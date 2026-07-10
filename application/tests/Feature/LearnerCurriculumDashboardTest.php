@@ -78,6 +78,7 @@ class LearnerCurriculumDashboardTest extends TestCase
                 ->where('preset', 'level_1_default')
                 ->where('lesson_slug', 'unit-01-meet-the-coding-studio')
                 ->where('stage.status', 'active')
+                ->where('stage.renderer', 'dom')
                 ->has('runtime', fn (Assert $runtime) => $runtime
                     ->where('max_run_ms', 10000)
                     ->etc()
